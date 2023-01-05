@@ -10,8 +10,7 @@ const databaseConnect = () => {
         .then((data) => {
             console.log(`Database connected to ${data.connection.host}`)
         })
-        .catch(() => {
-
+        .catch((err) => {
         })
 }
 
