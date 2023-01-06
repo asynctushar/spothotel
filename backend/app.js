@@ -9,6 +9,7 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 }
 
 // Routes import
+const userRoute = require('./routes/userRoute');
 const hotelRoute = require('./routes/hotelRoute');
 const roomRoute = require('./routes/roomRoute');
 const errorMiddleware = require('./middlewares/errorMiddleware');
@@ -25,6 +26,7 @@ if (process.env.NODE_ENV !== 'PRODUCTION') {
     })
 }
 
+app.use('/api/v1', userRoute);
 app.use('/api/v1', hotelRoute);
 app.use('/api/v1', roomRoute);
 
