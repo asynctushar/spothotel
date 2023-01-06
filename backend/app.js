@@ -1,6 +1,5 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const path = require('path');
 
 const app = express();
 
@@ -11,8 +10,8 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 
 // Routes import
 const hotelRoute = require('./routes/hotelRoute');
+const roomRoute = require('./routes/roomRoute');
 const errorMiddleware = require('./middlewares/errorMiddleware');
-
 
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
@@ -27,8 +26,7 @@ if (process.env.NODE_ENV !== 'PRODUCTION') {
 }
 
 app.use('/api/v1', hotelRoute);
-
-
+app.use('/api/v1', roomRoute);
 
 // error middileware
 app.use(errorMiddleware)

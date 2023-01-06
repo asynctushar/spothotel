@@ -1,5 +1,6 @@
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const Hotel = require('../models/Hotel');
+const Room = require('../models/Room');
 const ErrorHandler = require('../utils/errorHandler');
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
@@ -23,14 +24,18 @@ exports.uploadHotelPictures = catchAsyncErrors(async (req, res, next) => {
     const pictures = req.files;
     const id = req.params.id;
 
+    if (pictures.length < 1) {
+        return next(new ErrorHandler('Please upload hotel pictures', 400));
+    }
+
     const hotel = await Hotel.findById(id);
 
     if (!hotel) {
+        // removing temp image file
+        pictures.map((picture) => {
+            fs.rm(picture.path, { recursive: true }, (err) => { });
+        })
         return next(new ErrorHandler('Hotel not found', 404));
-    }
-
-    if (pictures.length < 1) {
-        return next(new ErrorHandler('Please upload hotel pictures', 400));
     }
 
     const picturePath = await Promise.all(pictures.map(async (picture) => {
@@ -65,7 +70,7 @@ exports.uploadHotelPictures = catchAsyncErrors(async (req, res, next) => {
     })
 })
 
-// update hotel detailss
+// update hotel details
 exports.updateHotel = catchAsyncErrors(async (req, res, next) => {
     const id = req.params.id;
     const { name, location, distance, specification, description } = req.body;
@@ -98,7 +103,14 @@ exports.deleteHotel = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Hotel not found", 404));
     }
 
-    // delete hotel rooms later
+    // delete hotel rooms
+    await Promise.all(hotel.rooms.map(async (roomId) => {
+        const room = await Room.findById(roomId);
+
+        room && await room.delete();
+
+        return;
+    }))
 
     if (hotel.pictures.length > 0) {
         await Promise.all(hotel.pictures.map(async (picture) => {
