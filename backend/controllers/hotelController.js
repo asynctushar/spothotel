@@ -18,7 +18,7 @@ exports.createHotel = catchAsyncErrors(async (req, res, next) => {
     })
 });
 
-// upload hotel pictures
+// upload hotel pictures -- admin
 exports.uploadHotelPictures = catchAsyncErrors(async (req, res, next) => {
     const pictures = req.files;
     const id = req.params.id;
@@ -33,7 +33,7 @@ exports.uploadHotelPictures = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Please upload hotel pictures', 400));
     }
 
-    hotel.pictures = await Promise.all(pictures.map(async (picture) => {
+    const picturePath = await Promise.all(pictures.map(async (picture) => {
         const myCloud = await cloudinary.uploader.upload(picture.path, {
             folder: '/spothotel/hotels',
             crop: "scale",
@@ -48,10 +48,94 @@ exports.uploadHotelPictures = catchAsyncErrors(async (req, res, next) => {
         }
     }))
 
+    // destroy previous pictures
+    if (hotel.pictures.length > 0) {
+        await Promise.all(hotel.pictures.map(async (picture) => {
+            await cloudinary.uploader.destroy(picture.public_id)
+            return;
+        }));
+    }
+
+    hotel.pictures = picturePath;
     await hotel.save();
 
     res.status(200).json({
         success: true,
         hotel
+    })
+})
+
+// update hotel detailss
+exports.updateHotel = catchAsyncErrors(async (req, res, next) => {
+    const id = req.params.id;
+    const { name, location, distance, specification, description } = req.body;
+
+    const hotel = await Hotel.findByIdAndUpdate(id, {
+        $set: {
+            name,
+            location,
+            distance,
+            description,
+            specification
+        }
+    }, { new: true })
+
+    if (!hotel) {
+        return next(new ErrorHandler("Hotel not found", 404));
+    }
+
+    res.status(200).json({
+        success: true,
+        hotel
+    })
+})
+
+// delete hotel -- admin
+exports.deleteHotel = catchAsyncErrors(async (req, res, next) => {
+    const hotel = await Hotel.findById(req.params.id);
+
+    if (!hotel) {
+        return next(new ErrorHandler("Hotel not found", 404));
+    }
+
+    // delete hotel rooms later
+
+    if (hotel.pictures.length > 0) {
+        await Promise.all(hotel.pictures.map(async (picture) => {
+            await cloudinary.uploader.destroy(picture.public_id)
+        }))
+    }
+
+    await hotel.delete();
+
+    res.status(200).json({
+        success: true,
+        message: "Hotel deleted successfully"
+    })
+})
+
+// get hotel details
+exports.getHotelDetails = catchAsyncErrors(async (req, res, next) => {
+    const hotel = await Hotel.findById(req.params.id);
+
+    if (!hotel) {
+        return next(new ErrorHandler("Hotel not found", 404));
+    }
+
+    res.status(200).json({
+        success: true,
+        hotel
+    })
+})
+
+// get all hotels
+exports.getAllHotels = catchAsyncErrors(async (req, res, next) => {
+    const hotels = await Hotel.find()
+
+    // query parameter will be added later
+
+    res.status(200).json({
+        success: true,
+        hotels
     })
 })
