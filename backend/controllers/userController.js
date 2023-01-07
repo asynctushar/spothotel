@@ -116,4 +116,57 @@ exports.changePassword = catchAsyncErrors(async (req, res, next) => {
     sendToken(user, 200, res);
 });
 
+// get user details -- admin
+exports.getUserDetails = catchAsyncErrors(async (req, res, next) => {
+    const id = req.params.id;
+
+    const user = await User.findById(id);
+
+    if (!user) {
+        return next(new ErrorHandler("User not found", 404));
+    }
+
+    res.status(200).json({
+        success: true,
+        user
+    })
+})
+
+// get all users --admin
+exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
+    const users = await User.find();
+
+    res.status(200).json({
+        success: true,
+        users
+    })
+})
+
+// change user role -- admin
+exports.chageUserRole = catchAsyncErrors(async (req, res, next) => {
+    const id = req.params.id;
+
+    if (id === req.user.id) {
+        return next(new ErrorHandler("You can't change change your own role", 400));
+    }
+
+    const user = await User.findById(id);
+    if (!user) {
+        return next(new ErrorHandler("User not found", 404));
+    }
+
+    if (user.role === "user") {
+        user.role = "admin"
+    } else {
+        user.role = "user"
+    }
+
+    await user.save();
+
+    res.status(200).json({
+        success: true,
+        user
+    })
+    
+})
 
