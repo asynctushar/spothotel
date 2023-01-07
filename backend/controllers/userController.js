@@ -2,6 +2,7 @@ const sendToken = require('../../../instabook/src/utils/sendToken');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const User = require('../models/User');
 const ErrorHandler = require('../utils/errorHandler');
+const Booking = require("../models/Booking");
 
 // sign up
 exports.createUser = catchAsyncErrors(async (req, res, next) => {
@@ -30,7 +31,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     }
 
     if (!password) {
-        return next(new ErrorHandler("Please enter password", 400));     
+        return next(new ErrorHandler("Please enter password", 400));
     }
 
     const isMatch = await user.comparePassword(password);
@@ -67,13 +68,13 @@ exports.getUser = catchAsyncErrors(async (req, res, next) => {
 exports.updateUser = catchAsyncErrors(async (req, res, next) => {
     const { name, email } = req.body;
 
-    const user = await User.findByIdAndUpdate(req.user.id,{
+    const user = await User.findByIdAndUpdate(req.user.id, {
         $set: {
             name,
             email
         }
     }, { new: true })
-    
+
     res.status(200).json({
         success: true,
         user
@@ -83,9 +84,15 @@ exports.updateUser = catchAsyncErrors(async (req, res, next) => {
 // delete user 
 exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
     const user = req.user;
+    const usersBookings = await Booking.find({
+        user: req.user.id
+    })
 
+    if (usersBookings.length > 0) {
+        await Promise.all(usersBookings.map(async (booking) => await booking.delete()));
+    }
+    
     await user.delete();
-
     res.status(200).json({
         success: true,
         message: "User deleted succussfully"
@@ -167,6 +174,6 @@ exports.chageUserRole = catchAsyncErrors(async (req, res, next) => {
         success: true,
         user
     })
-    
+
 })
 

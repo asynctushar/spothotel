@@ -1,7 +1,6 @@
 const Booking = require('../models/Booking');
 const Hotel = require('../models/Hotel');
 const Room = require('../models/Room');
-const User = require('../models/User');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const ErrorHandler = require('../utils/errorHandler');
 
@@ -64,6 +63,104 @@ exports.createBooking = catchAsyncErrors(async (req, res, next) => {
     await room.save();
 
     res.status(201).json({
+        success: true,
+        booking
+    })
+})
+
+// update booking status -- admin
+exports.updateBooking = catchAsyncErrors(async (req, res, next) => {
+    const status = req.body.status;
+
+    if (status !== "complete" && status !== "checked") {
+        return next(new ErrorHandler("Can't change booking status", 400));
+    }
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) {
+        return next(new ErrorHandler("Booking not found", 404));
+    }
+
+    if (status === 'complete') {
+        if (booking.status === "complete") return next(new ErrorHandler("Can't change booking status", 400));
+
+        const room = await Room.findById(booking.room);
+        const bookingDatesCopy = booking.dates.map((date) => Date.parse(date));
+
+        room.notAvailable = room.notAvailable.filter((date) => {
+            return !bookingDatesCopy.includes(Date.parse(date));
+        });
+
+        await room.save();
+        booking.status = status;
+        await booking.save();
+    }
+
+    if (status === "checked") {
+        if (booking.status === "checked") return next(new ErrorHandler("User already checked in", 400));
+        if (booking.status === "complete") return next(new ErrorHandler("Can't change booking status", 400));
+
+        booking.status = status;
+        await booking.save();
+    }
+
+    res.status(200).json({
+        success: true,
+        booking
+    })
+})
+
+// get own booking details
+exports.getOwnBookingDetails = catchAsyncErrors(async (req, res, next) => {
+    const booking = await Booking.findById(req.params.id);
+
+    if (!booking) {
+        return next(new ErrorHandler("Booking not found", 404));
+    }
+
+    if (booking.user.toString() !== req.user.id) {
+        return next(new ErrorHandler("Access denied", 403));
+    }
+
+    res.status(200).json({
+        success: true,
+        booking
+    })
+})
+
+// get own all bookings
+exports.getOwnBookings = catchAsyncErrors(async (req, res, next) => {
+    const bookings = await Booking.find({
+        user: req.user.id
+    })
+
+    if (!bookings) {
+        return next(new ErrorHandler("You have no booking yet", 404));
+    }
+
+    res.status(200).json({
+        success: true,
+        bookings
+    })
+})
+
+// get all bookings -- admin 
+exports.getAllBookings = catchAsyncErrors(async (req, res, next) => {
+    const bookings = await Booking.find();
+
+    res.status(200).json({
+        success: true,
+        bookings
+    })
+})
+
+// get booking details -- admin
+exports.getBookingDetails = catchAsyncErrors(async (req, res, next) => {
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) {
+        return next(new ErrorHandler("Booking not found", 404));
+    }
+
+    res.status(200).json({
         success: true,
         booking
     })

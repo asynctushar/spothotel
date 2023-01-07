@@ -1,9 +1,13 @@
 const express = require('express');
-const { createBooking } = require('../controllers/bookingController');
-const { isAuthenticatedUser } = require('../middlewares/auth');
+const { createBooking, updateBooking, getOwnBookings, getOwnBookingDetails, getBookingDetails, getAllBookings } = require('../controllers/bookingController');
+const { isAuthenticatedUser, authorizedRole } = require('../middlewares/auth');
 
 const router = express.Router();
 
 router.route('/hotel/:id/:room/book').post(isAuthenticatedUser, createBooking);
+router.route('/booking/:id').put(isAuthenticatedUser, authorizedRole('admin'), updateBooking).get(isAuthenticatedUser, authorizedRole('admin'), getBookingDetails);
+router.route('/bookings').get(isAuthenticatedUser, authorizedRole("admin"), getAllBookings);
+router.route('/me/bookings').get(isAuthenticatedUser, getOwnBookings);
+router.route('/me/booking/:id').get(isAuthenticatedUser, getOwnBookingDetails);
 
 module.exports = router;
