@@ -12,6 +12,7 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 const userRoute = require('./routes/userRoute');
 const hotelRoute = require('./routes/hotelRoute');
 const roomRoute = require('./routes/roomRoute');
+const bookingRoute = require('./routes/bookingRoute');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 
 app.use(express.json({limit: '50mb'}));
@@ -29,6 +30,7 @@ if (process.env.NODE_ENV !== 'PRODUCTION') {
 app.use('/api/v1', userRoute);
 app.use('/api/v1', hotelRoute);
 app.use('/api/v1', roomRoute);
+app.use('/api/v1', bookingRoute);
 
 // error middileware
 app.use(errorMiddleware)

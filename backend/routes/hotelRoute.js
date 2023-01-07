@@ -1,4 +1,3 @@
-const { Router } = require('express');
 const express = require('express');
 const { createHotel, uploadHotelPictures, updateHotel, deleteHotel, getHotelDetails, getAllHotels } = require('../controllers/hotelController');
 const imageUpload = require('../middlewares/imageUpload');
