@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
-        "./src/**/*.{js,jsx,ts,tsx}",
+        "./src/**/*.{js,jsx,ts,tsx}"
     ],
     theme: {
         extend: {
@@ -9,8 +9,14 @@ module.exports = {
                 sans: [
                     'Roboto', 'sans-serif'
                 ],
-            },
+            }
         }
     },
-    plugins: [],
+    plugins: [
+        require('daisyui')
+    ],
+    daisyui: {
+        styled: true,
+        themes: false,
+    },
 }

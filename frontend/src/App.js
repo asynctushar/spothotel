@@ -9,8 +9,9 @@ import SignUp from './screens/SignUp';
 const App = () => {
     return (
         <Router>
-            <div className="px-4 md:px-10 lg:px-20 bg-slate-50 min-h-screen">
+            <div className="bg-slate-50 min-h-screen">
                 <Navbar />
+                <hr className=" border-t border-grey-400" />
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<SignIn />} />
