@@ -17,7 +17,7 @@ const Home = () => {
     const [keyword, setKeyword] = useState('');
     const [dateRange, setDateRange] = useState([{
         startDate: new Date(),
-        endDate: addDays(new Date, 1),
+        endDate: addDays(new Date(), 1),
         key: 'selection',
     }]);
     const [travellers, setTravellers] = useState({ room: 1, person: 2 })
@@ -57,7 +57,7 @@ const Home = () => {
                 <Modal open={isSearchOpen} onClose={() => setIsSearchOpen(false)} className="flex justify-center items-center">
                     <div className=" w-full md:w-2/3 h-full md:h-2/3 bg-white md:rounded-lg">
                         <CloseIcon fontSize="large" onClick={() => setIsSearchOpen(false)} className="rounded-full text-red-500 cursor-pointer hover:bg-neutral-200 transition duration-200 p-1 m-2" />
-                        <input ref={searchRef} type="text" placeholder="Going to" className=" outline-none bg-transparent w-full border-b border-gray-400 border-solid py-2 px-4 mt-4" />
+                        <input onKeyUp={(e) => e.key === "Enter" && searchHandler()} ref={searchRef} type="text" placeholder="Going to" className=" outline-none bg-transparent w-full border-b border-gray-400 border-solid py-2 px-4 mt-4" />
                         <div className="mt-12 flex flex-col items-center">
                             <div className="cursor-pointer text-5xl" onClick={searchHandler}>
                                 <SearchIcon fontSize="inherit" />
@@ -120,7 +120,6 @@ const Home = () => {
                 </Modal>
             </div>
             <div>
-                search result
             </div>
         </div >
     )
