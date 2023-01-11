@@ -7,7 +7,7 @@ const Booking = require("../models/Booking");
 // sign up
 exports.createUser = catchAsyncErrors(async (req, res, next) => {
     const { name, email, password } = req.body;
-
+    
     if (password.length < 8) {
         return next(new ErrorHandler("Password should be at least 8 characters.", 400))
     }

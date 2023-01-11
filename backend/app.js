@@ -15,16 +15,16 @@ const roomRoute = require('./routes/roomRoute');
 const bookingRoute = require('./routes/bookingRoute');
 const errorMiddleware = require('./middlewares/errorMiddleware');
 
-app.use(express.json({limit: '50mb'}));
+app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
 
 // cors cofiguration
-if (process.env.NODE_ENV !== 'PRODUCTION') {
-    require('dotenv').config({
+if (process.env.NODE_ENV !== "PRODUCTION") {
+    app.use(require('cors')({
         origin: process.env.FRONTEND_URL,
-        optionsSuccessStatus: 200
-    })
+        optionsSuccessStatus: 200,
+    }))
 }
 
 app.use('/api/v1', userRoute);
