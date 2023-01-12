@@ -30,15 +30,20 @@ const Navbar = () => {
         setAnchorEl(null);
     }
 
+    const accountHandler = () => {
+        setAnchorEl(null);
+        navigate('/account');
+    }
+
     const logoutHandler = () => {
         dispatch(logoutAction());
         setAnchorEl(null)
     }
 
     return (
-        <header className="mx-auto px-4 md:px-10 lg:px-20">
+        <header className="mx-auto px-4 md:px-10 lg:px-20 xl:px-48">
             <nav className=" h-24 flex items-center justify-between relative">
-                <Link to="/" className="text-red-400 text-3xl font-bold">Spothotel</Link>
+                <Link to="/" className="text-red-400 text-3xl font-bold">SpotHotel</Link>
                 <div className="">
                     <div onClick={handleClick}>
                         <span className="md:hidden">
@@ -75,7 +80,7 @@ const Navbar = () => {
                                         <h2 className="capitalize text-xl font-semibold">Hi, {user.name}</h2>
                                         <span>Email: {user.email}</span>
                                     </div>
-                                    <button onClick={() => navigate('/account')} className="bg-red-400 hover:bg-red-500 py-2 rounded-lg w-48 text-center text-neutral-50  transition duration-200 font-semibold">Account</button>
+                                    <button onClick={accountHandler} className="bg-red-400 hover:bg-red-500 py-2 rounded-lg w-48 text-center text-neutral-50  transition duration-200 font-semibold">Account</button>
                                     <button onClick={logoutHandler} className=" border-red-400 text-red-400 hover:text-red-500 hover:border-red-500 hover:bg-red-200 border-solid border py-2 rounded-lg w-48 text-center transition duration-200 box-border">Log out</button>
                                 </Fragment>
                             )}

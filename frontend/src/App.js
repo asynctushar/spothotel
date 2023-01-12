@@ -7,7 +7,11 @@ import Home from './screens/Home';
 import Hotel from './screens/Hotel';
 import SignIn from './screens/SignIn';
 import SignUp from './screens/SignUp';
-import {getUserAction } from './redux/actions/userAction';
+import Account from './screens/Account';
+import Bookings from './screens/Bookings';
+import UpdateProfile from './screens/UpdateProfile.js';
+import ProtectedRoute from './utils/ProtectedRoute';
+import { getUserAction } from './redux/actions/userAction';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -27,6 +31,9 @@ const App = () => {
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/hotel/:id" element={<Hotel />} />
                     <Route path="/hotel/:id/:room/book" element={<Booking />} />
+                    <Route path="/account" element={<ProtectedRoute ><Account /> </ProtectedRoute>} />
+                    <Route path="/me/update" element={<ProtectedRoute ><UpdateProfile /></ProtectedRoute>} />
+                    <Route path="/me/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
                 </Routes>
             </div>
         </Router>

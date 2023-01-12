@@ -19,7 +19,7 @@ const SignUp = () => {
         if (isAuthenticated) {
             navigate('/');
         }
-    }, [dispatch, isAuthenticated])
+    }, [dispatch, isAuthenticated, navigate])
 
     const signupHandler = () => {
         dispatch(signUpAction({ name, email, password }));
@@ -33,7 +33,7 @@ const SignUp = () => {
     return (
         <Fragment>
             {isLoading ? <Loader /> : (
-                <div className="mx-auto px-4 md:px-10 lg:px-20 mt-4">
+                <div className="mx-auto px-4 md:px-10 lg:px-20 xl:px-48 mt-4">
                     <h2 className="text-center text-4xl font-semibold text-gray-800">Create New Account</h2>
                     <div className="flex flex-col items-center mt-12">
                         <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Your Name" required className=" bg-stone-50 w-full sm:w-2/4 md:w-2/3 lg:w-1/3  p-3 border border-solid border-slate-900 focus:outline-none rounded" />
@@ -42,7 +42,7 @@ const SignUp = () => {
                         <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" required className="focus:outline-nonebg-stone-50 w-full sm:w-2/4 md:w-2/3 lg:w-1/3  p-3 border border-solid border-slate-900 rounded mt-6 flex justify-between" />
 
                         <div className="bg-stone-50 w-full sm:w-2/4 md:w-2/3 lg:w-1/3  p-3 border border-solid border-slate-900 rounded mt-6 flex justify-between">
-                            <input value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} type={isPasswordHidden ? "password" : "text"} placeholder="Confirm password" required className="focus:outline-none" />
+                            <input value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} type={isPasswordHidden ? "password" : "text"} placeholder="Confirm password" required className="focus:outline-none w-3/4 bg-transparent" />
                             <VisibilityIcon className={`cursor-pointer ${isPasswordHidden ? "text-red-400" : "text-red-800"}`} onClick={() => setIsPasswordHidden(!isPasswordHidden)} />
                         </div>
 

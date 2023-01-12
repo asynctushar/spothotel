@@ -16,8 +16,8 @@ const Home = () => {
     const [isDateOpen, setIsDateOpen] = useState(false);
     const [keyword, setKeyword] = useState('');
     const [dateRange, setDateRange] = useState([{
-        startDate: new Date(),
-        endDate: addDays(new Date(), 1),
+        startDate: new Date( Date.now()),
+        endDate: addDays(Date.now(), 1),
         key: 'selection',
     }]);
     const [travellers, setTravellers] = useState({ room: 1, person: 2 })
@@ -43,7 +43,7 @@ const Home = () => {
     }
 
     return (
-        <div className="mx-auto px-4 md:px-10 lg:px-20 mt-4">
+        <div className="mx-auto px-4 md:px-10 lg:px-20 xl:px-48 mt-4">
 
             <h1 className="text-3xl text-grey-400">Where to?</h1>
             <div className="flex flex-col md:flex-row gap-4 mt-4">
@@ -59,7 +59,7 @@ const Home = () => {
                         <CloseIcon fontSize="large" onClick={() => setIsSearchOpen(false)} className="rounded-full text-red-500 cursor-pointer hover:bg-neutral-200 transition duration-200 p-1 m-2" />
                         <input onKeyUp={(e) => e.key === "Enter" && searchHandler()} ref={searchRef} type="text" placeholder="Going to" className=" outline-none bg-transparent w-full border-b border-gray-400 border-solid py-2 px-4 mt-4" />
                         <div className="mt-12 flex flex-col items-center">
-                            <div className="cursor-pointer text-5xl" onClick={searchHandler}>
+                            <div className="cursor-pointer text-5xl text-red-400 hover:text-red-500 transition duration-200" onClick={searchHandler}>
                                 <SearchIcon fontSize="inherit" />
                             </div>
                             <p className="mt-5 text-gray-600">Search by destination</p>
@@ -74,14 +74,15 @@ const Home = () => {
                     </div>
                 </div>
                 <Modal open={isDateOpen} onClose={() => setIsDateOpen(false)} className="flex justify-center items-center mb-20">
-                    <div className="flex flex-col bg-white h-96">
+                    <div className="flex flex-col bg-white h-96 rounded-md">
                         <CloseIcon fontSize="large" onClick={() => setIsDateOpen(false)} className="rounded-full text-red-500 cursor-pointer hover:bg-neutral-200 transition duration-200 p-1 m-2" />
                         <DateRange
                             onChange={dateRangeHanler}
                             showSelectionPreview={true}
                             moveRangeOnFirstSelection={false}
                             ranges={dateRange}
-                            className="sm:p-12"
+                            className="sm:p-12 rounded-md" 
+                            minDate={new Date(Date.now())}
                         />
                     </div>
                 </Modal>
