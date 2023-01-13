@@ -14,13 +14,9 @@ const roomSchema = new mongoose.Schema({
         type: Number,
         require: true
     },
-    bedStatus: {
+    type: {
         type: String,
         enum: ['single', 'double'],
-        required: true
-    },
-    bedCount: {
-        type: Number,
         required: true
     },
     pricePerDay: {

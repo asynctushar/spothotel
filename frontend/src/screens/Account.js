@@ -25,7 +25,7 @@ const Account = () => {
     return (
         <div className="mx-auto px-4 md:px-10 lg:px-20 xl:px-48 mt-4 flex flex-col md:flex-row justify-between pb-6 h-[calc(100vh-115px)]">
             <div className="w-full h-full mb-6 bg-slate-100 border border-solid border-gray-300 rounded flex flex-col">
-                <img src={Profile} alt="avatar" className="w-32 h-auto mx-auto mt-6" />
+                <img src={Profile} alt="avatar" className="w-32 h-32 mx-auto mt-6" />
                 <h2 className="capitalize text-center text-2xl font-semibold mt-6">{user?.name}</h2>
                 <p className="text-center"><span className="font-semibold">Email:</span> {user?.email}</p>
                 <hr className="mt-3 border-b border-dashed border-gray-300 mx-2" />
@@ -46,7 +46,7 @@ const Account = () => {
                 </div>
             </div>
             <div className="w-full md:w-4/5  md:mt-8">
-                <p className="text-center text-xl font-semibold mb-6">Download out app on</p>
+                <p className="text-center text-xl font-semibold mb-6">Download our app</p>
                 <div className="flex gap-4 justify-center mb-6 h-auto max-h-16">
                     <img src={AppleIcon} alt="apple-icon" className="w-5/12" />
                     <img src={PlayStoreIcon} alt="play-store-icon" className="w-5/12" />

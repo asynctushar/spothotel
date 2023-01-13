@@ -27,7 +27,7 @@ exports.createBooking = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Please insert booking dates", 400))
     }
 
-    const isValidDate = dates.every((date) => Date.now() <= new Date(date))
+    const isValidDate = dates.every((date) => new Date().getDate() <= new Date(date).getDate())
     if (!isValidDate) {
         return next(new ErrorHandler("given date is before than current date"));
     }
@@ -45,8 +45,8 @@ exports.createBooking = catchAsyncErrors(async (req, res, next) => {
 
     let formattedDates = [];
     dates.forEach((date) => {
-        room.notAvailable.push(new Date(date));
-        formattedDates.push(new Date(date));
+        room.notAvailable.push(new Date(date).toDateString());
+        formattedDates.push(new Date(date).toDateString());
     })
 
     const booking = await Booking.create({

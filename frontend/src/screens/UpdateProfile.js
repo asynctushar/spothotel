@@ -120,7 +120,7 @@ const UpdateProfile = () => {
                         </div>
                     </div>
                     <div className="w-full md:w-4/5 md:mt-8">
-                        <p className="text-center text-xl font-semibold mb-6">Download out app on</p>
+                        <p className="text-center text-xl font-semibold mb-6">Download our app</p>
                         <div className="flex gap-4 justify-center mb-6 h-auto max-h-16">
                             <img src={AppleIcon} alt="apple-icon" className="w-5/12" />
                             <img src={PlayStoreIcon} alt="play-store-icon" className="w-5/12" />

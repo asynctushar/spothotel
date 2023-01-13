@@ -8,7 +8,7 @@ const fs = require('fs');
 // create room -- admin
 exports.createRoom = catchAsyncErrors(async (req, res, next) => {
     const hotelId = req.params.id;
-    const { number, name, bedStatus, bedCount, specification, pricePerDay } = req.body;
+    const { number, name, type, specification, pricePerDay } = req.body;
 
     const hotel = await Hotel.findById(hotelId);
     if (!hotel) {
@@ -27,8 +27,7 @@ exports.createRoom = catchAsyncErrors(async (req, res, next) => {
     const room = await Room.create({
         number,
         name,
-        bedStatus,
-        bedCount,
+        type,
         specification,
         pricePerDay,
         hotel: hotel.id
