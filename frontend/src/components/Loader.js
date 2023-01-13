@@ -1,9 +1,9 @@
 import { CircularProgress} from '@mui/material';
 
-const Loader = () => {
+const Loader = ({margin=60}) => {
   return (
-      <div className="flex justify-center items-center w-full h-[calc(100vh-97px)]">
-          <CircularProgress color="warning" className="mb-48" />
+      <div className={`flex justify-center items-center w-full my-${margin} `} >
+          <CircularProgress color="warning" />
     </div>
   )
 }

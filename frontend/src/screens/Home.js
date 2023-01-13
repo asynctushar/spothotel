@@ -5,37 +5,43 @@ import { Button, Modal } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import { DateRange } from 'react-date-range';
-import { useRef, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { addDays, format } from 'date-fns';
+import { searchHotelsAction } from '../redux/actions/hotelAction';
+import { useDispatch, useSelector } from 'react-redux';
+import HotelCard from '../components/HotelCard';
+import Loader from '../components/Loader';
+import { setHasSearched } from '../redux/slices/hotelSlice';
 
 const Home = () => {
+    const dispatch = useDispatch();
+    const { hotels, isLoading, hasSearched } = useSelector((state) => state.hotelState);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isPersonOpen, setIsPersonOpen] = useState(false)
     const [isDateOpen, setIsDateOpen] = useState(false);
     const [keyword, setKeyword] = useState('');
+    const [travellers, setTravellers] = useState({ room: 1, person: 1 });
     const [dateRange, setDateRange] = useState([{
-        startDate: new Date( Date.now()),
+        startDate: new Date(Date.now()),
         endDate: addDays(Date.now(), 1),
         key: 'selection',
     }]);
-    const [travellers, setTravellers] = useState({ room: 1, person: 2 })
-    const searchRef = useRef();
+
+    useEffect(() => {
+        dispatch(setHasSearched(false));
+    }, [dispatch])
 
     const dateRangeHanler = (item) => {
         setDateRange([item.selection]);
     }
 
     const searchHandler = () => {
-        if (searchRef.current.value.length < 1) return;
-
-        setKeyword(searchRef.current.value);
+        if (keyword.length < 1) return;
         setIsSearchOpen(!isSearchOpen);
 
-        console.log(keyword)
-        console.log(dateRange)
-        console.log(travellers)
+        dispatch(searchHotelsAction({ location: keyword, room: travellers.room, person: travellers.person, d1: format(dateRange[0].startDate, 'yyyy-MM-dd'), d2: format(dateRange[0].endDate, 'yyyy-MM-dd') }))
     }
 
     const travellersHandler = () => {
@@ -44,9 +50,8 @@ const Home = () => {
 
     return (
         <div className="mx-auto px-4 md:px-10 lg:px-20 xl:px-48 mt-4">
-
             <h1 className="text-3xl text-grey-400">Where to?</h1>
-            <div className="flex flex-col md:flex-row gap-4 mt-4">
+            <div className="flex flex-col md:flex-row gap-4 mt-4 mb-6">
                 <div onClick={() => setIsSearchOpen(!isSearchOpen)} className="md:w-4/12 h-16 rounded border transition duration-200 cursor-pointer border-gray-400 flex items-center px-6 gap-4 hover:border-red-400" >
                     < FmdGoodIcon className="text-red-400 text-xl" />
                     <div className="flex flex-col">
@@ -54,14 +59,14 @@ const Home = () => {
                         <span className="text-gray-600 text-sm">{keyword}</span>
                     </div>
                 </div>
-                <Modal open={isSearchOpen} onClose={() => setIsSearchOpen(false)} className="flex justify-center items-center">
+                <Modal disableAutoFocus={true} open={isSearchOpen} onClose={() => setIsSearchOpen(false)} className="flex justify-center items-center">
                     <div className=" w-full md:w-2/3 h-full md:h-2/3 bg-white md:rounded-lg">
                         <CloseIcon fontSize="large" onClick={() => setIsSearchOpen(false)} className="rounded-full text-red-500 cursor-pointer hover:bg-neutral-200 transition duration-200 p-1 m-2" />
-                        <input onKeyUp={(e) => e.key === "Enter" && searchHandler()} ref={searchRef} type="text" placeholder="Going to" className=" outline-none bg-transparent w-full border-b border-gray-400 border-solid py-2 px-4 mt-4" />
+                        <input onKeyUp={(e) => e.key === "Enter" && searchHandler()} value={keyword} onChange={(e) => setKeyword(e.target.value)} type="text" placeholder="Going to" className=" outline-none bg-transparent w-full border-b border-gray-400 border-solid py-2 px-4 mt-4" />
                         <div className="mt-12 flex flex-col items-center">
-                            <div className="cursor-pointer text-5xl text-red-400 hover:text-red-500 transition duration-200" onClick={searchHandler}>
+                            <button disabled={keyword.length < 1} className=" text-5xl text-red-400 hover:text-red-500 transition duration-200" onClick={searchHandler} >
                                 <SearchIcon fontSize="inherit" />
-                            </div>
+                            </button>
                             <p className="mt-5 text-gray-600">Search by destination</p>
                         </div>
                     </div>
@@ -73,7 +78,7 @@ const Home = () => {
                         <span className="text-gray-600 text-sm">{format(dateRange[0].startDate, 'MMM dd')} - {format(dateRange[0].endDate, 'MMM dd')}</span>
                     </div>
                 </div>
-                <Modal open={isDateOpen} onClose={() => setIsDateOpen(false)} className="flex justify-center items-center mb-20">
+                <Modal disableAutoFocus={true} open={isDateOpen} onClose={() => setIsDateOpen(false)} className="flex justify-center items-center mb-20">
                     <div className="flex flex-col bg-white h-96 rounded-md">
                         <CloseIcon fontSize="large" onClick={() => setIsDateOpen(false)} className="rounded-full text-red-500 cursor-pointer hover:bg-neutral-200 transition duration-200 p-1 m-2" />
                         <DateRange
@@ -81,7 +86,7 @@ const Home = () => {
                             showSelectionPreview={true}
                             moveRangeOnFirstSelection={false}
                             ranges={dateRange}
-                            className="sm:p-12 rounded-md" 
+                            className="sm:p-12 rounded-md"
                             minDate={new Date(Date.now())}
                         />
                     </div>
@@ -93,7 +98,7 @@ const Home = () => {
                         <span className="text-gray-600 text-sm">{travellers.person} travellers, {travellers.room} room</span>
                     </div>
                 </div>
-                <Modal open={isPersonOpen} onClose={() => setIsPersonOpen(false)} className="flex justify-center items-center">
+                <Modal disableAutoFocus={true} open={isPersonOpen} onClose={() => setIsPersonOpen(false)} className="flex justify-center items-center">
                     <div className="w-full md:w-2/3 h-full md:h-2/3 bg-white md:rounded-lg">
                         <CloseIcon fontSize="large" onClick={() => setIsPersonOpen(false)} className="rounded-full text-red-500 cursor-pointer hover:bg-neutral-200 transition duration-200 p-1 m-2" />
                         <h4 className="text-2xl text-gray-800 px-6 mt-6">Travellers</h4>
@@ -120,8 +125,22 @@ const Home = () => {
                     </div>
                 </Modal>
             </div>
-            <div>
-            </div>
+            <Fragment>
+                {hasSearched && (
+                    <Fragment>
+                        {isLoading ? <Loader margin={56} /> : (
+                            <div>
+                                <h2 className="text-xl text-center mb-4">Search Results</h2>
+                                {hotels.length < 1 && <p className="text-center mt-48 text-gray-600">No hotel available on this location and on this date. Please change the date or location. </p>}
+                                {hotels.length > 0 && <p className="text-sm">{hotels.length} {hotels.length === 1 ? "hotel" : "hotels"} found. </p>}
+                                {hotels?.map((hotel) => (
+                                    <HotelCard key={hotel._id} hotel={hotel} />
+                                ))}
+                            </div>
+                        )}
+                    </Fragment>
+                )}
+            </Fragment>
         </div >
     )
 }

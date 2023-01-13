@@ -10,7 +10,7 @@ const upload = multer({
         }
     }),
     limits: {
-        fileSize: 3000000
+        fileSize: 30000000
     },
     fileFilter: (req, file, cb) => {
         if (file.mimetype.startsWith('image')) {
