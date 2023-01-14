@@ -16,7 +16,7 @@ const HotelCard = ({ hotel }) => {
                         <img src={picture} alt="No picture available" className="w-full h-full object-fill" />
                     </div>
                 ) : (
-                    <Slide duration={3000} transitionDuration={500} prevArrow={<ArrowBackIosNewIcon className="text-zinc-200" />} nextArrow={<ArrowForwardIosIcon className="text-zinc-200" />}>
+                    <Slide duration={3000} transitionDuration={400} prevArrow={<ArrowBackIosNewIcon className="text-zinc-200" />} nextArrow={<ArrowForwardIosIcon className="text-zinc-200" />}>
                         {hotel.pictures.map((pic) => (
                             <div className="h-60" key={pic.public_id}>
                                 <img src={pic.url} alt={pic.public_id} className="w-full h-full object-cover" />

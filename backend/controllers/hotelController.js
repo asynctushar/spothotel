@@ -129,7 +129,7 @@ exports.deleteHotel = catchAsyncErrors(async (req, res, next) => {
 
 // get hotel details
 exports.getHotelDetails = catchAsyncErrors(async (req, res, next) => {
-    const hotel = await Hotel.findById(req.params.id);
+    const hotel = await Hotel.findById(req.params.id).populate('rooms');
 
     if (!hotel) {
         return next(new ErrorHandler("Hotel not found", 404));

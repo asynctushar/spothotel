@@ -9,11 +9,10 @@ import { Fragment, useEffect, useState } from 'react';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { addDays, format } from 'date-fns';
-import { searchHotelsAction } from '../redux/actions/hotelAction';
+import { searchHotelsAction, getFeturedHotels } from '../redux/actions/hotelAction';
 import { useDispatch, useSelector } from 'react-redux';
 import HotelCard from '../components/HotelCard';
 import Loader from '../components/Loader';
-import { setHasSearched } from '../redux/slices/hotelSlice';
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -29,17 +28,13 @@ const Home = () => {
         key: 'selection',
     }]);
 
-    useEffect(() => {
-        dispatch(setHasSearched(false));
-    }, [dispatch])
-
     const dateRangeHanler = (item) => {
         setDateRange([item.selection]);
     }
 
     const searchHandler = () => {
         if (keyword.length < 1) return;
-        setIsSearchOpen(!isSearchOpen);
+        setIsSearchOpen(false);
 
         dispatch(searchHotelsAction({ location: keyword, room: travellers.room, person: travellers.person, d1: format(dateRange[0].startDate, 'yyyy-MM-dd'), d2: format(dateRange[0].endDate, 'yyyy-MM-dd') }))
     }
@@ -48,11 +43,17 @@ const Home = () => {
         setIsPersonOpen(!isPersonOpen);
     }
 
+    useEffect(() => {
+        if (!hasSearched) {
+            dispatch(getFeturedHotels());
+        }
+    }, [dispatch])
+
     return (
         <div className="mx-auto px-4 md:px-10 lg:px-20 xl:px-48 mt-4">
             <h1 className="text-3xl text-grey-400">Where to?</h1>
             <div className="flex flex-col md:flex-row gap-4 mt-4 mb-6">
-                <div onClick={() => setIsSearchOpen(!isSearchOpen)} className="md:w-4/12 h-16 rounded border transition duration-200 cursor-pointer border-gray-400 flex items-center px-6 gap-4 hover:border-red-400" >
+                <div onClick={() => setIsSearchOpen(!isSearchOpen)} className=" md:w-4/12 h-16 rounded border transition duration-200 cursor-pointer border-gray-400 flex items-center px-6 gap-4 hover:border-red-400" >
                     < FmdGoodIcon className="text-red-400 text-xl" />
                     <div className="flex flex-col">
                         <span >Going to</span>
@@ -79,16 +80,19 @@ const Home = () => {
                     </div>
                 </div>
                 <Modal disableAutoFocus={true} open={isDateOpen} onClose={() => setIsDateOpen(false)} className="flex justify-center items-center mb-20">
-                    <div className="flex flex-col bg-white h-96 rounded-md">
+                    <div className="flex flex-col bg-white pb-8 rounded-md">
                         <CloseIcon fontSize="large" onClick={() => setIsDateOpen(false)} className="rounded-full text-red-500 cursor-pointer hover:bg-neutral-200 transition duration-200 p-1 m-2" />
                         <DateRange
                             onChange={dateRangeHanler}
                             showSelectionPreview={true}
                             moveRangeOnFirstSelection={false}
                             ranges={dateRange}
-                            className="sm:p-12 rounded-md"
+                            className="sm:px-12 sm:py-4 rounded-md"
                             minDate={new Date(Date.now())}
                         />
+                        <div className="flex justify-center">
+                            <Button variant="contained" className="w-72 h-12 " onClick={() => setIsDateOpen(false)}>Done</Button>
+                        </div>
                     </div>
                 </Modal>
                 <div onClick={() => setIsPersonOpen(!isPersonOpen)} className="md:w-4/12 h-16 rounded border transition duration-200 cursor-pointer border-gray-400 flex items-center px-6 gap-4 hover:border-red-400 ">
@@ -124,6 +128,10 @@ const Home = () => {
                         </div>
                     </div>
                 </Modal>
+                <div className="flex justify-center mt-3 md:mt-0 items-center">
+                    <button color="error" disabled={keyword.length < 1} variant="contained" className=" bg-red-500 rounded text-gray-50 font-medium hover:bg-red-600 disabled:bg-red-400 w-72 md:w-24 lg:w-32 md:h-full h-12 text-inherit"
+                        onClick={searchHandler}> Search</button>
+                </div>
             </div>
             <Fragment>
                 {hasSearched && (
@@ -139,6 +147,14 @@ const Home = () => {
                             </div>
                         )}
                     </Fragment>
+                )}
+                {!hasSearched && (
+                    <div>
+                        <h2 className="text-xl font-medium mb-6">Featured</h2>
+                        {hotels?.map((hotel) => (
+                            <HotelCard key={hotel._id} hotel={hotel} />
+                        ))}
+                    </div>
                 )}
             </Fragment>
         </div >
