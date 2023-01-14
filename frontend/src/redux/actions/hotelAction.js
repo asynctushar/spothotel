@@ -1,5 +1,5 @@
 import { setError } from '../slices/appSlice';
-import { setLoader, setHotels, setHasSearched, setHotel} from '../slices/hotelSlice';
+import { setLoader, setHotels, setHasSearched, setHotel, setRoom} from '../slices/hotelSlice';
 import axios from 'axios';
 
 // search hotel
@@ -39,6 +39,19 @@ export const getHotelAction = (id) => async (dispatch) => {
         const { data } = await axios.get(`/api/v1/hotel/${id}`);
 
         dispatch(setHotel(data.hotel));
+        dispatch(setLoader(false));
+    } catch (err) {
+        dispatch(setLoader(false));
+        dispatch(setError(err.response.data.message));
+    }
+}
+
+// get room details
+export const getRoomAction = (id) => async (dispatch) => {
+    try {
+        dispatch(setLoader(true));
+        const { data } = await axios.get(`/api/v1/room/${id}`);
+        dispatch(setRoom(data.room));
         dispatch(setLoader(false));
     } catch (err) {
         dispatch(setLoader(false));

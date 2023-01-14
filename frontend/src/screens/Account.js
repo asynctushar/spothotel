@@ -12,12 +12,6 @@ const Account = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (!isAuthenticated) {
-            navigate('/login');
-        }
-    }, [isAuthenticated, navigate]);
-
     const logoutHandler = () => {
         dispatch(logoutAction());
     }

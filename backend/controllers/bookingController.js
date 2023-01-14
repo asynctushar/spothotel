@@ -4,7 +4,6 @@ const Room = require('../models/Room');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const ErrorHandler = require('../utils/errorHandler');
 
-
 // new booking
 exports.createBooking = catchAsyncErrors(async (req, res, next) => {
     const { paymentInfo, dates, totalPrice, phone } = req.body;

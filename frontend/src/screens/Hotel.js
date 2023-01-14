@@ -56,7 +56,7 @@ const Hotel = () => {
                             ))}
                         </div>
                     </div>
-                    <div id="rooms" className="mx-4 md:mx-0 -mt-4 mb-8 md:w-7/12">
+                    <div id="rooms" className="mx-4 md:mx-0 -mt-4 mb-8 md:w-9/12">
                         <span className="text-2xl mx-auto w-52 pb-2 block font-medium text-center border-b-2 border-solid border-gray-400">Choose your room</span>
                         <div className="flex flex-wrap gap-4 justify-center mt-12">
                         {hotel?.rooms.map((room) => (
