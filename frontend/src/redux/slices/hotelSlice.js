@@ -5,7 +5,9 @@ const initialState = {
     hotels: undefined,
     hotel: undefined,
     hasSearched: false,
-    room: undefined
+    room: undefined,
+    booking: undefined,
+    hasBooked: false
 }
 
 const hotelSlice = createSlice({
@@ -26,10 +28,16 @@ const hotelSlice = createSlice({
         },
         setRoom: (state, action) => {
             state.room = action.payload;
+        },
+        setBooking: (state, action) => {
+            state.booking = action.payload;
+        },
+        setHasBooked: (state, action) => {
+            state.hasBooked = action.payload;
         }
     }
 });
 
-export const { setLoader, setHotels, setHasSearched , setHotel, setRoom} = hotelSlice.actions;
+export const { setLoader, setHotels, setHasSearched , setHotel, setRoom, setBooking, setHasBooked} = hotelSlice.actions;
 
 export default hotelSlice.reducer;

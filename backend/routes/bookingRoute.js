@@ -1,5 +1,5 @@
 const express = require('express');
-const { createBooking, updateBooking, getOwnBookings, getOwnBookingDetails, getBookingDetails, getAllBookings } = require('../controllers/bookingController');
+const { createBooking, updateBooking, getOwnBookings, getOwnBookingDetails, getBookingDetails, getAllBookings, sendStripeApiKey, sendStripeSecretKey } = require('../controllers/bookingController');
 const { isAuthenticatedUser, authorizedRole } = require('../middlewares/auth');
 
 const router = express.Router();
@@ -9,5 +9,7 @@ router.route('/booking/:id').put(isAuthenticatedUser, authorizedRole('admin'), u
 router.route('/bookings').get(isAuthenticatedUser, authorizedRole("admin"), getAllBookings);
 router.route('/me/bookings').get(isAuthenticatedUser, getOwnBookings);
 router.route('/me/booking/:id').get(isAuthenticatedUser, getOwnBookingDetails);
+router.route('/stripeapikey').get(isAuthenticatedUser, sendStripeApiKey);
+router.route('/stripesecretkey').post(isAuthenticatedUser, sendStripeSecretKey);;
 
 module.exports = router;

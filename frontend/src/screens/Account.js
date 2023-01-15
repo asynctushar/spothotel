@@ -2,13 +2,12 @@ import AppleIcon from '../images/icon-app-store.png';
 import PlayStoreIcon from '../images/icon-play-store.png';
 import Profile from '../images/profile.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { logoutAction } from '../redux/actions/userAction';
 
 const Account = () => {
-    const { user, isAuthenticated } = useSelector((state) => state.userState);
+    const { user } = useSelector((state) => state.userState);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 

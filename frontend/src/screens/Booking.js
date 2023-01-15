@@ -3,7 +3,7 @@ import { Button, Modal } from '@mui/material';
 import { DateRange } from 'react-date-range';
 import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Loader from '../components/Loader';
 import { getRoomAction } from '../redux/actions/hotelAction';
 import { addDays, format } from 'date-fns';
@@ -13,6 +13,7 @@ const Booking = () => {
     const user = useSelector((state) => state.userState.user);
     const { room, isLoading } = useSelector((state) => state.hotelState);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
@@ -24,13 +25,26 @@ const Booking = () => {
         endDate: new Date(),
         key: 'selection',
     }]);
+    const prices = room?.pricePerDay * dates?.length;
+    const vat = room?.pricePerDay * dates?.length * (18 / 100);
+    const totalPrice = prices + vat;
+    const willCheckOut = name.length > 0 && email.length > 0 && phone.length > 10;
+    const bookingDetails = {
+        name,
+        email,
+        phone,
+        totalPrice,
+        dates,
+        room: id,
+        hotel: room?.hotel._id
+    }
 
     useEffect(() => {
         dispatch(getRoomAction(id));
 
         setName(user.name);
         setEmail(user.email);
-    }, [id, user, dispatch]);
+    }, [user, id, dispatch]);
 
     useEffect(() => {
         if (room && room.notAvailable.length > 0) {
@@ -54,6 +68,11 @@ const Booking = () => {
         setDateRange([item.selection]);
     }
 
+    const onCheckout = () => {
+        sessionStorage.setItem("bookingDetails", JSON.stringify(bookingDetails));
+        navigate('/booking/payment')
+    }
+
     return (
         <Fragment>
             {isLoading ? <Loader /> : (
@@ -66,11 +85,11 @@ const Booking = () => {
                         </div>
                         <div className="ml-8 flex items-center mb-4">
                             <label htmlFor="email" className="font-medium w-16">Email:</label>
-                            <input value={email} onChange={(e) => setEmail(e.target.value)} id="email" type="email" className="outline-none py-2 px-1 sm:px-2  rounded-md border border-solid border-gray-400 text-gray-700 font-mono" />
+                            <input value={email} onChange={(e) => setEmail(e.target.value)} id="email" type="email" className="outline-none py-2 px-1 sm:px-2  rounded-md border border-solid border-gray-400 text-gray-700 font-mono" disabled={true} />
                         </div>
                         <div className="ml-8 flex items-center mb-4">
                             <label htmlFor="phone" className="font-medium w-16">Mobile:</label>
-                            <input value={phone} onChange={(e) => setPhone(e.target.value)} id="phone" type="number" className="outline-none py-2 px-1 sm:px-2 rounded-md border border-solid border-gray-400 text-gray-700 font-mono" />
+                            <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Your phone number" id="phone" type="number" className="outline-none py-2 px-1 sm:px-2 rounded-md border border-solid border-gray-400  font-mono" />
                         </div>
                     </div>
                     <div className="px-1 sm:px-3">
@@ -105,7 +124,7 @@ const Booking = () => {
                         <div className="ml-8 flex mb-4">
                             <span className="font-medium inline-block  w-28">Dates:</span>
                             <button onClick={() => setIsDateOpen(!isDateOpen)}>
-                                <textarea value={dates?.toString()} disabled={true} id="phone" rows={dates.length + 1} cols={10} className="py-2 px-1 sm:px-2 rounded-md border border-solid border-gray-400 text-gray-700 font-mono cursor-pointer break-all" />
+                                <textarea value={dates?.toString()} disabled={true} id="phone" rows={dates.length + 1} cols={10} className="py-2 px-1 sm:px-2 rounded-md border border-solid border-gray-400 text-gray-700 font-mono cursor-pointer break-all resize-none hover:bg-red-200 transition duration-200" />
                             </button>
                             <Modal disableAutoFocus={true} open={isDateOpen} onClose={() => setIsDateOpen(false)} className="flex justify-center items-center mb-20">
                                 <div className="flex flex-col bg-white pb-8 rounded-md">
@@ -127,16 +146,19 @@ const Booking = () => {
                         </div>
                         <div className="ml-8 flex mb-4">
                             <span className="font-medium inline-block  w-28">Price({dates?.length}):</span>
-                            <span className="font-mono">{room?.pricePerDay * dates.length} taka</span>
+                            <span className="font-mono">{prices} taka</span>
                         </div>
                         <div className="ml-8 flex mb-4">
                             <span className="font-medium inline-block  w-28">Vat:</span>
-                            <span className="font-mono">{room?.pricePerDay * dates.length * (18 / 100)} taka</span>
+                            <span className="font-mono">{vat} taka</span>
                         </div>
                         <div className="ml-8 flex mb-4">
                             <span className="font-medium inline-block w-28">Total Price:</span>
-                            <span className="font-mono">{room?.pricePerDay * dates.length + room?.pricePerDay * dates.length * (18 / 100)} taka</span>
+                            <span className="font-mono">{totalPrice} taka</span>
                         </div>
+                    </div>
+                    <div className="px-1 sm:px-3 py-20 flex justify-center sm:justify-end items-center ">
+                        <button onClick={onCheckout} className="py-4 w-full sm:w-60 block text-center rounded bg-red-400 hover:bg-red-500 transition duration-200 text-zinc-50 " disabled={willCheckOut ? false : true} >Checkout</button>
                     </div>
                 </div >
             )}

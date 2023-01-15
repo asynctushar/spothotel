@@ -19,14 +19,14 @@ const RoomCard = ({ room }) => {
             const dates = room.notAvailable.map((date) => new Date(date));
             setDisableDates(dates);
         }
-    }, [])
+    }, [room])
 
     return (
         <div className="flex flex-col w-72 gap-8 bg-stone-100 shadow-md rounded-md">
             <div className="h-60 rounded-t-md overflow-hidden">
                 {room.pictures.length < 1 ? (
                     <div className="h-60">
-                        <img src={picture} alt="No picture available" className="w-full h-full object-fill overflow-hidden" />
+                        <img src={picture} alt="Not available" className="w-full h-full object-fill overflow-hidden" />
                     </div>
                 ) : (
                     <Slide duration={3000} transitionDuration={400} prevArrow={<ArrowBackIosNewIcon className="text-zinc-200" />} nextArrow={<ArrowForwardIosIcon className="text-zinc-200" />}>

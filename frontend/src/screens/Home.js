@@ -1,7 +1,7 @@
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, Modal } from '@mui/material';
+import { Button, CircularProgress, Modal } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import { DateRange } from 'react-date-range';
@@ -12,7 +12,6 @@ import { addDays, format } from 'date-fns';
 import { searchHotelsAction, getFeturedHotels } from '../redux/actions/hotelAction';
 import { useDispatch, useSelector } from 'react-redux';
 import HotelCard from '../components/HotelCard';
-import Loader from '../components/Loader';
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -47,7 +46,7 @@ const Home = () => {
         if (!hasSearched) {
             dispatch(getFeturedHotels());
         }
-    }, [dispatch])
+    }, [dispatch, hasSearched])
 
     return (
         <div className="mx-auto px-4 md:px-10 lg:px-20 xl:px-48 mt-4">
@@ -136,7 +135,11 @@ const Home = () => {
             <Fragment>
                 {hasSearched && (
                     <Fragment>
-                        {isLoading ? <Loader margin={56} /> : (
+                        {isLoading ? (
+                            <div className="flex justify-center items-center w-full h-96 " >
+                                <CircularProgress color="warning" />
+                            </div>
+                        ) : (
                             <div>
                                 <h2 className="text-xl text-center mb-4">Search Results</h2>
                                 {hotels.length < 1 && <p className="text-center mt-48 text-gray-600">No hotel available on this location and on this date. Please change the date or location. </p>}
@@ -148,7 +151,11 @@ const Home = () => {
                         )}
                     </Fragment>
                 )}
-                {!hasSearched && (
+                {!hasSearched && isLoading ? (
+                    <div className="flex justify-center items-center w-full h-96 " >
+                        <CircularProgress color="warning" />
+                    </div>
+                ) : (
                     <div>
                         <h2 className="text-xl font-medium mb-6">Featured</h2>
                         {hotels?.map((hotel) => (

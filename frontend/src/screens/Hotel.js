@@ -1,6 +1,6 @@
 import { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getHotelAction } from "../redux/actions/hotelAction";
 import { Slide } from 'react-slideshow-image';
 import picture from '../images/nopicture.jpg';
@@ -27,7 +27,7 @@ const Hotel = () => {
                     <div className="h-60 md:w-7/12">
                         {hotel?.pictures.length < 1 ? (
                             <div className="h-60 -mr-[21.33px]">
-                                <img src={picture} alt="No picture available" className="w-full h-full object-fill" />
+                                <img src={picture} alt="Not available" className="w-full h-full object-fill" />
                             </div>
                         ) : (
                             <Slide duration={3000} transitionDuration={400} prevArrow={<ArrowBackIosNewIcon className="text-zinc-200" />} nextArrow={<ArrowForwardIosIcon className="text-zinc-200" />}>

@@ -1,9 +1,9 @@
 import { setError } from '../slices/appSlice';
-import { setLoader, setHotels, setHasSearched, setHotel, setRoom} from '../slices/hotelSlice';
+import { setLoader, setHotels, setHasSearched, setHotel, setRoom, setBooking ,setHasBooked} from '../slices/hotelSlice';
 import axios from 'axios';
 
 // search hotel
-export const searchHotelsAction = ({location, person, room, d1, d2}) => async (dispatch) => {
+export const searchHotelsAction = ({ location, person, room, d1, d2 }) => async (dispatch) => {
     try {
         dispatch(setHasSearched(true));
         dispatch(setLoader(true));
@@ -55,6 +55,18 @@ export const getRoomAction = (id) => async (dispatch) => {
         dispatch(setLoader(false));
     } catch (err) {
         dispatch(setLoader(false));
+        dispatch(setError(err.response.data.message));
+    }
+}
+
+// new booking
+export const newBookingAction = (formData, hotelId, roomId) => async (dispatch) => {
+    try {
+        const { data } = await axios.post(`/api/v1/hotel/${hotelId}/${roomId}/book`, formData, { headers: { "Content-Type": "application/json" } })
+
+        dispatch(setBooking(data.booking));
+        dispatch(setHasBooked(true));
+    } catch (err) {
         dispatch(setError(err.response.data.message));
     }
 }

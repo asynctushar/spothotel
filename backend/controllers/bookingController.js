@@ -3,6 +3,7 @@ const Hotel = require('../models/Hotel');
 const Room = require('../models/Room');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const ErrorHandler = require('../utils/errorHandler');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 // new booking
 exports.createBooking = catchAsyncErrors(async (req, res, next) => {
@@ -26,7 +27,7 @@ exports.createBooking = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Please insert booking dates", 400))
     }
 
-    const isValidDate = dates.every((date) => new Date().getDate() <= new Date(date).getDate())
+    const isValidDate = dates.every((date) => new Date().toDateString() <= new Date(date).toDateString())
     if (!isValidDate) {
         return next(new ErrorHandler("given date is before than current date"));
     }
@@ -37,15 +38,19 @@ exports.createBooking = catchAsyncErrors(async (req, res, next) => {
     }
 
     if (room.notAvailable.length > 0) {
-        const isBooked = dates.every((date) => !room.notAvailable.includes(new Date(date)));
+        const notAvailableCopy = room.notAvailable.map((room) => Date.parse(room));
+
+        const isBooked = dates.some((date) => {
+            return notAvailableCopy.includes(Date.parse(new Date(date)))
+        });
 
         if (isBooked) return next(new ErrorHandler("Room already booked", 400));
     }
 
     let formattedDates = [];
     dates.forEach((date) => {
-        room.notAvailable.push(new Date(date).toDateString());
-        formattedDates.push(new Date(date).toDateString());
+        room.notAvailable.push(date);
+        formattedDates.push(date);
     })
 
     const booking = await Booking.create({
@@ -164,3 +169,29 @@ exports.getBookingDetails = catchAsyncErrors(async (req, res, next) => {
         booking
     })
 })
+
+// send stripe api key to client
+exports.sendStripeApiKey = catchAsyncErrors((req, res, next) => {
+    res.status(200).json({
+        message: "success",
+        stripeApiKey: process.env.STRIPE_API_KEY
+    })
+})
+
+// send stripe secret key
+exports.sendStripeSecretKey = catchAsyncErrors(async (req, res, next) => {
+    const myPayment = await stripe.paymentIntents.create({
+        amount: (req.body.amount * 100),
+        currency: 'bdt',
+        metadata: {
+            company: 'Spothotel'
+        }
+    });
+
+    res.status(200).json({
+        success: true,
+        client_secret: myPayment.client_secret
+    });
+});
+
+
