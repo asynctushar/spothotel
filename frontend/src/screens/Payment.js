@@ -26,24 +26,24 @@ const Payment = () => {
     const hasBooked = useSelector((state) => state.hotelState.hasBooked);
 
     useEffect(() => {
-        if (bookingDetails === null) {
-            navigate('/');
-        }
-    }, [bookingDetails, navigate]);
-
-    useEffect(() => {
         if (hasBooked) {
             navigate('/booking/success');
             dispatch(setHasBooked(false));
-            sessionStorage.removeItem('bookingDetails');
         }
-    }, [hasBooked, dispatch , navigate])
+    }, [hasBooked, dispatch, navigate])
+    
+    useEffect(() => {
+        if (bookingDetails === null) {
+            navigate('/ewe');
+        }
+    }, [bookingDetails, navigate]);
+
 
     const submitHandler = async () => {
         payBtn.current.disabled = true;
 
         try {
-            const { data } = await axios.post('/api/v1/stripesecretkey', { amount: bookingDetails.totalPrice }, { headers: { "Content-Type": "application/json" } })
+            const { data } = await axios.post('/api/v1/stripeclientkey', { amount: bookingDetails.totalPrice }, { headers: { "Content-Type": "application/json" } })
             const client_secret = data.client_secret;
 
             if (!stripe || !elements) return;

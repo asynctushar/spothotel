@@ -128,7 +128,7 @@ const Home = () => {
                     </div>
                 </Modal>
                 <div className="flex justify-center mt-3 md:mt-0 items-center">
-                    <button color="error" disabled={keyword.length < 1} variant="contained" className=" bg-red-500 rounded text-gray-50 font-medium hover:bg-red-600 disabled:bg-red-400 w-72 md:w-24 lg:w-32 md:h-full h-12 text-inherit"
+                    <button color="error" disabled={keyword.length < 1} variant="contained" className=" bg-red-500 rounded font-medium hover:bg-red-600 disabled:bg-red-400 w-72 text-green-50 md:w-24 lg:w-32 md:h-full h-12 text-inherit"
                         onClick={searchHandler}> Search</button>
                 </div>
             </div>
@@ -142,8 +142,8 @@ const Home = () => {
                         ) : (
                             <div>
                                 <h2 className="text-xl text-center mb-4">Search Results</h2>
-                                {hotels.length < 1 && <p className="text-center mt-48 text-gray-600">No hotel available on this location and on this date. Please change the date or location. </p>}
-                                {hotels.length > 0 && <p className="text-sm">{hotels.length} {hotels.length === 1 ? "hotel" : "hotels"} found. </p>}
+                                {hotels.length < 1 && <p className="text-center mt-48 text-gray-600">No hotel available on this location and on this date.Please change the date or location.</p>}
+                                {hotels.length > 0 && <p className="text-sm">{hotels.length} {hotels.length === 1 ? "hotel" : "hotels"} found.</p>}
                                 {hotels?.map((hotel) => (
                                     <HotelCard key={hotel._id} hotel={hotel} />
                                 ))}
@@ -151,18 +151,21 @@ const Home = () => {
                         )}
                     </Fragment>
                 )}
-                {!hasSearched && isLoading ? (
-                    <div className="flex justify-center items-center w-full h-96 " >
-                        <CircularProgress color="warning" />
-                    </div>
-                ) : (
-                    <div>
-                        <h2 className="text-xl font-medium mb-6">Featured</h2>
-                        {hotels?.map((hotel) => (
-                            <HotelCard key={hotel._id} hotel={hotel} />
-                        ))}
-                    </div>
-                )}
+                {!hasSearched && (
+                    <Fragment>
+                        {isLoading ? (
+                            <div className="flex justify-center items-center w-full h-96 " >
+                                <CircularProgress color="warning" />
+                            </div>
+                        ) : (
+                            <div>
+                                <h2 className="text-xl font-medium mb-6">Featured</h2>
+                                {hotels?.map((hotel) => (
+                                    <HotelCard key={hotel._id} hotel={hotel} />
+                                ))}
+                            </div>
+                        )}
+                    </Fragment>)}
             </Fragment>
         </div >
     )

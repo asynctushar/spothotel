@@ -18,6 +18,7 @@ import { setError } from './redux/slices/appSlice';
 import axios from 'axios';
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import BookingDetails from './screens/BookingDetails';
 
 const App = () => {
 
@@ -71,6 +72,7 @@ const App = () => {
                     <Route path="/account" element={<ProtectedRoute ><Account /> </ProtectedRoute>} />
                     <Route path="/me/update" element={<ProtectedRoute ><UpdateProfile /></ProtectedRoute>} />
                     <Route path="/me/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
+                    <Route path="/me/booking/:id" element={<ProtectedRoute><BookingDetails /></ProtectedRoute>} />
                 </Routes>
             </div>
         </Router>

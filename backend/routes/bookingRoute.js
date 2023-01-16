@@ -10,6 +10,6 @@ router.route('/bookings').get(isAuthenticatedUser, authorizedRole("admin"), getA
 router.route('/me/bookings').get(isAuthenticatedUser, getOwnBookings);
 router.route('/me/booking/:id').get(isAuthenticatedUser, getOwnBookingDetails);
 router.route('/stripeapikey').get(isAuthenticatedUser, sendStripeApiKey);
-router.route('/stripesecretkey').post(isAuthenticatedUser, sendStripeSecretKey);;
+router.route('/stripeclientkey').post(isAuthenticatedUser, sendStripeSecretKey);;
 
 module.exports = router;

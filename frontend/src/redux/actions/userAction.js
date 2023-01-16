@@ -1,4 +1,4 @@
-import { setLoader, setUser, logoutUser } from '../slices/userSlice';
+import { setLoader, setUser, logoutUser} from '../slices/userSlice';
 import { setError } from '../slices/appSlice';
 import axios from 'axios';
 
@@ -93,3 +93,4 @@ export const deleteUserAction = () => async (dispatch) => {
         dispatch(setLoader(false));
     }
 }
+

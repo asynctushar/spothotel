@@ -27,7 +27,7 @@ exports.createBooking = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Please insert booking dates", 400))
     }
 
-    const isValidDate = dates.every((date) => new Date().toDateString() <= new Date(date).toDateString())
+    const isValidDate = dates.every((date) => Date.parse(new Date().toDateString()) <= Date.parse(new Date(date).toDateString()))
     if (!isValidDate) {
         return next(new ErrorHandler("given date is before than current date"));
     }
@@ -53,7 +53,7 @@ exports.createBooking = catchAsyncErrors(async (req, res, next) => {
         formattedDates.push(date);
     })
 
-    const booking = await Booking.create({
+    await Booking.create({
         user: req.user.id,
         hotel: hotel.id,
         room: room.id,
@@ -67,8 +67,7 @@ exports.createBooking = catchAsyncErrors(async (req, res, next) => {
     await room.save();
 
     res.status(201).json({
-        success: true,
-        booking
+        success: true
     })
 })
 
@@ -115,7 +114,7 @@ exports.updateBooking = catchAsyncErrors(async (req, res, next) => {
 
 // get own booking details
 exports.getOwnBookingDetails = catchAsyncErrors(async (req, res, next) => {
-    const booking = await Booking.findById(req.params.id);
+    const booking = await Booking.findById(req.params.id).populate('room').populate('hotel');
 
     if (!booking) {
         return next(new ErrorHandler("Booking not found", 404));

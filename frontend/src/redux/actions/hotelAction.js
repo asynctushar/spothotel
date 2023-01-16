@@ -1,5 +1,5 @@
 import { setError } from '../slices/appSlice';
-import { setLoader, setHotels, setHasSearched, setHotel, setRoom, setBooking ,setHasBooked} from '../slices/hotelSlice';
+import { setLoader, setHotels, setHasSearched, setHotel, setRoom, setBookings, setHasBooked, setBooking } from '../slices/hotelSlice';
 import axios from 'axios';
 
 // search hotel
@@ -62,11 +62,38 @@ export const getRoomAction = (id) => async (dispatch) => {
 // new booking
 export const newBookingAction = (formData, hotelId, roomId) => async (dispatch) => {
     try {
-        const { data } = await axios.post(`/api/v1/hotel/${hotelId}/${roomId}/book`, formData, { headers: { "Content-Type": "application/json" } })
+        await axios.post(`/api/v1/hotel/${hotelId}/${roomId}/book`, formData, { headers: { "Content-Type": "application/json" } })
 
-        dispatch(setBooking(data.booking));
         dispatch(setHasBooked(true));
     } catch (err) {
         dispatch(setError(err.response.data.message));
+    }
+}
+
+// users bookings
+export const getUsersBookings = () => async (dispatch) => {
+    try {
+        dispatch(setLoader(true));
+        const { data } = await axios.get('/api/v1/me//bookings');
+        
+        dispatch(setBookings(data.bookings));
+        dispatch(setLoader(false));
+    } catch (err) {
+        dispatch(setError(err.response.data.message));
+        dispatch(setLoader(false));
+    }
+}
+
+// users booking details
+export const getUserBooking = (id) => async (dispatch) => {
+    try {
+        dispatch(setLoader(true));
+        const { data } = await axios.get(`/api/v1/me/booking/${id}`);
+
+        dispatch(setBooking(data.booking));
+        dispatch(setLoader(false));
+    } catch (err) {
+        dispatch(setError(err.response.date.message));
+        dispatch(setLoader(false));
     }
 }
