@@ -12,7 +12,7 @@ const Bookings = () => {
     const { isLoading, bookings } = useSelector((state) => state.hotelState);
     const [page, setPage] = useState(0);
     const rowsPerPage = 5;
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage  - bookings?.length) : 0;
+    const emptyRows =Math.max(0, (1 + page) * rowsPerPage  - bookings?.length);
 
     useEffect(() => {
         dispatch(getUsersBookings());

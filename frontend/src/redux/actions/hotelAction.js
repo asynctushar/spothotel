@@ -75,7 +75,7 @@ export const getUsersBookings = () => async (dispatch) => {
     try {
         dispatch(setLoader(true));
         const { data } = await axios.get('/api/v1/me//bookings');
-        
+
         dispatch(setBookings(data.bookings));
         dispatch(setLoader(false));
     } catch (err) {

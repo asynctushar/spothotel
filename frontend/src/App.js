@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, forwardRef } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Navbar from './components/Navbar';
@@ -14,21 +14,26 @@ import BookingSuccess from './screens/BookingSuccess';
 import UpdateProfile from './screens/UpdateProfile.js';
 import ProtectedRoute from './utils/ProtectedRoute';
 import { getUserAction } from './redux/actions/userAction';
-import { setError } from './redux/slices/appSlice';
+import { setError, clearError, clearSuccess } from './redux/slices/appSlice';
 import axios from 'axios';
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import BookingDetails from './screens/BookingDetails';
+import { Alert, Snackbar } from '@mui/material';
 
 const App = () => {
-
     const [stripeApiKey, setStripeApiKey] = useState("");
     const isAuthenticated = useSelector((state) => state.userState.isAuthenticated);
+    const { error, success } = useSelector((state) => state.appState);
     const dispatch = useDispatch();
     const [isStripeLoading, setStripeLoading] = useState(true);
+    const [isErrorOpen, setIsErrorOpen] = useState(false);
+    const [isSuccessOpen, setIsSuccessOpen ] = useState(false);
+    const CustomAlert = forwardRef((props, ref) => <Alert elevation={6} variant="filled" {...props} ref={ref} />);
 
     useEffect(() => {
         dispatch(getUserAction());
+
     }, [dispatch])
 
     useEffect(() => {
@@ -46,7 +51,27 @@ const App = () => {
             }
             getStripeApiKey();
         }
-    }, [isAuthenticated, dispatch])
+    }, [isAuthenticated, dispatch]);
+
+    useEffect(() => {
+        if (error) {
+            setIsErrorOpen(true);
+
+        } else if (success) {
+            setIsSuccessOpen(true);
+        }
+
+    }, [error, success]);
+
+    const handleErrorClose = () => {
+        setIsErrorOpen(false);
+        dispatch(clearError());
+    }
+
+    const handleSuccessClose = () => {
+        setIsSuccessOpen(false);
+        dispatch(clearSuccess());
+    }
 
     return (
         <Router>
@@ -74,6 +99,12 @@ const App = () => {
                     <Route path="/me/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
                     <Route path="/me/booking/:id" element={<ProtectedRoute><BookingDetails /></ProtectedRoute>} />
                 </Routes>
+                <Snackbar open={isErrorOpen} autoHideDuration={3000} onClose={handleErrorClose}>
+                    <CustomAlert onClose={handleErrorClose} severity="error" className="w-fit mx-auto md:mr-auto ">{error}</CustomAlert>
+                </Snackbar>
+                <Snackbar open={isSuccessOpen} autoHideDuration={3000} onClose={handleSuccessClose}>
+                    <CustomAlert onClose={handleSuccessClose} severity="success" className="w-fit mx-auto md:mr-auto ">{success}</CustomAlert>
+                </Snackbar>
             </div>
         </Router>
     );

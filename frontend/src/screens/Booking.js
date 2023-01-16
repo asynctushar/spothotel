@@ -7,6 +7,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Loader from '../components/Loader';
 import { getRoomAction } from '../redux/actions/hotelAction';
 import { addDays, format } from 'date-fns';
+import { setError } from '../redux/slices/appSlice';
 
 const Booking = () => {
     const id = useParams().room;
@@ -69,8 +70,16 @@ const Booking = () => {
     }
 
     const onCheckout = () => {
+         const notAvailAble = room.notAvailable.map((date) => Date.parse(date));
+        const isValidDate = dates.every((date) => !notAvailAble.includes(Date.parse(date)));
+
+        if (!isValidDate) {
+            dispatch(setError("Date already booked"));
+            return;
+        }
+
         sessionStorage.setItem("bookingDetails", JSON.stringify(bookingDetails));
-        navigate('/booking/payment')
+        navigate('/booking/payment');
     }
 
     return (

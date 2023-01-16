@@ -12,7 +12,7 @@ const HotelCard = ({ hotel }) => {
         <div className="flex flex-col md:flex-row md:min-h-60 gap-8 bg-gray-200 rounded-md my-4 md:items-center">
             <div className="md:w-2/6 h-full">
                 {hotel.pictures.length < 1 ? (
-                    <div className="h-60 -mr-[21.33px]">
+                    <div className="h-60 md:-mr-[21.33px]">
                         <img src={picture} alt="Not available" className="w-full h-full object-fill" />
                     </div>
                 ) : (
