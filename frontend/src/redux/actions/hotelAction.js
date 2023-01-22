@@ -74,7 +74,7 @@ export const newBookingAction = (formData, hotelId, roomId) => async (dispatch) 
 export const getUsersBookings = () => async (dispatch) => {
     try {
         dispatch(setLoader(true));
-        const { data } = await axios.get('/api/v1/me//bookings');
+        const { data } = await axios.get('/api/v1/me/bookings');
 
         dispatch(setBookings(data.bookings));
         dispatch(setLoader(false));
