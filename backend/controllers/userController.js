@@ -1,4 +1,4 @@
-const sendToken = require('../../../instabook/src/utils/sendToken');
+const sendToken = require('../utils/sendToken');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const User = require('../models/User');
 const ErrorHandler = require('../utils/errorHandler');
