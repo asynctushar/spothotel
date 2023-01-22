@@ -140,9 +140,9 @@ const Home = () => {
                                 <CircularProgress color="warning" />
                             </div>
                         ) : (
-                            <div>
+                            <div className="h-96">
                                 <h2 className="text-xl text-center mb-4">Search Results</h2>
-                                {hotels.length < 1 && <p className="text-center mt-48 text-gray-600">No hotel available on this location and on this date.Please change the date or location.</p>}
+                                {hotels.length < 1 && <p className="text-center text-gray-600 my-48">No hotel available on based on your requirements</p>}
                                 {hotels.length > 0 && <p className="text-sm">{hotels.length} {hotels.length === 1 ? "hotel" : "hotels"} found.</p>}
                                 {hotels?.map((hotel) => (
                                     <HotelCard key={hotel._id} hotel={hotel} />
