@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { Calendar } from 'react-date-range';
 import { useState, useEffect } from 'react';
-import { Dialog, DialogContent } from '@mui/material';
+import { Dialog } from '@mui/material';
 
 const RoomCard = ({ room }) => {
     const navigate = useNavigate();
@@ -54,12 +54,10 @@ const RoomCard = ({ room }) => {
                     <button onClick={() => setIsDateOpen(!isDateOpen)} className=" border-red-400 text-red-400 hover:text-red-500 hover:border-red-500 hover:bg-red-200 border-solid border py-2 rounded-lg w-36 text-center transition duration-200 box-border">Availability</button>
                     <button onClick={() => navigate(`/hotel/${room.hotel}/${room._id}/book`)} className="bg-red-400 hover:bg-red-500 py-2 rounded-lg w-36 text-center text-neutral-50  transition duration-200 font-semibold">Reserve</button>
                 </div>
-                <Dialog open={isDateOpen} onClose={() => setIsDateOpen(!isDateOpen)}>
-                    <DialogContent>
-                        <div className="">
-                            <Calendar disabledDates={disableDates} minDate={new Date()} className="bg-slate-900" />
+                <Dialog className="flex items-center justify-center" open={isDateOpen} onClose={() => setIsDateOpen(!isDateOpen)}>
+                        <div className=" bg-orange-50 sm:p-8 rounded">
+                            <Calendar disabledDates={disableDates} minDate={new Date()} className="rounded"/>
                         </div>
-                    </DialogContent>
                 </Dialog>
             </div>
         </div >

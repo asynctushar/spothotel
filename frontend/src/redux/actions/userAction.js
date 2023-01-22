@@ -40,7 +40,6 @@ export const getUserAction = () => async (dispatch) => {
         dispatch(setLoader(false));
     } catch (err) {
         dispatch(setLoader(false));
-        dispatch(setError(err.response.data.message));
     }
 }
 
