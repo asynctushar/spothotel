@@ -22,7 +22,6 @@ const Bookings = () => {
         setPage(newPage);
     };
 
-
     return (
         <Fragment>
             {isLoading ? <Loader /> : (

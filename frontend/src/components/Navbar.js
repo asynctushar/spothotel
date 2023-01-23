@@ -41,7 +41,7 @@ const Navbar = () => {
     }
 
     return (
-        <header className="mx-auto px-4 md:px-10 lg:px-20 xl:px-48">
+        <header className="mx-auto px-4 md:px-10 lg:px-20 xl:px-48 z-[1300]">
             <nav className=" h-24 flex items-center justify-between relative">
                 <Link to="/" className="text-red-400 text-3xl font-bold">SpotHotel</Link>
                 <div className="">

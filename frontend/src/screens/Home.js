@@ -128,7 +128,7 @@ const Home = () => {
                     </div>
                 </Modal>
                 <div className="flex justify-center mt-3 md:mt-0 items-center">
-                    <button color="error" disabled={keyword.length < 1} variant="contained" className=" bg-red-500 rounded font-medium hover:bg-red-600 disabled:bg-red-400 w-72 text-orange-50 md:w-24 lg:w-32 md:h-full h-12 text-inherit"
+                    <button color="error" disabled={keyword.length < 1} variant="contained" className=" bg-red-500 rounded font-medium hover:bg-red-600 disabled:bg-red-400 w-72 !text-orange-50 md:w-24 lg:w-32 md:h-full h-12 text-inherit"
                         onClick={searchHandler}> Search</button>
                 </div>
             </div>

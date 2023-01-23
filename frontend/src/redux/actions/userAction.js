@@ -1,4 +1,4 @@
-import { setLoader, setUser, logoutUser} from '../slices/userSlice';
+import { setLoader, setUser, logoutUser, setUsersLoader, setAllUsers } from '../slices/userSlice';
 import { setError } from '../slices/appSlice';
 import axios from 'axios';
 
@@ -62,7 +62,7 @@ export const updateUserAction = (formData) => async (dispatch) => {
     try {
         const { data } = await axios.put('/api/v1/me', formData, { headers: { "Content-Type": "application/json" } });
 
-        dispatch(setUser(data.user));   
+        dispatch(setUser(data.user));
     } catch (err) {
         dispatch(setError(err.response.data.message));
     }
@@ -90,6 +90,31 @@ export const deleteUserAction = () => async (dispatch) => {
     } catch (err) {
         dispatch(setError(err.response.data.message));
         dispatch(setLoader(false));
+    }
+}
+
+// get all users -- admin
+export const getAllUsers = () => async (dispatch) => {
+    try {
+        dispatch(setUsersLoader(true));
+        const { data } = await axios.get('/api/v1/admin/users');
+
+        dispatch(setAllUsers(data.users));
+        dispatch(setUsersLoader(false));
+    } catch (err) {
+        dispatch(setError(err.response.data.message));
+        dispatch(setUsersLoader(false));
+    }
+}
+
+// update user's role -- admin
+export const updateUserRole = ( id, role ) => async (dispatch) => {
+    try {
+        const { data } = await axios.put(`/api/v1/admin/user/${id}`, { role }, { headers: { "Content-Type": "application/json" } });
+
+        dispatch(setAllUsers(data.users));
+    } catch (err) {
+        dispatch(setError(err.response.data.message));
     }
 }
 

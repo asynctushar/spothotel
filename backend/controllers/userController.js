@@ -152,6 +152,7 @@ exports.getAllUsers = catchAsyncErrors(async (req, res, next) => {
 // change user role -- admin
 exports.chageUserRole = catchAsyncErrors(async (req, res, next) => {
     const id = req.params.id;
+    const role = req.body.role;
 
     if (id === req.user.id) {
         return next(new ErrorHandler("You can't change change your own role", 400));
@@ -162,17 +163,18 @@ exports.chageUserRole = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("User not found", 404));
     }
 
-    if (user.role === "user") {
-        user.role = "admin"
-    } else {
-        user.role = "user"
+    if (role !== 'user' && role !== 'admin') {
+        return next(new ErrorHandler("Only user and admin role available", 400));
     }
 
+    user.role = role;
+
     await user.save();
+    const users = await User.find();
 
     res.status(200).json({
         success: true,
-        user
+        users
     })
 
 })

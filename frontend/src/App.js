@@ -11,6 +11,11 @@ import Account from './screens/Account';
 import Bookings from './screens/Bookings';
 import Payment from './screens/Payment';
 import BookingSuccess from './screens/BookingSuccess';
+import AllUsers from './screens/AllUsers';
+import AllHotels from './screens/AllHotels';
+import CreateHotel from './screens/CreateHotel';
+import AllBookings from './screens/AllBookings';
+import Dashboard from './screens/Dashboard';
 import UpdateProfile from './screens/UpdateProfile.js';
 import ProtectedRoute from './utils/ProtectedRoute';
 import { getUserAction } from './redux/actions/userAction';
@@ -28,7 +33,7 @@ const App = () => {
     const dispatch = useDispatch();
     const [isStripeLoading, setStripeLoading] = useState(true);
     const [isErrorOpen, setIsErrorOpen] = useState(false);
-    const [isSuccessOpen, setIsSuccessOpen ] = useState(false);
+    const [isSuccessOpen, setIsSuccessOpen] = useState(false);
     const CustomAlert = forwardRef((props, ref) => <Alert elevation={6} variant="filled" {...props} ref={ref} />);
 
     useEffect(() => {
@@ -74,39 +79,45 @@ const App = () => {
     }
 
     return (
-        <Router>
-            <div className="bg-slate-50 min-h-screen">
-                <Navbar />
-                <hr className=" border-t border-grey-400" />
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/login" element={<SignIn />} />
-                    <Route path="/signup" element={<SignUp />} />
-                    <Route path="/hotel/:id" element={<Hotel />} />
-                    {!isStripeLoading &&
-                        <Route path="/booking/payment" element={
-                            <ProtectedRoute>
-                                <Elements stripe={loadStripe(stripeApiKey)}>
-                                    <Payment />
-                                </Elements>
-                            </ProtectedRoute>
-                        } />
-                    }
-                    <Route path="/hotel/:id/:room/book" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
-                    <Route path="/booking/success" element={<ProtectedRoute><BookingSuccess /></ProtectedRoute>} />
-                    <Route path="/account" element={<ProtectedRoute ><Account /> </ProtectedRoute>} />
-                    <Route path="/me/update" element={<ProtectedRoute ><UpdateProfile /></ProtectedRoute>} />
-                    <Route path="/me/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
-                    <Route path="/me/booking/:id" element={<ProtectedRoute><BookingDetails /></ProtectedRoute>} />
-                </Routes>
-                <Snackbar open={isErrorOpen} autoHideDuration={3000} onClose={handleErrorClose}>
-                    <CustomAlert onClose={handleErrorClose} severity="error" className="w-fit mx-auto md:mr-auto ">{error}</CustomAlert>
-                </Snackbar>
-                <Snackbar open={isSuccessOpen} autoHideDuration={3000} onClose={handleSuccessClose}>
-                    <CustomAlert onClose={handleSuccessClose} severity="success" className="w-fit mx-auto md:mr-auto ">{success}</CustomAlert>
-                </Snackbar>
-            </div>
-        </Router>
+            <Router>
+                <div className="bg-slate-50 min-h-screen">
+                    <Navbar />
+                    <hr className=" border-t border-grey-400" />
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/login" element={<SignIn />} />
+                        <Route path="/signup" element={<SignUp />} />
+                        <Route path="/hotel/:id" element={<Hotel />} />
+                        {!isStripeLoading &&
+                            <Route path="/booking/payment" element={
+                                <ProtectedRoute>
+                                    <Elements stripe={loadStripe(stripeApiKey)}>
+                                        <Payment />
+                                    </Elements>
+                                </ProtectedRoute>
+                            } />
+                        }
+                        <Route path="/hotel/:id/:room/book" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
+                        <Route path="/booking/success" element={<ProtectedRoute><BookingSuccess /></ProtectedRoute>} />
+                        <Route path="/account" element={<ProtectedRoute ><Account /> </ProtectedRoute>} />
+                        <Route path="/me/update" element={<ProtectedRoute ><UpdateProfile /></ProtectedRoute>} />
+                        <Route path="/me/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
+                        <Route path="/me/booking/:id" element={<ProtectedRoute><BookingDetails /></ProtectedRoute>} />
+                        <Route path="/me/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
+                        <Route path="/admin/dashboard" element={<ProtectedRoute role="admin"><Dashboard /></ProtectedRoute>} />
+                        <Route path="/admin/users" element={<ProtectedRoute role="admin"><AllUsers /></ProtectedRoute>} />
+                        <Route path="/admin/hotels" element={<ProtectedRoute role="admin"><AllHotels /></ProtectedRoute>} />
+                        <Route path="/admin/hotel/new" element={<ProtectedRoute role="admin"><CreateHotel /></ProtectedRoute>} />
+                        <Route path="/admin/bookings" element={<ProtectedRoute role="admin"><AllBookings /></ProtectedRoute>} />
+                    </Routes>
+                    <Snackbar open={isErrorOpen} autoHideDuration={3000} onClose={handleErrorClose}>
+                        <CustomAlert onClose={handleErrorClose} severity="error" className="w-fit mx-auto md:mr-auto ">{error}</CustomAlert>
+                    </Snackbar>
+                    <Snackbar open={isSuccessOpen} autoHideDuration={3000} onClose={handleSuccessClose}>
+                        <CustomAlert onClose={handleSuccessClose} severity="success" className="w-fit mx-auto md:mr-auto ">{success}</CustomAlert>
+                    </Snackbar>
+                </div>
+            </Router>
     );
 }
 
