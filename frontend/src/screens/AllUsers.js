@@ -40,19 +40,19 @@ const AllUsers = () => {
                             <Table className="min-w-[700px]">
                                 <TableHead >
                                     <TableRow className="bg-red-300">
-                                        <TableCell>Id</TableCell>
-                                        <TableCell>Name</TableCell>
-                                        <TableCell>Email</TableCell>
-                                        <TableCell>Role</TableCell>
+                                        <TableCell align="center" >Id</TableCell>
+                                        <TableCell align="center" >Name</TableCell>
+                                        <TableCell align="center" >Email</TableCell>
+                                        <TableCell align="center" >Role</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {(rowsPerPage > 2 ? allUsers?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : allUsers)?.map((singleUser) => (
                                         <TableRow key={singleUser._id}>
-                                            <TableCell>{singleUser._id}</TableCell>
-                                            <TableCell>{singleUser.name}</TableCell>
-                                            <TableCell>{singleUser.email}</TableCell>
-                                            <TableCell className="!flex !justify-evenly !items-center">
+                                            <TableCell align="center" >{singleUser._id}</TableCell>
+                                            <TableCell align="center" >{singleUser.name}</TableCell>
+                                            <TableCell align="center" >{singleUser.email}</TableCell>
+                                            <TableCell align="center" className="!flex !justify-evenly !items-center">
                                                 {singleUser.role}
                                                 <Tooltip title={singleUser._id === user._id ? "" : "Edit"} placement="top">
                                                     <IconButton onClick={() => {

@@ -167,10 +167,17 @@ exports.getRoomDetails = catchAsyncErrors(async (req, res, next) => {
 })
 
 // get all rooms
-exports.getAllRooms = catchAsyncErrors(async (req, res, next) => {
-    const rooms = await Room.find()
+exports.getHotelRooms = catchAsyncErrors(async (req, res, next) => {
+    const hotelId = req.params.id;
 
-    // query parameter will be added later
+    const hotel = await Hotel.findById(hotelId);
+    if (!hotel) {
+        return next(new ErrorHandler("Hotel not found.", 404));
+    }
+
+    const rooms = await Room.find({
+        hotel: hotelId
+    })
 
     res.status(200).json({
         success: true,

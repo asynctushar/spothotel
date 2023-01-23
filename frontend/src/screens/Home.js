@@ -60,7 +60,7 @@ const Home = () => {
                     </div>
                 </div>
                 <Modal disableAutoFocus={true} open={isSearchOpen} onClose={() => setIsSearchOpen(false)} className="flex justify-center items-center">
-                    <div className=" w-full md:w-2/3 h-full md:h-2/3 bg-white md:rounded-lg">
+                    <div className="w-full md:w-2/3 h-full md:h-2/3 bg-white md:rounded-lg">
                         <CloseIcon fontSize="large" onClick={() => setIsSearchOpen(false)} className="rounded-full text-red-500 cursor-pointer hover:bg-neutral-200 transition duration-200 p-1 m-2" />
                         <input onKeyUp={(e) => e.key === "Enter" && searchHandler()} value={keyword} onChange={(e) => setKeyword(e.target.value)} type="text" placeholder="Going to" className=" outline-none bg-transparent w-full border-b border-gray-400 border-solid py-2 px-4 mt-4" />
                         <div className="mt-12 flex flex-col items-center">

@@ -1,5 +1,5 @@
-import { setError } from '../slices/appSlice';
-import { setLoader, setHotels, setHasSearched, setHotel, setRoom, setBookings, setHasBooked, setBooking } from '../slices/hotelSlice';
+import { setError , setSuccess} from '../slices/appSlice';
+import { setLoader, setHotels, setHasSearched, setHotel, setRoom, setBookings, setHasBooked, setBooking, setAllHotels } from '../slices/hotelSlice';
 import axios from 'axios';
 
 // search hotel
@@ -94,6 +94,35 @@ export const getUserBooking = (id) => async (dispatch) => {
         dispatch(setLoader(false));
     } catch (err) {
         dispatch(setError(err.response.date.message));
+        dispatch(setLoader(false));
+    }
+}
+
+// get all hotels -- admin
+export const getAllHotels = () => async (dispatch) => {
+    try {
+        dispatch(setLoader(true));
+        const { data } = await axios.get(`/api/v1/hotels`);
+
+        dispatch(setAllHotels(data.hotels));
+        dispatch(setLoader(false));
+    } catch (err) {
+        dispatch(setLoader(false));
+        dispatch(setError(err.response.data.message));
+    }
+}
+
+// upload hotel picture
+export const uploadHotelPicture = (formData, id) => async (dispatch) => {
+    try {
+        dispatch(setLoader(true));
+        await axios.put(`/api/v1/hotel/${id}/images`, formData, { headers: { "Content-Type": "multipart/form-data" } });
+
+        dispatch(setSuccess("Image uploaded successfully"));
+        dispatch(setHasSearched(false));
+        dispatch(setLoader(false));
+    } catch (err) {
+        dispatch(setError(err.response.data.message));
         dispatch(setLoader(false));
     }
 }

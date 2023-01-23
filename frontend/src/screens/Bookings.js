@@ -12,7 +12,7 @@ const Bookings = () => {
     const { isLoading, bookings } = useSelector((state) => state.hotelState);
     const [page, setPage] = useState(0);
     const rowsPerPage = 5;
-    const emptyRows =Math.max(0, (1 + page) * rowsPerPage  - bookings?.length);
+    const emptyRows = Math.max(0, (1 + page) * rowsPerPage - bookings?.length);
 
     useEffect(() => {
         dispatch(getUsersBookings());
@@ -31,24 +31,24 @@ const Bookings = () => {
                         <Table className="min-w-[600px]">
                             <TableHead >
                                 <TableRow className="bg-red-300">
-                                    <TableCell>Id</TableCell>
-                                    <TableCell>Status</TableCell>
-                                    <TableCell>Check In Date</TableCell>
-                                    <TableCell>Details</TableCell>
+                                    <TableCell align="center" >Id</TableCell>
+                                    <TableCell align="center" >Status</TableCell>
+                                    <TableCell align="center" >Check In Date</TableCell>
+                                    <TableCell align="center" >Details</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {(rowsPerPage > 2 ? bookings?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : bookings)?.map((booking) => (
                                     <TableRow key={booking._id}>
-                                        <TableCell>{booking._id}</TableCell>
-                                        <TableCell>{booking.status}</TableCell>
-                                        <TableCell>{format(new Date(booking.dates[0]), "yyyy-MM-dd")}</TableCell>
-                                        <TableCell><Link to={`/me/booking/${booking._id}`} ><LaunchIcon /></Link> </TableCell>
+                                        <TableCell align="center" >{booking._id}</TableCell>
+                                        <TableCell align="center" >{booking.status}</TableCell>
+                                        <TableCell align="center" >{format(new Date(booking.dates[0]), "yyyy-MM-dd")}</TableCell>
+                                        <TableCell align="center" ><Link to={`/me/booking/${booking._id}`} ><LaunchIcon /></Link> </TableCell>
                                     </TableRow>
                                 ))}
                                 {emptyRows > 0 && (
                                     <TableRow style={{ height: 57 * emptyRows }}>
-                                        <TableCell colSpan={ 4}/>
+                                        <TableCell colSpan={4} />
                                     </TableRow>
                                 )}
                             </TableBody>
