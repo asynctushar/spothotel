@@ -168,9 +168,9 @@ const AllHotels = () => {
                         <Dialog open={isDeleteOpen}>
                             <DialogTitle className="text-center">Delete Hotel?</DialogTitle>
                             <DialogContent className="m-8">
-                                <DialogContentText className="text-gray-900">This will delete hotel's room also.</DialogContentText>
+                                <DialogContentText className="text-gray-900">This will delete hotel's room and room's booking details also.</DialogContentText>
                             </DialogContent>
-                            <DialogActions>
+                            <DialogActions className="m-4">
                                 <button onClick={() => {
                                     setIsDeleteOpen(!isDeleteOpen);
                                     setHotelRef(undefined);

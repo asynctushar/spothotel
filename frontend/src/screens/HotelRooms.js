@@ -8,7 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import WeekendIcon from '@mui/icons-material/Weekend';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableFooter, TablePagination, IconButton, Dialog, DialogContent, DialogTitle, DialogActions, Button } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableFooter, TablePagination, IconButton, Dialog, DialogContent, DialogTitle, DialogActions, Button, DialogContentText } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { setError } from "../redux/slices/appSlice";
@@ -175,15 +175,18 @@ const HotelRooms = () => {
                                 </Dialog>
                                 <Dialog open={isDeleteOpen}>
                                     <div className="p-4" >
-                                    <DialogTitle className="text-center">Delete Room?</DialogTitle>
-                                    <DialogActions className="mt-12">
-                                        <button onClick={() => {
-                                            setIsDeleteOpen(!isDeleteOpen);
-                                            setRoomRef(undefined);
-                                        }
-                                        } className="bg-red-400 hover:bg-red-500 py-2 rounded-lg w-24 text-center text-neutral-50  transition duration-200 font-semibold">Cancel</button>
-                                        <button onClick={deleteHandler} className=" border-red-400 text-red-400 hover:text-red-500 hover:border-red-500 hover:bg-red-200 border-solid border py-2 rounded-lg w-24 text-center transition duration-200 box-border">Delete</button>
-                                    </DialogActions>
+                                        <DialogTitle className="text-center">Delete Room?</DialogTitle>
+                                        <DialogContent className="m-8">
+                                            <DialogContentText className="text-gray-900">This will delete the room's booking details also.</DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions className="mt-12">
+                                            <button onClick={() => {
+                                                setIsDeleteOpen(!isDeleteOpen);
+                                                setRoomRef(undefined);
+                                            }
+                                            } className="bg-red-400 hover:bg-red-500 py-2 rounded-lg w-24 text-center text-neutral-50  transition duration-200 font-semibold">Cancel</button>
+                                            <button onClick={deleteHandler} className=" border-red-400 text-red-400 hover:text-red-500 hover:border-red-500 hover:bg-red-200 border-solid border py-2 rounded-lg w-24 text-center transition duration-200 box-border">Delete</button>
+                                        </DialogActions>
                                     </div>
                                 </Dialog>
                             </div>

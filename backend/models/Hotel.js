@@ -15,7 +15,6 @@ const hotelSchema = new mongoose.Schema({
         type: Number,
         require: true
     },
-    minPrice: Number,
     specification: [String],
     description: {
         type: String,

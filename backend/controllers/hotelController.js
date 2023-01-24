@@ -15,8 +15,7 @@ exports.createHotel = catchAsyncErrors(async (req, res, next) => {
     });
 
     res.status(201).json({
-        success: true,
-        hotel
+        success: true
     })
 });
 
