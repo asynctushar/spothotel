@@ -112,7 +112,7 @@ export const getAllHotels = () => async (dispatch) => {
     }
 }
 
-// upload hotel picture
+// upload hotel picture --admin
 export const uploadHotelPicture = (formData, id) => async (dispatch) => {
     try {
         dispatch(setLoader(true));
@@ -120,6 +120,50 @@ export const uploadHotelPicture = (formData, id) => async (dispatch) => {
 
         dispatch(setSuccess("Image uploaded successfully"));
         dispatch(setHasSearched(false));
+        dispatch(setLoader(false));
+    } catch (err) {
+        dispatch(setError(err.response.data.message));
+        dispatch(setLoader(false));
+    }
+}
+
+// upload room picture --admin
+export const uploadRoomPicture = (formData, id) => async (dispatch) => {
+    try {
+        dispatch(setLoader(true));
+        await axios.put(`/api/v1/room/${id}/images`, formData, { headers: { "Content-Type": "multipart/form-data" } });
+
+        dispatch(setSuccess("Image uploaded successfully"));
+        dispatch(setLoader(false));
+    } catch (err) {
+        dispatch(setError(err.response.data.message));
+        dispatch(setLoader(false));
+    }
+}
+
+// delete hotel -- admin
+export const deleteHotel = (id) => async (dispatch) => {
+    try {
+        dispatch(setLoader(true));
+        const { data } = await axios.delete(`/api/v1/hotel/${id}`);
+
+        dispatch(setAllHotels(data.hotels));
+        dispatch(setSuccess("Hotel deleted successfully"));
+        dispatch(setLoader(false));
+    } catch (err) {
+        dispatch(setError(err.response.data.message));
+        dispatch(setLoader(false));
+    }
+}
+
+// delete room -- admin
+export const deleteRoom = (id) => async (dispatch) => {
+    try {
+        dispatch(setLoader(true));
+        const { data } = await axios.delete(`/api/v1/room/${id}`);
+
+        dispatch(setHotel(data.hotel));
+        dispatch(setSuccess("Room deleted successfully"));
         dispatch(setLoader(false));
     } catch (err) {
         dispatch(setError(err.response.data.message));

@@ -99,7 +99,7 @@ exports.uploadRoomPictures = catchAsyncErrors(async (req, res, next) => {
 exports.updateRoom = catchAsyncErrors(async (req, res, next) => {
     const id = req.params.id;
     const { number, name, bedStatus, bedCount, specification, pricePerDay } = req.body;
-    
+
     if (number) {
         return next(new ErrorHandler("Room number can't be changed", 400))
     }
@@ -145,9 +145,11 @@ exports.deleteRoom = catchAsyncErrors(async (req, res, next) => {
 
     await roomsHotel.save();
     await room.delete();
+    const hotel = await Hotel.findById(roomsHotel.id).populate('rooms');
 
     res.status(200).json({
         success: true,
+        hotel,
         message: "room deleted successfully"
     })
 })

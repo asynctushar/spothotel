@@ -25,6 +25,8 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import BookingDetails from './screens/BookingDetails';
 import { Alert, Snackbar } from '@mui/material';
+import UpdateHotel from './screens/UpdateHotel';
+import HotelRooms from './screens/HotelRooms';
 
 const App = () => {
     const [stripeApiKey, setStripeApiKey] = useState("");
@@ -108,6 +110,8 @@ const App = () => {
                         <Route path="/admin/users" element={<ProtectedRoute role="admin"><AllUsers /></ProtectedRoute>} />
                         <Route path="/admin/hotels" element={<ProtectedRoute role="admin"><AllHotels /></ProtectedRoute>} />
                         <Route path="/admin/hotel/new" element={<ProtectedRoute role="admin"><CreateHotel /></ProtectedRoute>} />
+                        <Route path="/admin/hotel/:id/update" element={<ProtectedRoute role="admin"><UpdateHotel /></ProtectedRoute>} />
+                        <Route path="/admin/hotel/:id/rooms" element={<ProtectedRoute role="admin"><HotelRooms /></ProtectedRoute>} />
                         <Route path="/admin/bookings" element={<ProtectedRoute role="admin"><AllBookings /></ProtectedRoute>} />
                     </Routes>
                     <Snackbar open={isErrorOpen} autoHideDuration={3000} onClose={handleErrorClose}>

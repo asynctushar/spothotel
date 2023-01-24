@@ -1,20 +1,23 @@
 import SideBar from "../components/SideBar";
 import { Fragment, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllHotels, uploadHotelPicture } from '../redux/actions/hotelAction';
+import { deleteHotel, getAllHotels, uploadHotelPicture } from '../redux/actions/hotelAction';
 import Loader from '../components/Loader';
 import { Link } from 'react-router-dom';
 import LaunchIcon from '@mui/icons-material/Launch';
 import HolidayVillageIcon from '@mui/icons-material/HolidayVillage';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableFooter, TablePagination, IconButton, Dialog, DialogContent, DialogTitle, DialogActions, Button } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableFooter, TablePagination, IconButton, Dialog, DialogContent, DialogTitle, DialogActions, Button, DialogContentText } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { setError } from "../redux/slices/appSlice";
 
 const AllHotels = () => {
     const dispatch = useDispatch();
     const { isLoading, allHotels } = useSelector((state) => state.hotelState);
     const [open, setOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [hotelRef, setHotelRef] = useState(undefined);
     const [images, setImages] = useState([]);
     const [page, setPage] = useState(0);
@@ -39,6 +42,13 @@ const AllHotels = () => {
         dispatch(uploadHotelPicture(formData, hotelRef._id))
         setOpen(!open);
         setImages([]);
+        setHotelRef(undefined);
+    }
+
+    const deleteHandler = () => {
+        dispatch(deleteHotel(hotelRef._id));
+        setIsDeleteOpen(false);
+        setHotelRef(undefined);
     }
 
 
@@ -57,6 +67,7 @@ const AllHotels = () => {
                                         <TableCell align="center">Name</TableCell>
                                         <TableCell align="center">Upload Images</TableCell>
                                         <TableCell align="center">Update</TableCell>
+                                        <TableCell align="center">Delete</TableCell>
                                         <TableCell align="center">Rooms</TableCell>
                                         <TableCell align="center">Details</TableCell>
                                     </TableRow>
@@ -74,13 +85,33 @@ const AllHotels = () => {
                                                     <AddPhotoAlternateIcon />
                                                 </IconButton>
                                             </TableCell>
-                                            <TableCell align="center"><Link to={`/admin/hotel/${hotel._id}/update`}><EditIcon /></Link></TableCell>
-                                            <TableCell align="center"><Link to={`/admin/hotel/${hotel._id}/rooms`}><HolidayVillageIcon /></Link></TableCell>
-                                            <TableCell align="center"><Link to={`/hotel/${hotel._id}`}><LaunchIcon /></Link></TableCell>
+                                            <TableCell align="center">
+                                                <Link to={`/admin/hotel/${hotel._id}/update`}>
+                                                    <IconButton><EditIcon /></IconButton>
+                                                </Link>
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <IconButton onClick={() => {
+                                                    setIsDeleteOpen(!isDeleteOpen);
+                                                    setHotelRef(hotel);
+                                                }}>
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <Link to={`/admin/hotel/${hotel._id}/rooms`}>
+                                                    <IconButton><HolidayVillageIcon /></IconButton>
+                                                </Link>
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <Link to={`/hotel/${hotel._id}`}>
+                                                    <IconButton><LaunchIcon /></IconButton>
+                                                </Link>
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                     {emptyRows > 0 && (
-                                        <TableRow style={{ height: 57 * emptyRows }}>
+                                        <TableRow style={{ height: 72.8 * emptyRows }}>
                                             <TableCell colSpan={4} />
                                         </TableRow>
                                     )}
@@ -105,7 +136,11 @@ const AllHotels = () => {
                                         <Button component="label">
                                             <FileUploadIcon color="action" fontSize="large" />
                                             <input hidden accept="image/*" multiple type="file" onChange={(e) => {
-                                                setImages(Array.from(e.target.files));
+                                                if (e.target.files.length <= 5) {
+                                                    setImages(Array.from(e.target.files));
+                                                } else {
+                                                    dispatch(setError("Maximum 5 Images can be uploaded."))
+                                                }
                                             }
                                             } />
                                         </Button>
@@ -123,11 +158,26 @@ const AllHotels = () => {
                                     <button onClick={() => {
                                         setOpen(!open);
                                         setImages([]);
+                                        setHotelRef(undefined);
                                     }
                                     } className="bg-red-400 hover:bg-red-500 py-2 rounded-lg w-24 text-center text-neutral-50  transition duration-200 font-semibold">Cancel</button>
                                     <button disabled={images.length < 1 ? true : false} onClick={updloadImageHandler} className=" border-red-400 text-red-400 hover:text-red-500 hover:border-red-500 hover:bg-red-200 border-solid border py-2 rounded-lg w-24 text-center transition duration-200 box-border">Upload</button>
                                 </DialogActions>
                             </div>
+                        </Dialog>
+                        <Dialog open={isDeleteOpen}>
+                            <DialogTitle className="text-center">Delete Hotel?</DialogTitle>
+                            <DialogContent className="m-8">
+                                <DialogContentText className="text-gray-900">This will delete hotel's room also.</DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <button onClick={() => {
+                                    setIsDeleteOpen(!isDeleteOpen);
+                                    setHotelRef(undefined);
+                                }
+                                } className="bg-red-400 hover:bg-red-500 py-2 rounded-lg w-24 text-center text-neutral-50  transition duration-200 font-semibold">Cancel</button>
+                                <button onClick={deleteHandler} className=" border-red-400 text-red-400 hover:text-red-500 hover:border-red-500 hover:bg-red-200 border-solid border py-2 rounded-lg w-24 text-center transition duration-200 box-border">Delete</button>
+                            </DialogActions>
                         </Dialog>
                     </div>
                 )}

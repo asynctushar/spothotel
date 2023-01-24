@@ -120,9 +120,11 @@ exports.deleteHotel = catchAsyncErrors(async (req, res, next) => {
     }
 
     await hotel.delete();
+    const hotels = await Hotel.find();
 
     res.status(200).json({
         success: true,
+        hotels,
         message: "Hotel deleted successfully"
     })
 })

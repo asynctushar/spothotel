@@ -68,7 +68,7 @@ const AllUsers = () => {
                                         </TableRow>
                                     ))}
                                     {emptyRows > 0 && (
-                                        <TableRow style={{ height: 57 * emptyRows }}>
+                                        <TableRow style={{ height: 72.8 * emptyRows }}>
                                             <TableCell colSpan={4} />
                                         </TableRow>
                                     )}
