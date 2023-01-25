@@ -1,72 +1,148 @@
-import { Fragment, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { getHotelAction } from "../redux/actions/hotelAction";
-import { Slide } from 'react-slideshow-image';
-import picture from '../images/nopicture.jpg';
-import AddIcon from '@mui/icons-material/Add';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import AirlineStopsIcon from '@mui/icons-material/AirlineStops';
+import SideBar from "../components/SideBar";
+import { Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, styled } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { setIsHotelUPdated } from '../redux/slices/hotelSlice';
+import { getHotelAction, updateHotel } from '../redux/actions/hotelAction';
 import Loader from '../components/Loader';
-import RoomCard from "../components/RoomCard";
+
+const availableSpecifications = [
+    "Car Parking",
+    "Restaurant",
+    "Free Wi-fi"
+];
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        },
+    },
+};
+
+const CustomSelect = styled(Select)(() => ({
+    "&.MuiOutlinedInput-root": {
+        "& fieldset": {
+            border: "1px solid rgb(156 163 175)"
+        },
+        "&:hover fieldset": {
+            border: "1px solid rgb(156 163 175)"
+        },
+        "&.Mui-focused fieldset": {
+            border: "1px solid rgb(156 163 175)"
+        }
+    }
+}));
 
 const UpdateHotel = () => {
-    const { id } = useParams();
+    const [specification, setSpecification] = useState([]);
+    const [name, setName] = useState('');
+    const [location, setLocation] = useState('');
+    const [distance, setDistance] = useState('');
+    const [description, setDescription] = useState('');
+    const { isHotelUpdated, isLoading, hotel } = useSelector((state) => state.hotelState);
+    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { hotel, isLoading } = useSelector((state) => state.hotelState);
+    const { id } = useParams();
 
     useEffect(() => {
-        dispatch(getHotelAction(id));
+        if (id) {
+            dispatch(getHotelAction(id))
+        }
     }, [id, dispatch]);
 
+    useEffect(() => {
+        if (hotel) {
+            setName(hotel.name);
+            setLocation(hotel.location);
+            setDistance(hotel.distance);
+            setDescription(hotel.description);
+            setSpecification(hotel.specification);
+        }
+    }, [hotel])
+
+    useEffect(() => {
+        if (isHotelUpdated) {
+            navigate('/admin/hotels');
+            dispatch(setIsHotelUPdated(false));
+        }
+    }, [isHotelUpdated, dispatch, navigate]);
+
+    const handleChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        // On autofill we get a stringified value.
+        setSpecification(
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        const formData = {
+            name,
+            location,
+            distance: Number(distance),
+            description,
+            specification
+        }
+
+        dispatch(updateHotel(formData, id));
+    }
+
     return (
-        <Fragment>
+        <div className="flex">
+            <SideBar />
             {isLoading ? <Loader /> : (
-                <div className="flex flex-col md:min-h-60 gap-8 bg-gray-200  pt-4 md:items-center">
-                    <div className="h-60 md:w-7/12">
-                        {hotel?.pictures.length < 1 ? (
-                            <div className="h-60 -mr-[21.33px]">
-                                <img src={picture} alt="Not available" className="w-full h-full object-fill" />
-                            </div>
-                        ) : (
-                            <Slide duration={3000} transitionDuration={400} prevArrow={<ArrowBackIosNewIcon className="text-zinc-200" />} nextArrow={<ArrowForwardIosIcon className="text-zinc-200" />}>
-                                {hotel?.pictures.map((pic) => (
-                                    <div className="h-60" key={pic.public_id}>
-                                        <img src={pic.url} alt={pic.public_id} className="w-full h-full object-cover" />
-                                    </div>
+                <div className="px-4 md:px-10 lg:px-20 xl:px-48 mx-auto">
+                    <h2 className="text-2xl font-medium text-center my-8">Update Hotel</h2>
+                    <form className="flex flex-col gap-4" onSubmit={(e) => handleSubmit(e)}>
+                        <div className="border border-solid border-gray-400 py-3 px-5 rounded">
+                            <FormatColorTextIcon className="text-gray-600" />
+                            <input type="text" required={true} value={name} onChange={(e) => setName(e.target.value)} placeholder="Hotel Name" className="w-40 sm:w-60 md:w-80 ml-3 outline-none bg-transparent" />
+                        </div>
+                        <div className="border border-solid border-gray-400 py-3 px-5 rounded">
+                            <LocationOnIcon className="text-gray-600" />
+                            <input type="text" required={true} value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" className="w-40 sm:w-60 md:w-80 ml-3 outline-none bg-transparent" />
+                        </div>
+                        <div className="border border-solid border-gray-400 py-3 px-5 rounded">
+                            <AirlineStopsIcon className="text-gray-600" />
+                            <input type="number" required={true} value={distance} onChange={(e) => setDistance(e.target.value)} placeholder="Distance" className="w-40 sm:w-60 md:w-80 ml-3 outline-none bg-transparent" />
+                        </div>
+                        <FormControl className="md:w-[25rem] w-60 sm:w-80">
+                            <InputLabel id="demo-multiple-checkbox-label" className="!text-gray-400">Specifications</InputLabel>
+                            <CustomSelect
+                                labelId="demo-multiple-checkbox-label"
+                                id="demo-multiple-checkbox"
+                                multiple
+                                value={specification}
+                                onChange={handleChange}
+                                input={<OutlinedInput label="Specifications" />}
+                                renderValue={(selected) => selected.join(', ')}
+                                MenuProps={MenuProps}
+                            >
+                                {availableSpecifications.map((spec) => (
+                                    <MenuItem key={spec} value={spec}>
+                                        <Checkbox checked={specification?.indexOf(spec) > -1} />
+                                        <ListItemText primary={spec} />
+                                    </MenuItem>
                                 ))}
-                            </Slide>
-                        )}
-                    </div >
-                    <div className="md:w-7/12 mx-4 md:my-6 mb-6">
-                        <div className="flex justify-between">
-                            <h2 className="text-xl capitalize font-semibold">{hotel?.name}</h2>
-                            <a href="#rooms" className="bg-red-400 text-gray-50 p-3 rounded hover:bg-red-500">Reserve a room</a>
-                        </div>
-                        <h4 className="font-medium">{hotel?.location}</h4>
-                        <p className="my-3">{hotel?.description}</p>
-                        <span className="font-medium text-gray-700"><LocationOnIcon className="mb-1" /><span className=" font-normal">{hotel?.distance}m from zero point.</span></span>
-                        <div className="flex gap-4 flex-wrap mt-6">
-                            {hotel?.specification?.map((spec) => (
-                                <div key={spec} className="py-2 px-3 bg-gray-100 rounded-lg">
-                                    <AddIcon className="mr-2" />
-                                    <span>{spec}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                    <div id="rooms" className="mx-4 md:mx-0 -mt-4 mb-8 md:w-9/12">
-                        <span className="text-2xl mx-auto w-52 pb-2 block font-medium text-center border-b-2 border-solid border-gray-400">Choose your room</span>
-                        <div className="flex flex-wrap gap-4 justify-center mt-12">
-                            {hotel?.rooms.map((room) => (
-                                <RoomCard key={room._id} room={room} />
-                            ))}
-                        </div>
-                    </div>
+                            </CustomSelect>
+                        </FormControl>
+                        <textarea required={true} placeholder="Hotel Description" rows={4} value={description} onChange={(e) => setDescription(e.target.value)} className="border border-solid border-gray-400 py-3 px-5 rounded resize-none focus:outline-none bg-transparent" />
+                        <Button variant="contained" type="submit" className="!bg-red-400 !py-4">Update</Button>
+                    </form>
                 </div >
             )}
-        </Fragment>
+        </div >
     )
 }
 export default UpdateHotel;

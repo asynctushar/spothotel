@@ -7,8 +7,8 @@ import { Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, Outl
 import {  useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { setIsRoomCreated } from '../redux/slices/hotelSlice';
-import { createRoom, getHotelAction } from '../redux/actions/hotelAction';
+import { setIsRoomUpdated } from '../redux/slices/hotelSlice';
+import { getHotelAction , getRoomAction, updateRoom} from '../redux/actions/hotelAction';
 import Loader from '../components/Loader';
 
 const availableSpecifications = [
@@ -46,29 +46,44 @@ const CustomSelect = styled(Select)(() => ({
     }
 }));
 
-const CreateRoom = () => {
+const UpdateRoom = () => {
     const [specification, setSpecification] = useState([]);
     const [type, setType] = useState('');
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
     const [price, setPrice] = useState('');
-    const { isRoomCreated, isLoading, hotel } = useSelector((state) => state.hotelState);
+    const { isRoomUpdated, isLoading, hotel, room } = useSelector((state) => state.hotelState);
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { id } = useParams();
+    const { id, room: roomId } = useParams();
 
     useEffect(() => {
-        if (isRoomCreated) {
+        if (isRoomUpdated) {
             navigate(`/admin/hotel/${id}/rooms`);
-            dispatch(setIsRoomCreated(false));
+            dispatch(setIsRoomUpdated(false));
         }
-    }, [isRoomCreated, dispatch, navigate, id]);
+    }, [isRoomUpdated, dispatch, navigate, id]);
 
     useEffect(() => {
         if (id) {
             dispatch(getHotelAction(id));
         }
-    }, [dispatch, id]);
+
+        if (roomId) {
+            dispatch(getRoomAction(roomId));
+        }
+
+    }, [dispatch, id, roomId]);
+
+    useEffect(() => {
+        if (room) {
+            setName(room.name);
+            setNumber(room.number);
+            setPrice(room.pricePerDay);
+            setType(room.type);
+            setSpecification(room.specification);
+        }
+    }, [room])
 
     const handleSpecificationChange = (event) => {
         const {
@@ -89,13 +104,12 @@ const CreateRoom = () => {
 
         const formData = {
             name,
-            number: Number(number),
             pricePerDay: Number(price),
             specification,
             type
         }
 
-        dispatch(createRoom(formData, id));
+        dispatch(updateRoom(formData, roomId));
     }
 
     return (
@@ -105,7 +119,7 @@ const CreateRoom = () => {
                 <div className="w-[80%] sm:w-[60%] md:w-[70%] mx-auto mt-3">
                     <div className="flex flex-col md:flex-row gap-6 md:gap-4 items-center md:justify-between ">
                         <div className="flex">
-                            <Button onClick={() => navigate('/admin/hotels')} variant="contained"
+                            <Button onClick={() => navigate(`/admin/hotel/${id}/rooms`)} variant="contained"
                                 className="!text-gray-100 !bg-red-400 w-60 !py-3 md:w-min">
                                 <ArrowBackIosNewIcon fontSize="small" className="mr-2" />
                                 Back
@@ -120,7 +134,7 @@ const CreateRoom = () => {
                             </div>
                         </div>
                     </div>
-                    <h2 className="text-2xl font-medium text-center my-8">Create Room</h2>
+                    <h2 className="text-2xl font-medium text-center my-8">Update Room</h2>
                     <form className="flex flex-col gap-4 px-2 max-w-fit mx-auto mb-8" onSubmit={(e) => handleSubmit(e)}>
                         <div className="border border-solid border-gray-400 py-3 px-5 rounded">
                             <FormatColorTextIcon className="text-gray-600" />
@@ -128,7 +142,7 @@ const CreateRoom = () => {
                         </div>
                         <div className="border border-solid border-gray-400 py-3 px-5 rounded">
                             <MeetingRoomIcon className="text-gray-600" />
-                            <input type="number" required={true} value={number} onChange={(e) => setNumber(e.target.value)} placeholder="Room Number" className="w-40 sm:w-60 md:w-80 ml-3 outline-none bg-transparent" />
+                            <input type="number" disabled={true} required={true} value={number} onChange={(e) => setNumber(e.target.value)} placeholder="Room Number" className="w-40 sm:w-60 md:w-80 ml-3 outline-none bg-transparent" />
                         </div>
                         <div className="border border-solid border-gray-400 py-3 px-5 rounded">
                             <RequestQuoteIcon className="text-gray-600" />
@@ -172,11 +186,11 @@ const CreateRoom = () => {
                                 ))}
                             </CustomSelect>
                         </FormControl>
-                        <Button variant="contained" type="submit" className="!bg-red-400 !py-4">Create</Button>
+                        <Button variant="contained" type="submit" className="!bg-red-400 !py-4">Update</Button>
                     </form>
                 </div>
             )}
         </div >
     )
 }
-export default CreateRoom;
+export default UpdateRoom;

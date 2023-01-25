@@ -1,5 +1,5 @@
 import { setError, setSuccess } from '../slices/appSlice';
-import { setLoader, setHotels, setHasSearched, setHotel, setRoom, setBookings, setHasBooked, setBooking, setAllHotels, setIsHotelCreated, setIsRoomCreated } from '../slices/hotelSlice';
+import { setLoader, setHotels, setHasSearched, setHotel, setRoom, setBookings, setHasBooked, setBooking, setAllHotels, setIsHotelCreated, setIsRoomCreated , setIsHotelUPdated, setIsRoomUpdated} from '../slices/hotelSlice';
 import axios from 'axios';
 
 // search hotel
@@ -185,7 +185,21 @@ export const createHotel = (formData) => async (dispatch) => {
     }
 }
 
-// create new hotel --admin
+// update hotel --admin
+export const updateHotel = (formData,hotelId) => async (dispatch) => {
+    try {
+        dispatch(setLoader(true));
+        await axios.put(`/api/v1/hotel/${hotelId}`, formData, { headers: { "Content-Type": "application/json" } });
+
+        dispatch(setSuccess("Hotel Updated successfully"));
+        dispatch(setIsHotelUPdated(true));
+    } catch (err) {
+        dispatch(setError(err.response.data.message));
+        dispatch(setLoader(false));
+    }
+}
+
+// create new room --admin
 export const createRoom = (formData, hotelId) => async (dispatch) => {
     try {
         dispatch(setLoader(true));
@@ -193,6 +207,20 @@ export const createRoom = (formData, hotelId) => async (dispatch) => {
 
         dispatch(setSuccess("Room Created successfully"));
         dispatch(setIsRoomCreated(true));
+    } catch (err) {
+        dispatch(setError(err.response.data.message));
+        dispatch(setLoader(false));
+    }
+}
+
+// update room --admin
+export const updateRoom = (formData, roomId) => async (dispatch) => {
+    try {
+        dispatch(setLoader(true));
+        await axios.put(`/api/v1/room/${roomId}`, formData, { headers: { "Content-Type": "application/json" } });
+
+        dispatch(setSuccess("Room Updated successfully"));
+        dispatch(setIsRoomUpdated(true));
     } catch (err) {
         dispatch(setError(err.response.data.message));
         dispatch(setLoader(false));

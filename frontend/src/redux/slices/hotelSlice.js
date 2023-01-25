@@ -11,7 +11,9 @@ const initialState = {
     bookings: [],
     allHotels: [],
     isHotelCreated: false,
-    isRoomCreated: false
+    isRoomCreated: false,
+    isHotelUpdated: false,
+    isRoomUpdated: false
 }
 
 const hotelSlice = createSlice({
@@ -50,10 +52,16 @@ const hotelSlice = createSlice({
         },
         setIsRoomCreated: (state, action) => {
             state.isRoomCreated = action.payload;
+        },
+        setIsHotelUPdated: (state, action) => {
+            state.isHotelUpdated = action.payload;
+        },
+        setIsRoomUpdated: (state, action) => {
+            state.isRoomUpdated = action.payload;
         }
     }
 });
 
-export const { setLoader, setHotels, setHasSearched , setHotel, setRoom, setBookings, setHasBooked, setBooking, setAllHotels, setIsHotelCreated, setIsRoomCreated} = hotelSlice.actions;
+export const { setLoader, setHotels, setHasSearched , setHotel, setRoom, setBookings, setHasBooked, setBooking, setAllHotels, setIsHotelCreated, setIsRoomCreated, setIsHotelUPdated, setIsRoomUpdated} = hotelSlice.actions;
 
 export default hotelSlice.reducer;

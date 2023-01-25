@@ -41,7 +41,7 @@ const CustomSelect = styled(Select)(() => ({
 }));
 
 const CreateHotel = () => {
-    const [specifiactions, setSpecifications] = useState([]);
+    const [specification, setSpecification] = useState([]);
     const [name, setName] = useState('');
     const [location, setLocation] = useState('');
     const [distance, setDistance] = useState('');
@@ -61,7 +61,7 @@ const CreateHotel = () => {
         const {
             target: { value },
         } = event;
-        setSpecifications(
+        setSpecification(
             // On autofill we get a stringified value.
             typeof value === 'string' ? value.split(',') : value,
         );
@@ -75,7 +75,7 @@ const CreateHotel = () => {
             location,
             distance: Number(distance),
             description,
-            specifiactions
+            specification
         }
 
         dispatch(createHotel(formData));
@@ -106,7 +106,7 @@ const CreateHotel = () => {
                                 labelId="demo-multiple-checkbox-label"
                                 id="demo-multiple-checkbox"
                                 multiple
-                                value={specifiactions}
+                                value={specification}
                                 onChange={handleChange}
                                 input={<OutlinedInput label="Specifications" />}
                                 renderValue={(selected) => selected.join(', ')}
@@ -114,7 +114,7 @@ const CreateHotel = () => {
                             >
                                 {availableSpecifications.map((spec) => (
                                     <MenuItem key={spec} value={spec}>
-                                        <Checkbox checked={specifiactions.indexOf(spec) > -1} />
+                                        <Checkbox checked={specification.indexOf(spec) > -1} />
                                         <ListItemText primary={spec} />
                                     </MenuItem>
                                 ))}

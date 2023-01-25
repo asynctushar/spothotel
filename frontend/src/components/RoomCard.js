@@ -41,7 +41,7 @@ const RoomCard = ({ room }) => {
             <div className="mx-4 mb-6">
                 <h2 className="text-xl capitalize font-semibold">{room.name}</h2>
                 <p className=" my-3 font-medium">Type: <span className="font-normal font-mono">{room.type}</span></p>
-                <div className="flex gap-4 flex-wrap mt-6 mb-5 h-24 items-start">
+                <div className="flex gap-4 flex-wrap mt-6 mb-5 h-24 items-end">
                     {room.specification?.map((spec) => (
                         <div key={spec} className="py-2 px-3 bg-gray-300 rounded-lg">
                             <AddIcon className="mr-1" />

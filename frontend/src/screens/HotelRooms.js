@@ -105,7 +105,7 @@ const HotelRooms = () => {
                                                         </IconButton>
                                                     </TableCell>
                                                     <TableCell align="center">
-                                                        <Link to={`/admin/hotel/${room._id}/update`}>
+                                                        <Link to={`/admin/hotel/${id}/room/${room._id}/update`}>
                                                             <IconButton><EditIcon /></IconButton>
                                                         </Link>
                                                     </TableCell>
