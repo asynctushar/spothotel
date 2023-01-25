@@ -120,7 +120,7 @@ const CreateHotel = () => {
                                 ))}
                             </CustomSelect>
                         </FormControl>
-                        <textarea required={true} placeholder="Hotel Description" rows={4} value={description} onChange={(e) => setDescription(e.target.value)} className="border border-solid border-gray-400 py-3 px-5 rounded resize-none focus:outline-none" />
+                        <textarea required={true} placeholder="Hotel Description" rows={4} value={description} onChange={(e) => setDescription(e.target.value)} className="border border-solid border-gray-400 py-3 px-5 rounded resize-none focus:outline-none bg-transparent" />
                         <Button variant="contained" type="submit" className="!bg-red-400 !py-4">Create</Button>
                     </form>
                 </div >

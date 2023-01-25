@@ -1,5 +1,5 @@
 import { setError, setSuccess } from '../slices/appSlice';
-import { setLoader, setHotels, setHasSearched, setHotel, setRoom, setBookings, setHasBooked, setBooking, setAllHotels, setIsHotelCreated } from '../slices/hotelSlice';
+import { setLoader, setHotels, setHasSearched, setHotel, setRoom, setBookings, setHasBooked, setBooking, setAllHotels, setIsHotelCreated, setIsRoomCreated } from '../slices/hotelSlice';
 import axios from 'axios';
 
 // search hotel
@@ -179,7 +179,20 @@ export const createHotel = (formData) => async (dispatch) => {
 
         dispatch(setSuccess("Hotel Created successfully"));
         dispatch(setIsHotelCreated(true));
+    } catch (err) {
+        dispatch(setError(err.response.data.message));
         dispatch(setLoader(false));
+    }
+}
+
+// create new hotel --admin
+export const createRoom = (formData, hotelId) => async (dispatch) => {
+    try {
+        dispatch(setLoader(true));
+        await axios.post(`/api/v1/hotel/${hotelId}/room/new`, formData, { headers: { "Content-Type": "application/json" } });
+
+        dispatch(setSuccess("Room Created successfully"));
+        dispatch(setIsRoomCreated(true));
     } catch (err) {
         dispatch(setError(err.response.data.message));
         dispatch(setLoader(false));

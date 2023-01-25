@@ -27,6 +27,7 @@ import BookingDetails from './screens/BookingDetails';
 import { Alert, Snackbar } from '@mui/material';
 import UpdateHotel from './screens/UpdateHotel';
 import HotelRooms from './screens/HotelRooms';
+import CreateRoom from './screens/CreateRoom';
 
 const App = () => {
     const [stripeApiKey, setStripeApiKey] = useState("");
@@ -112,6 +113,7 @@ const App = () => {
                         <Route path="/admin/hotel/new" element={<ProtectedRoute role="admin"><CreateHotel /></ProtectedRoute>} />
                         <Route path="/admin/hotel/:id/update" element={<ProtectedRoute role="admin"><UpdateHotel /></ProtectedRoute>} />
                         <Route path="/admin/hotel/:id/rooms" element={<ProtectedRoute role="admin"><HotelRooms /></ProtectedRoute>} />
+                        <Route path="/admin/hotel/:id/room/new" element={<ProtectedRoute role="admin"><CreateRoom /></ProtectedRoute>} />
                         <Route path="/admin/bookings" element={<ProtectedRoute role="admin"><AllBookings /></ProtectedRoute>} />
                     </Routes>
                     <Snackbar open={isErrorOpen} autoHideDuration={3000} onClose={handleErrorClose}>

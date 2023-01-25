@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useNavigate } from 'react-router-dom';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import { Calendar } from 'react-date-range';
 import { useState, useEffect } from 'react';
 import { Dialog } from '@mui/material';
@@ -22,7 +22,7 @@ const RoomCard = ({ room }) => {
     }, [room])
 
     return (
-        <div className="flex flex-col w-72 gap-8 bg-stone-100 shadow-md rounded-md">
+        <div className="flex flex-col w-80 gap-8 bg-stone-100 shadow-md rounded-md">
             <div className="h-60 rounded-t-md overflow-hidden">
                 {room.pictures.length < 1 ? (
                     <div className="h-60">
@@ -38,26 +38,26 @@ const RoomCard = ({ room }) => {
                     </Slide>
                 )}
             </div >
-            <div className=" mx-4 mb-6">
+            <div className="mx-4 mb-6">
                 <h2 className="text-xl capitalize font-semibold">{room.name}</h2>
                 <p className=" my-3 font-medium">Type: <span className="font-normal font-mono">{room.type}</span></p>
-                <div className="flex gap-4 flex-wrap mt-6 mb-4">
+                <div className="flex gap-4 flex-wrap mt-6 mb-5 h-24 items-start">
                     {room.specification?.map((spec) => (
                         <div key={spec} className="py-2 px-3 bg-gray-300 rounded-lg">
-                            <AddIcon className="mr-2" />
+                            <AddIcon className="mr-1" />
                             <span>{spec}</span>
                         </div>
                     ))}
                 </div>
-                <span className="text-xl font-medium"><AttachMoneyIcon className="mb-1" />{room.pricePerDay}/day</span>
+                <span className="text-xl font-medium"><RequestQuoteIcon className="mb-1 mr-1" />{room.pricePerDay} Taka/day</span>
                 <div className="flex justify-between gap-4 mt-4">
                     <button onClick={() => setIsDateOpen(!isDateOpen)} className=" border-red-400 text-red-400 hover:text-red-500 hover:border-red-500 hover:bg-red-200 border-solid border py-2 rounded-lg w-36 text-center transition duration-200 box-border">Availability</button>
                     <button onClick={() => navigate(`/hotel/${room.hotel}/${room._id}/book`)} className="bg-red-400 hover:bg-red-500 py-2 rounded-lg w-36 text-center text-neutral-50  transition duration-200 font-semibold">Reserve</button>
                 </div>
                 <Dialog className="flex items-center justify-center" open={isDateOpen} onClose={() => setIsDateOpen(!isDateOpen)}>
-                        <div className=" bg-orange-50 sm:p-8 rounded">
-                            <Calendar disabledDates={disableDates} minDate={new Date()} className="rounded"/>
-                        </div>
+                    <div className=" bg-white sm:p-8 rounded">
+                        <Calendar disabledDates={disableDates} minDate={new Date()} className="rounded" />
+                    </div>
                 </Dialog>
             </div>
         </div >

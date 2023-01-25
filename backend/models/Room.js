@@ -16,7 +16,7 @@ const roomSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['single', 'double'],
+        enum: ['Single', 'Double'],
         required: true
     },
     pricePerDay: {
