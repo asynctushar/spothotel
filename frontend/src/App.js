@@ -29,6 +29,7 @@ import UpdateHotel from './screens/UpdateHotel';
 import HotelRooms from './screens/HotelRooms';
 import CreateRoom from './screens/CreateRoom';
 import UpdateRoom from './screens/UpdateRoom';
+import SingleBookingDetails from './screens/SingleBookingDetails';
 
 const App = () => {
     const [stripeApiKey, setStripeApiKey] = useState("");
@@ -83,49 +84,50 @@ const App = () => {
     }
 
     return (
-            <Router>
-                <div className="bg-slate-50 min-h-screen">
-                    <Navbar />
-                    <hr className=" border-t border-grey-400" />
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/login" element={<SignIn />} />
-                        <Route path="/signup" element={<SignUp />} />
-                        <Route path="/hotel/:id" element={<Hotel />} />
-                        {!isStripeLoading &&
-                            <Route path="/booking/payment" element={
-                                <ProtectedRoute>
-                                    <Elements stripe={loadStripe(stripeApiKey)}>
-                                        <Payment />
-                                    </Elements>
-                                </ProtectedRoute>
-                            } />
-                        }
-                        <Route path="/hotel/:id/:room/book" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
-                        <Route path="/booking/success" element={<ProtectedRoute><BookingSuccess /></ProtectedRoute>} />
-                        <Route path="/account" element={<ProtectedRoute ><Account /> </ProtectedRoute>} />
-                        <Route path="/me/update" element={<ProtectedRoute ><UpdateProfile /></ProtectedRoute>} />
-                        <Route path="/me/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
-                        <Route path="/me/booking/:id" element={<ProtectedRoute><BookingDetails /></ProtectedRoute>} />
-                        <Route path="/me/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
-                        <Route path="/admin/dashboard" element={<ProtectedRoute role="admin"><Dashboard /></ProtectedRoute>} />
-                        <Route path="/admin/users" element={<ProtectedRoute role="admin"><AllUsers /></ProtectedRoute>} />
-                        <Route path="/admin/hotels" element={<ProtectedRoute role="admin"><AllHotels /></ProtectedRoute>} />
-                        <Route path="/admin/hotel/new" element={<ProtectedRoute role="admin"><CreateHotel /></ProtectedRoute>} />
-                        <Route path="/admin/hotel/:id/update" element={<ProtectedRoute role="admin"><UpdateHotel /></ProtectedRoute>} />
-                        <Route path="/admin/hotel/:id/rooms" element={<ProtectedRoute role="admin"><HotelRooms /></ProtectedRoute>} />
-                        <Route path="/admin/hotel/:id/room/new" element={<ProtectedRoute role="admin"><CreateRoom /></ProtectedRoute>} />
-                        <Route path="/admin/hotel/:id/room/:room/update" element={<ProtectedRoute role="admin">< UpdateRoom/></ProtectedRoute>} />
-                        <Route path="/admin/bookings" element={<ProtectedRoute role="admin"><AllBookings /></ProtectedRoute>} />
-                    </Routes>
-                    <Snackbar open={isErrorOpen} autoHideDuration={3000} onClose={handleErrorClose}>
-                        <CustomAlert onClose={handleErrorClose} severity="error" className="w-fit mx-auto md:mr-auto ">{error}</CustomAlert>
-                    </Snackbar>
-                    <Snackbar open={isSuccessOpen} autoHideDuration={3000} onClose={handleSuccessClose}>
-                        <CustomAlert onClose={handleSuccessClose} severity="success" className="w-fit mx-auto md:mr-auto ">{success}</CustomAlert>
-                    </Snackbar>
-                </div>
-            </Router>
+        <Router>
+            <div className="bg-slate-50 min-h-screen">
+                <Navbar />
+                <hr className=" border-t border-grey-400" />
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<SignIn />} />
+                    <Route path="/signup" element={<SignUp />} />
+                    <Route path="/hotel/:id" element={<Hotel />} />
+                    {!isStripeLoading &&
+                        <Route path="/booking/payment" element={
+                            <ProtectedRoute>
+                                <Elements stripe={loadStripe(stripeApiKey)}>
+                                    <Payment />
+                                </Elements>
+                            </ProtectedRoute>
+                        } />
+                    }
+                    <Route path="/hotel/:id/:room/book" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
+                    <Route path="/booking/success" element={<ProtectedRoute><BookingSuccess /></ProtectedRoute>} />
+                    <Route path="/account" element={<ProtectedRoute ><Account /> </ProtectedRoute>} />
+                    <Route path="/me/update" element={<ProtectedRoute ><UpdateProfile /></ProtectedRoute>} />
+                    <Route path="/me/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
+                    <Route path="/me/booking/:id" element={<ProtectedRoute><BookingDetails /></ProtectedRoute>} />
+                    <Route path="/me/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} />
+                    <Route path="/admin/dashboard" element={<ProtectedRoute role="admin"><Dashboard /></ProtectedRoute>} />
+                    <Route path="/admin/users" element={<ProtectedRoute role="admin"><AllUsers /></ProtectedRoute>} />
+                    <Route path="/admin/hotels" element={<ProtectedRoute role="admin"><AllHotels /></ProtectedRoute>} />
+                    <Route path="/admin/hotel/new" element={<ProtectedRoute role="admin"><CreateHotel /></ProtectedRoute>} />
+                    <Route path="/admin/hotel/:id/update" element={<ProtectedRoute role="admin"><UpdateHotel /></ProtectedRoute>} />
+                    <Route path="/admin/hotel/:id/rooms" element={<ProtectedRoute role="admin"><HotelRooms /></ProtectedRoute>} />
+                    <Route path="/admin/hotel/:id/room/new" element={<ProtectedRoute role="admin"><CreateRoom /></ProtectedRoute>} />
+                    <Route path="/admin/hotel/:id/room/:room/update" element={<ProtectedRoute role="admin">< UpdateRoom /></ProtectedRoute>} />
+                    <Route path="/admin/bookings" element={<ProtectedRoute role="admin"><AllBookings /></ProtectedRoute>} />
+                    <Route path="/admin/booking/:id" element={<ProtectedRoute role="admin"><SingleBookingDetails /></ProtectedRoute>} />
+                </Routes>
+                <Snackbar open={isErrorOpen} autoHideDuration={3000} onClose={handleErrorClose}>
+                    <CustomAlert onClose={handleErrorClose} severity="error" className="w-fit mx-auto md:mr-auto ">{error}</CustomAlert>
+                </Snackbar>
+                <Snackbar open={isSuccessOpen} autoHideDuration={3000} onClose={handleSuccessClose}>
+                    <CustomAlert onClose={handleSuccessClose} severity="success" className="w-fit mx-auto md:mr-auto ">{success}</CustomAlert>
+                </Snackbar>
+            </div>
+        </Router>
     );
 }
 

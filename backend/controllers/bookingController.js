@@ -160,7 +160,7 @@ exports.getAllBookings = catchAsyncErrors(async (req, res, next) => {
 
 // get booking details -- admin
 exports.getBookingDetails = catchAsyncErrors(async (req, res, next) => {
-    const booking = await Booking.findById(req.params.id);
+    const booking = await Booking.findById(req.params.id).populate('room').populate('hotel');
     if (!booking) {
         return next(new ErrorHandler("Booking not found", 404));
     }

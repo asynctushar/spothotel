@@ -1,5 +1,6 @@
 const Room = require('../models/Room');
 const Hotel = require('../models/Hotel');
+const Booking = require('../models/Booking');
 const cloudinary = require('cloudinary').v2;
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const ErrorHandler = require('../utils/errorHandler');
@@ -141,6 +142,15 @@ exports.deleteRoom = catchAsyncErrors(async (req, res, next) => {
         await Promise.all(room.pictures.map(async (picture) => {
             await cloudinary.uploader.destroy(picture.public_id)
         }))
+    }
+
+    // delete room's booking details
+    const bookings = await Booking.find({
+        room: room.id
+    })
+
+    if (bookings.length > 0) {
+        await Promise.all(bookings.map(async (booking) => await booking.delete()));
     }
 
     await roomsHotel.save();
