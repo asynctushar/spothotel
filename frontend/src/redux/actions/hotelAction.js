@@ -1,5 +1,5 @@
 import { setError, setSuccess } from '../slices/appSlice';
-import { setLoader, setHotels, setHasSearched, setHotel, setRoom, setBookings, setHasBooked, setBooking, setAllHotels, setIsHotelCreated, setIsRoomCreated , setIsHotelUPdated, setIsRoomUpdated} from '../slices/hotelSlice';
+import { setLoader, setHotels, setHasSearched, setHotel, setRoom, setBookings, setHasBooked, setBooking, setAllHotels, setIsHotelCreated, setIsRoomCreated , setIsHotelUPdated, setIsRoomUpdated, setAllBookings} from '../slices/hotelSlice';
 import axios from 'axios';
 
 // search hotel
@@ -224,5 +224,30 @@ export const updateRoom = (formData, roomId) => async (dispatch) => {
     } catch (err) {
         dispatch(setError(err.response.data.message));
         dispatch(setLoader(false));
+    }
+}
+
+// get all bookings -- admin
+export const getAllBookings = () => async (dispatch) => {
+    try {
+        dispatch(setLoader(true));
+        const { data } = await axios.get(`/api/v1/bookings`);
+
+        dispatch(setAllBookings(data.bookings));
+        dispatch(setLoader(false));
+    } catch (err) {
+        dispatch(setLoader(false));
+        dispatch(setError(err.response.data.message));
+    }
+}
+
+// change booking status --admin
+export const changeBookingStatus = (status, bookingId) => async (dispatch) => {
+    try {
+        const { data } = await axios.put(`/api/v1/booking/${bookingId}`, { status }, { headers: { "Content-Type": "application/json" } });
+        
+        dispatch(setAllBookings(data.bookings));
+    } catch (err) {
+        dispatch(setError(err.response.data.message));
     }
 }

@@ -34,6 +34,7 @@ const UpdateProfile = () => {
 
         dispatch(updateUserAction({ name }))
         setIsNameOpen(!isNameOpen);
+        setName(user.name);
     }
 
     const changeEmailHandler = () => {
@@ -41,6 +42,7 @@ const UpdateProfile = () => {
 
         dispatch(updateUserAction({ email }))
         setIsEmailOpen(!isEmailOpen);
+        setEmail(user.email);
     }
 
     const changePasswordHandler = () => {

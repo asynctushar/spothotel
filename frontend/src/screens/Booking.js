@@ -70,7 +70,7 @@ const Booking = () => {
     }
 
     const onCheckout = () => {
-         const notAvailAble = room.notAvailable.map((date) => Date.parse(date));
+        const notAvailAble = room.notAvailable.map((date) => Date.parse(date));
         const isValidDate = dates.every((date) => !notAvailAble.includes(Date.parse(date)));
 
         if (!isValidDate) {

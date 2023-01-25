@@ -52,7 +52,7 @@ const AllUsers = () => {
                                             <TableCell align="center" >{singleUser._id}</TableCell>
                                             <TableCell align="center" >{singleUser.name}</TableCell>
                                             <TableCell align="center" >{singleUser.email}</TableCell>
-                                            <TableCell align="center" className="!flex !justify-evenly !items-center">
+                                            <TableCell align="center" className="!flex !justify-center gap-3 !items-center">
                                                 {singleUser.role}
                                                 <Tooltip title={singleUser._id === user._id ? "" : "Edit"} placement="top">
                                                     <IconButton onClick={() => {

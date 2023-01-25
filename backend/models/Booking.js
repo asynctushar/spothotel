@@ -38,8 +38,8 @@ const bookingSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['processing', 'checked', 'complete'],
-        default: 'processing'
+        enum: ['Processing', 'Checked', 'Complete'],
+        default: 'Processing'
     }
 }, { timestamps: true });
 

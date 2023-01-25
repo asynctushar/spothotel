@@ -73,7 +73,7 @@ exports.updateUser = catchAsyncErrors(async (req, res, next) => {
             name,
             email
         }
-    }, { new: true })
+    }, { new: true , runValidators: true})
 
     res.status(200).json({
         success: true,

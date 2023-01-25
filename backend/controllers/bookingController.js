@@ -75,7 +75,7 @@ exports.createBooking = catchAsyncErrors(async (req, res, next) => {
 exports.updateBooking = catchAsyncErrors(async (req, res, next) => {
     const status = req.body.status;
 
-    if (status !== "complete" && status !== "checked") {
+    if (status !== "Complete" && status !== "Checked") {
         return next(new ErrorHandler("Can't change booking status", 400));
     }
     const booking = await Booking.findById(req.params.id);
@@ -83,8 +83,8 @@ exports.updateBooking = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Booking not found", 404));
     }
 
-    if (status === 'complete') {
-        if (booking.status === "complete") return next(new ErrorHandler("Can't change booking status", 400));
+    if (status === 'Complete') {
+        if (booking.status === "Complete") return next(new ErrorHandler("Can't change booking status", 400));
 
         const room = await Room.findById(booking.room);
         const bookingDatesCopy = booking.dates.map((date) => Date.parse(date));
@@ -98,17 +98,19 @@ exports.updateBooking = catchAsyncErrors(async (req, res, next) => {
         await booking.save();
     }
 
-    if (status === "checked") {
-        if (booking.status === "checked") return next(new ErrorHandler("User already checked in", 400));
-        if (booking.status === "complete") return next(new ErrorHandler("Can't change booking status", 400));
+    if (status === "Checked") {
+        if (booking.status === "Checked") return next(new ErrorHandler("User already checked in", 400));
+        if (booking.status === "Complete") return next(new ErrorHandler("Can't change booking status", 400));
 
         booking.status = status;
         await booking.save();
     }
 
+    const bookings = await Booking.find();
+
     res.status(200).json({
         success: true,
-        booking
+        bookings
     })
 })
 
