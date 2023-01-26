@@ -99,7 +99,7 @@ exports.uploadRoomPictures = catchAsyncErrors(async (req, res, next) => {
 // update room details
 exports.updateRoom = catchAsyncErrors(async (req, res, next) => {
     const id = req.params.id;
-    const { number, name, bedStatus, bedCount, specification, pricePerDay } = req.body;
+    const { number, name, type, bedCount, specification, pricePerDay } = req.body;
 
     if (number) {
         return next(new ErrorHandler("Room number can't be changed", 400))
@@ -108,7 +108,7 @@ exports.updateRoom = catchAsyncErrors(async (req, res, next) => {
     const room = await Room.findByIdAndUpdate(id, {
         $set: {
             name,
-            bedStatus,
+            type,
             bedCount,
             specification,
             pricePerDay,
@@ -166,7 +166,7 @@ exports.deleteRoom = catchAsyncErrors(async (req, res, next) => {
 
 // get room details
 exports.getRoomDetails = catchAsyncErrors(async (req, res, next) => {
-    const room = await Room.findById(req.params.id).populate("hotel");
+    const room = await Room.findById(req.params.id).populate('hotel');
 
     if (!room) {
         return next(new ErrorHandler("Room not found", 404));

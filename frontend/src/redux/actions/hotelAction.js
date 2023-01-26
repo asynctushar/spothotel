@@ -93,7 +93,7 @@ export const getUserBooking = (id) => async (dispatch) => {
         dispatch(setBooking(data.booking));
         dispatch(setLoader(false));
     } catch (err) {
-        dispatch(setError(err.response.date.message));
+        dispatch(setError(err.response.data.message));
         dispatch(setLoader(false));
     }
 }
@@ -261,7 +261,7 @@ export const getBookingDetails = (id) => async (dispatch) => {
         dispatch(setBooking(data.booking));
         dispatch(setLoader(false));
     } catch (err) {
-        dispatch(setError(err.response.date.message));
+        dispatch(setError(err.response.data.message));
         dispatch(setLoader(false));
     }
 }

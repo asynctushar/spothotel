@@ -12,6 +12,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { setError } from "../redux/slices/appSlice";
+import NotFound from './NotFound';
 
 const HotelRooms = () => {
     const dispatch = useDispatch();
@@ -61,7 +62,7 @@ const HotelRooms = () => {
             <Fragment>
                 {isLoading ? <Loader /> : (
                     <Fragment>
-                        {hotel && (
+                        {!hotel ? <NotFound /> : (
                             <div className="w-[80%] sm:w-[60%] md:w-[70%] mx-auto mt-3">
                                 <div className="flex flex-col md:flex-row gap-6 md:gap-4 justify-between">
                                     <div className="flex gap-4">
@@ -105,7 +106,7 @@ const HotelRooms = () => {
                                                         </IconButton>
                                                     </TableCell>
                                                     <TableCell align="center">
-                                                        <Link to={`/admin/hotel/${id}/room/${room._id}/update`}>
+                                                        <Link to={`/admin/room/${room._id}/update`}>
                                                             <IconButton><EditIcon /></IconButton>
                                                         </Link>
                                                     </TableCell>

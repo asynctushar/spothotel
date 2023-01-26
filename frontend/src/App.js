@@ -30,6 +30,7 @@ import HotelRooms from './screens/HotelRooms';
 import CreateRoom from './screens/CreateRoom';
 import UpdateRoom from './screens/UpdateRoom';
 import SingleBookingDetails from './screens/SingleBookingDetails';
+import NotFound from './screens/NotFound';
 
 const App = () => {
     const [stripeApiKey, setStripeApiKey] = useState("");
@@ -102,7 +103,7 @@ const App = () => {
                             </ProtectedRoute>
                         } />
                     }
-                    <Route path="/hotel/:id/:room/book" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
+                    <Route path="/room/:id/book" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
                     <Route path="/booking/success" element={<ProtectedRoute><BookingSuccess /></ProtectedRoute>} />
                     <Route path="/account" element={<ProtectedRoute ><Account /> </ProtectedRoute>} />
                     <Route path="/me/update" element={<ProtectedRoute ><UpdateProfile /></ProtectedRoute>} />
@@ -116,9 +117,10 @@ const App = () => {
                     <Route path="/admin/hotel/:id/update" element={<ProtectedRoute role="admin"><UpdateHotel /></ProtectedRoute>} />
                     <Route path="/admin/hotel/:id/rooms" element={<ProtectedRoute role="admin"><HotelRooms /></ProtectedRoute>} />
                     <Route path="/admin/hotel/:id/room/new" element={<ProtectedRoute role="admin"><CreateRoom /></ProtectedRoute>} />
-                    <Route path="/admin/hotel/:id/room/:room/update" element={<ProtectedRoute role="admin">< UpdateRoom /></ProtectedRoute>} />
+                    <Route path="/admin/room/:id/update" element={<ProtectedRoute role="admin">< UpdateRoom /></ProtectedRoute>} />
                     <Route path="/admin/bookings" element={<ProtectedRoute role="admin"><AllBookings /></ProtectedRoute>} />
                     <Route path="/admin/booking/:id" element={<ProtectedRoute role="admin"><SingleBookingDetails /></ProtectedRoute>} />
+                    <Route path="/*" element={<NotFound />} />
                 </Routes>
                 <Snackbar open={isErrorOpen} autoHideDuration={3000} onClose={handleErrorClose}>
                     <CustomAlert onClose={handleErrorClose} severity="error" className="w-fit mx-auto md:mr-auto ">{error}</CustomAlert>

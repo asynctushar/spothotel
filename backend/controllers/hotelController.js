@@ -188,7 +188,7 @@ exports.getAllHotels = catchAsyncErrors(async (req, res, next) => {
     if (req.query.person) {
         hotels = hotels.filter((hotel) => {
             return hotel.rooms.some((room) => {
-                return room.type === (personCount > 1 ? "double" : "single");
+                return personCount > 1 ? room.type === "Double" :  true;
             })
         })
     }
