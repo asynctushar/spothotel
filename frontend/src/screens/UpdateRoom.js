@@ -8,7 +8,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { setIsRoomUpdated } from '../redux/slices/hotelSlice';
-import { getHotelAction, getRoomAction, updateRoom } from '../redux/actions/hotelAction';
+import { getRoomAction, updateRoom } from '../redux/actions/hotelAction';
 import Loader from '../components/Loader';
 import NotFound from './NotFound';
 

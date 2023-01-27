@@ -5,7 +5,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import Loader from '../components/Loader';
-import { getHotelAction, getRoomAction } from '../redux/actions/hotelAction';
+import { getRoomAction } from '../redux/actions/hotelAction';
 import { addDays, format } from 'date-fns';
 import { setError } from '../redux/slices/appSlice';
 import NotFound from './NotFound';

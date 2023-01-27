@@ -8,6 +8,14 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 // new booking
 exports.createBooking = catchAsyncErrors(async (req, res, next) => {
     const { paymentInfo, dates, totalPrice, phone } = req.body;
+
+    // validation of payment info
+    const intent = await stripe.paymentIntents.retrieve(paymentInfo.id);
+
+    if (intent.status !== "succeeded" || intent.amount !== (totalPrice * 100)) {
+        return next(new ErrorHandler("Invalid Payment Info", 400));
+    }
+    
     const hotel = await Hotel.findById(req.params.id);
     if (!hotel) {
         return next(new ErrorHandler("Hotel not found", 404));
