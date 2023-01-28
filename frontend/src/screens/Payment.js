@@ -1,7 +1,7 @@
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import EventIcon from '@mui/icons-material/Event';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
-import { useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { useDispatch, useSelector, } from 'react-redux';
 import { useNavigate, } from 'react-router-dom';
 import axios from 'axios';
@@ -15,6 +15,7 @@ import {
     useElements
 } from "@stripe/react-stripe-js";
 import { setHasBooked } from '../redux/slices/hotelSlice';
+import Meta from '../utils/Meta';
 
 const Payment = () => {
     const payBtn = useRef();
@@ -31,7 +32,7 @@ const Payment = () => {
             dispatch(setHasBooked(false));
         }
     }, [hasBooked, dispatch, navigate])
-    
+
     useEffect(() => {
         if (bookingDetails === null) {
             navigate('/ewe');
@@ -89,26 +90,29 @@ const Payment = () => {
     }
 
     return (
-        <div className="mx-auto px-4 md:px-10 lg:px-20 xl:px-48 mt-4">
-            <h2 className="text-2xl text-center font-medium mb-5 mt-40">Payment</h2>
-            <div className="px-1 sm:px-3 flex justify-center">
-                <div className="flex flex-col gap-4">
-                    <div className="flex items-center py-3 px-4 w-56 rounded border border-solid border-gray-500 " >
-                        <CreditCardIcon />
-                        <CardNumberElement className="w-full ml-2" />
+        <Fragment>
+            <Meta title="Payment" />
+            <div className="mx-auto px-4 md:px-10 lg:px-20 xl:px-48 mt-4">
+                <h2 className="text-2xl text-center font-medium mb-5 mt-40">Payment</h2>
+                <div className="px-1 sm:px-3 flex justify-center">
+                    <div className="flex flex-col gap-4">
+                        <div className="flex items-center py-3 px-4 w-56 rounded border border-solid border-gray-500 " >
+                            <CreditCardIcon />
+                            <CardNumberElement className="w-full ml-2" />
+                        </div>
+                        <div className="flex items-center py-3 px-4 w-56 rounded border border-solid border-gray-500 " >
+                            <EventIcon />
+                            <CardExpiryElement className="w-full ml-2" />
+                        </div>
+                        <div className="flex items-center py-3 px-4 w-56 rounded border border-solid border-gray-500 " >
+                            <VpnKeyIcon />
+                            <CardCvcElement className="w-full ml-2" />
+                        </div>
+                        <button onClick={() => submitHandler()} type="submit" ref={payBtn} className="py-4 w-56 block text-center rounded bg-red-400 hover:bg-red-500 transition duration-200 text-zinc-50 disabled:cursor-not-allowed">{`Pay - ${bookingDetails?.totalPrice}`}</button>
                     </div>
-                    <div className="flex items-center py-3 px-4 w-56 rounded border border-solid border-gray-500 " >
-                        <EventIcon />
-                        <CardExpiryElement className="w-full ml-2" />
-                    </div>
-                    <div className="flex items-center py-3 px-4 w-56 rounded border border-solid border-gray-500 " >
-                        <VpnKeyIcon />
-                        <CardCvcElement className="w-full ml-2" />
-                    </div>
-                    <button onClick={() => submitHandler()} type="submit" ref={payBtn} className="py-4 w-56 block text-center rounded bg-red-400 hover:bg-red-500 transition duration-200 text-zinc-50 disabled:cursor-not-allowed">{`Pay - ${bookingDetails?.totalPrice}`}</button>
                 </div>
-            </div>
-        </div >
+            </div >
+        </Fragment>
     )
 }
 export default Payment;

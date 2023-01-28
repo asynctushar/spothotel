@@ -11,6 +11,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Loader from '../components/Loader';
 import RoomCard from "../components/RoomCard";
 import NotFound from './NotFound';
+import Meta from "../utils/Meta";
 
 const Hotel = () => {
     const { id } = useParams();
@@ -22,6 +23,8 @@ const Hotel = () => {
     }, [id, dispatch]);
 
     return (
+        <Fragment>
+        <Meta title={hotel?.name} />
         <Fragment>
             {isLoading ? <Loader /> : (
                 <Fragment>
@@ -71,7 +74,8 @@ const Hotel = () => {
                     )}
                 </Fragment>
             )}
-        </Fragment>
+            </Fragment>
+            </Fragment>
     )
 }
 export default Hotel;

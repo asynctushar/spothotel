@@ -49,7 +49,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
         ".MuiDrawer-paper": {
             zIndex: 1,
             top: "auto",
-            position: "fixed",
+            position: "relative",
         },
         flexShrink: 0,
         whiteSpace: 'nowrap',
