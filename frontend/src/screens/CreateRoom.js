@@ -111,7 +111,7 @@ const CreateRoom = () => {
                             <div className="w-[80%] sm:w-[60%] md:w-[70%] mx-auto mt-3">
                                 <div className="flex flex-col md:flex-row gap-6 md:gap-4 items-center md:justify-between ">
                                     <div className="flex">
-                                        <Button onClick={() => navigate('/admin/hotels')} variant="contained"
+                                        <Button onClick={() => navigate(`/admin/hotel/${hotel?._id}/rooms`)} variant="contained"
                                             className="!text-gray-100 !bg-red-400 w-60 !py-3 md:w-min">
                                             <ArrowBackIosNewIcon fontSize="small" className="mr-2" />
                                             Back
