@@ -1,9 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Popover from '@mui/material/Popover';
 import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutAction } from '../redux/actions/userAction';
+import {setHasSearched} from '../redux/slices/hotelSlice'
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -19,6 +20,11 @@ const Navbar = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const handleLogoClick = () => {
+        navigate('/');
+        dispatch(setHasSearched(false));
+    }
 
     const loginHandler = () => {
         navigate('/login');
@@ -43,7 +49,7 @@ const Navbar = () => {
     return (
         <header className="mx-auto px-4 md:px-10 lg:px-20 xl:px-48 z-[1300]">
             <nav className=" h-24 flex items-center justify-between relative">
-                <Link to="/" className="text-red-400 text-3xl font-bold">SpotHotel</Link>
+                <h3 onClick={handleLogoClick} className="text-red-400 text-3xl font-bold cursor-pointer">SpotHotel</h3>
                 <div className="">
                     <div onClick={handleClick}>
                         <span className="md:hidden">

@@ -5,7 +5,6 @@ const Booking = require('../models/Booking');
 const ErrorHandler = require('../utils/errorHandler');
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
-const moment = require('moment');
 
 // create hotel -- admin
 exports.createHotel = catchAsyncErrors(async (req, res, next) => {
@@ -160,21 +159,22 @@ exports.getAllHotels = catchAsyncErrors(async (req, res, next) => {
     const personCount = Number(req.query.person);
     const dates = [];
 
+    
     // for search query
     if (req.query.person && personCount < 1) return next(new ErrorHandler("At least one person required", 400));
     if (req.query.room && roomCount < 1) return next(new ErrorHandler("At least one room required", 400));
     if (req.query.d1 && req.query.d2) {
-        let startDate = moment(req.query.d1);
-        let endDate = moment(req.query.d2);
+        let startDate = req.query.d1;
+        let endDate = req.query.d2;        
 
         if (startDate > endDate) return next(new ErrorHandler("Please check start and end date", 400));
 
-        while (startDate <= endDate) {
-            dates.push(Date.parse(new Date(startDate).toDateString()));
-            startDate = moment(startDate).add(1, 'days')
+        while ( new Date(startDate) <= new Date(endDate)) {
+            dates.push(Date.parse(new Date(startDate)));
+
+            startDate = new Date(new Date(startDate).setDate(new Date(startDate).getDate() + 1));
         }
     }
-
 
     let hotels = await Hotel.find({
         location: {

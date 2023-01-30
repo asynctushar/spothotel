@@ -25,8 +25,7 @@ const Dashboard = () => {
     const dispatch = useDispatch();
     const allUsers = useSelector((state) => state.userState.allUsers);
     const { allBookings, allHotels } = useSelector((state) => state.hotelState);
-    const allDates = allBookings?.flatMap(booking => booking.dates);
-
+    const allDates = allBookings?.map(booking => booking.createdAt);
 
     useEffect(() => {
         dispatch(getAllUsers());
@@ -35,36 +34,30 @@ const Dashboard = () => {
 
     }, [dispatch]);
 
-    const getMonthsDateCount = () => {
+    const generateMonthlyBookingCount = (dates) => {
         const monthNames = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
         ];
 
-        const monthCount = allDates?.reduce((counts, date) => {
-            let month = new Date(date).getMonth();
-            counts[month] = (counts[month] || 0) + 1;
+        const monthCounts = monthNames.reduce((counts, name) => {
+            counts[name] = 0;
             return counts;
         }, {});
 
-        function getMonthName(month) {
-            return monthNames[month];
-        }
-
-        let monthNameCount = {};
-        Object.keys(monthCount).forEach(function (key) {
-            monthNameCount[getMonthName(key)] = monthCount[key];
+        dates.forEach(date => {
+            const monthName = monthNames[new Date(date).getMonth()];
+            monthCounts[monthName]++;
         });
 
-        return monthNameCount;
+        return monthCounts;
     }
 
-
     const lineState = {
-        labels: Object.keys(getMonthsDateCount()),
+        labels: Object.keys(generateMonthlyBookingCount(allDates)),
         datasets: [
             {
-                label: "Total Bookings",
-                data: Object.values(getMonthsDateCount()),
+                label: "Monthly Bookings",
+                data: Object.values(generateMonthlyBookingCount(allDates)),
                 backgroundColor: "tomato",
                 hoverBackgroundColor: "rgb(197, 72, 49)"
             }
@@ -83,7 +76,7 @@ const Dashboard = () => {
                 <div className="mx-auto w-full lg:mt-16 sm:mt-8 mt-5 md:mt-12">
                     <h2 className="text-center mb-12 font-medium text-2xl text-red-400">Admin DashBoard</h2>
                     <div className=" px-4 lg:px-20 flex flex-col gap-5 sm:gap-8 md:gap-12 lg:gap-28 sm:flex-row sm:justify-center" >
-                        <Card className="px-5 py-3 shadow-2xl sm:w-1/4 sm:px-2 sm:py-2">
+                        <Card className="px-5 py-3 shadow-2xl sm:w-1/4 sm:px-2 sm:py-2 !bg-zinc-200">
                             <CardContent className="w-full flex justify-between items-center sm:aspect-square sm:flex-col-reverse sm:justify-center">
                                 <div className="text-center">
                                     <Link to="/admin/users" className="text-3xl font-medium text-red-500"> {allUsers.length}</Link>
@@ -92,7 +85,7 @@ const Dashboard = () => {
                                 <PeopleAltIcon className="text-red-400 !text-4xl mb-4" />
                             </CardContent>
                         </Card>
-                        <Card className="px-5 py-3 shadow-2xl sm:w-1/4 sm:px-2 sm:py-2">
+                        <Card className="px-5 py-3 shadow-2xl sm:w-1/4 sm:px-2 sm:py-2 !bg-zinc-200">
                             <CardContent className="w-full flex justify-between items-center sm:aspect-square sm:flex-col-reverse sm:justify-center">
                                 <div className="text-center">
                                     <Link to="/admin/hotels" className="text-3xl font-medium text-red-500"> {allHotels.length}</Link>
@@ -101,7 +94,7 @@ const Dashboard = () => {
                                 <ApartmentIcon className="text-red-400 !text-4xl mb-4" />
                             </CardContent>
                         </Card>
-                        <Card className="px-5 py-3 shadow-2xl sm:w-1/4 sm:px-2 sm:py-2">
+                        <Card className="px-5 py-3 shadow-2xl sm:w-1/4 sm:px-2 sm:py-2 !bg-zinc-200">
                             <CardContent className="w-full flex justify-between items-center sm:aspect-square sm:flex-col-reverse sm:justify-center">
                                 <div className="text-center">
                                     <Link to="/admin/bookings" className="text-3xl font-medium text-red-500"> {allBookings.length}</Link>
