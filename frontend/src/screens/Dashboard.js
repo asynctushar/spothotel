@@ -56,7 +56,7 @@ const Dashboard = () => {
         labels: Object.keys(generateMonthlyBookingCount(allDates)),
         datasets: [
             {
-                label: "Monthly Bookings",
+                label: "Bookings",
                 data: Object.values(generateMonthlyBookingCount(allDates)),
                 backgroundColor: "tomato",
                 hoverBackgroundColor: "rgb(197, 72, 49)"
@@ -105,7 +105,7 @@ const Dashboard = () => {
                         </Card>
                     </div>
                     <div className="w-11/12 md:w-3/5 aspect-auto my-20 mx-auto">
-                        <h2 className="text-center mb-8 font-medium text-xl text-red-400">Bookings</h2>
+                        <h2 className="text-center mb-8 font-medium text-xl text-red-400">Monthly Bookings</h2>
                         <Bar data={lineState} options={options} className="w-full" />
                     </div>
                 </div>

@@ -54,12 +54,12 @@ const AllBookings = () => {
                                     </TableHead>
                                     <TableBody>
                                         {(rowsPerPage > 2 ? allBookings?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : allBookings)?.map((booking) => (
-                                            <TableRow key={booking._id} >
+                                            <TableRow key={booking._id} style={{ height: 72.8 }}>
                                                 <TableCell align="center">{booking._id}</TableCell>
                                                 <TableCell align="center" className="capitalize">{booking.paymentInfo.status}</TableCell>
-                                                <TableCell align="center" className="!flex !justify-center gap-3 !items-center">
+                                                <TableCell align="center">
                                                     {booking.status}
-                                                    <Tooltip title={booking.status === "Complete" ? "" : "Edit"} placement="right">
+                                                    <Tooltip title={booking.status === "Complete" ? "" : "Edit"} placement="right" className="!ml-2">
                                                         <IconButton onClick={() => {
                                                             setOpen(!open);
                                                             setBookingRef(booking);
@@ -67,7 +67,7 @@ const AllBookings = () => {
                                                         }}
                                                             disabled={booking.status === "Complete" ? true : false}
                                                             className="disabled:text-gray-600">
-                                                            <EditIcon fontSize="medium" />
+                                                            <EditIcon fontSize="medium"/>
                                                         </IconButton>
                                                     </Tooltip>
                                                 </TableCell>

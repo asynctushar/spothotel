@@ -51,13 +51,13 @@ const AllUsers = () => {
                                     </TableHead>
                                     <TableBody>
                                         {(rowsPerPage > 2 ? allUsers?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : allUsers)?.map((singleUser) => (
-                                            <TableRow key={singleUser._id}>
+                                            <TableRow key={singleUser._id} style={{ height: 72.8 }}>
                                                 <TableCell align="center" >{singleUser._id}</TableCell>
                                                 <TableCell align="center" >{singleUser.name}</TableCell>
                                                 <TableCell align="center" >{singleUser.email}</TableCell>
-                                                <TableCell align="center" className="!flex !justify-center gap-3 !items-center">
+                                                <TableCell align="center">
                                                     {singleUser.role}
-                                                    <Tooltip title={singleUser._id === user._id ? "" : "Edit"} placement="top">
+                                                    <Tooltip title={singleUser._id === user._id ? "" : "Edit"} placement="top" className="!ml-2">
                                                         <IconButton onClick={() => {
                                                             setOpen(!open);
                                                             setUserRef(singleUser);

@@ -96,7 +96,7 @@ const HotelRooms = () => {
                                             </TableHead>
                                             <TableBody>
                                                 {(rowsPerPage > 2 ? hotel?.rooms.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : hotel.rooms)?.map((room) => (
-                                                    <TableRow key={room._id} >
+                                                    <TableRow key={room._id} style={{ height: 72.8 }}>
                                                         <TableCell align="center">{room._id}</TableCell>
                                                         <TableCell align="center">{room.name}</TableCell>
                                                         <TableCell align="center">{room.number}</TableCell>

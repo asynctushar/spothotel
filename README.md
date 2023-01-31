@@ -10,7 +10,7 @@ Hi! My name is **Tushar Biswas**, I have developed this hotel booking applicatio
 
 ## Env Variables
 
-Make Sure to Create a config.env file in backend/config directory and add appropriate variables in order to use the app.
+Make Sure to add appropriate variables (create "config.env" file in "./backend/config" directory for local server) in order to use the app.
 
 **Essential Variables**
 
@@ -33,6 +33,7 @@ STRIPE_API_KEY =
 STRIPE_SECRET_KEY =
 
 NODE_ENV = PRODUCTION
+
 
 ** in case of local server add this variable too:
 

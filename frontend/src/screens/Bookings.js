@@ -42,7 +42,7 @@ const Bookings = () => {
                                 </TableHead>
                                 <TableBody>
                                     {(rowsPerPage > 2 ? bookings?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : bookings)?.map((booking) => (
-                                        <TableRow key={booking._id}>
+                                        <TableRow key={booking._id} style={{height: 72.8}}>
                                             <TableCell align="center" >{booking._id}</TableCell>
                                             <TableCell align="center" >{booking.status}</TableCell>
                                             <TableCell align="center" >{format(new Date(booking.dates[0]), "yyyy-MM-dd")}</TableCell>
