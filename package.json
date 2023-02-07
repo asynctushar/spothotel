@@ -5,7 +5,7 @@
     "main": "backend/server.js",
     "scripts": {
         "start": "npm install --prefix frontend && npm run build --prefix frontend && node backend/server.js",
-        "dev": "nodemon backend/server.js",
+        "dev": "nodemon backend/server.js"
     },
     "author": "Tushar Biswas",
     "license": "ISC",

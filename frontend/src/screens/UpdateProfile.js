@@ -115,7 +115,7 @@ const UpdateProfile = () => {
                                 <Dialog open={isDeleteOpen}>
                                     <DialogTitle className="text-center">Delete your Account?</DialogTitle>
                                     <DialogContent className="m-8">
-                                        <DialogContentText className="text-gray-900">This will delete your bookings deltails also.</DialogContentText>
+                                        <DialogContentText className="text-gray-900">This will delete your bookings details also.</DialogContentText>
                                     </DialogContent>
                                     <DialogActions>
                                         <button onClick={() => setIsDeleteOpen(!isDeleteOpen)} className="bg-red-400 hover:bg-red-500 py-2 rounded-lg w-24 text-center text-neutral-50  transition duration-200 font-semibold">Cancel</button>
