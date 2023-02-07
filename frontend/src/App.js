@@ -79,7 +79,7 @@ const App = () => {
         setIsErrorOpen(false);
         dispatch(clearError());
     }
-    
+
     const handleSuccessClose = () => {
         setIsSuccessOpen(false);
         dispatch(clearSuccess());
