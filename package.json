@@ -4,8 +4,9 @@
     "description": "",
     "main": "backend/server.js",
     "scripts": {
-        "start": "npm install --prefix frontend && npm run build --prefix frontend && node backend/server.js",
+        "start": "node backend/server.js",
         "dev": "nodemon backend/server.js",
+        "production": "npm install --prefix frontend && npm run build --prefix frontend"
     },
     "author": "Tushar Biswas",
     "license": "ISC",
