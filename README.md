@@ -9,34 +9,18 @@ Hi! My name is **Tushar Biswas**, I have developed this hotel booking applicatio
 **For Frontend** - `cd frontend` ` npm i`
 
 ## Env Variables
+Make Sure to add appropriate variables (create "config.env" file in "./backend/config" directory and ".env" file in "./frontend" directory) in order to use the app.
 
-Make Sure to add appropriate variables (create "config.env" file in "./backend/config" directory for local server) in order to use the app.
+## Backend variables
+I've added "config.env.sample" file in "./backend/config" folder. Just rename it to "config.env" and add the remaining vaiables. 
 
-**Essential Variables**
-
-DB_URI =
-
-JWT_SECRET =
-
-JWT_EXPIRE =
-
-COOKIE_EXPIRE =
-
-CLOUDINARY_NAME =
-
-CLOUDINARY_API_KEY = 
-
-CLOUDINARY_API_SECRET =
-
-STRIPE_API_KEY =
-
-STRIPE_SECRET_KEY =
-
-NODE_ENV = PRODUCTION
+## Frontend variables
+I've added "env.sample" file in "./frontend" folder. Just rename it to ".env" and modify the remaining vaiables. 
 
 
-** in case of local server add this variable too:
 
-FRONTEND_URL =
+## For deployment in production
+If you want to deploy the application in production then make sure to build the frontend with "npm run build" command at "./frontend" directory. And finally put all the vairables from "./backend/config.env.sample.production" to the environment variable fields & fill the value.
 
-PORT = 
+ 
+

@@ -1,14 +1,7 @@
 const multer = require('multer');
 const ErrorHandler = require('../utils/errorHandler');
 const upload = multer({
-    storage: multer.diskStorage({
-        destination: (req, file, cb) => {
-            cb(null, './backend/temp')
-        },
-        filename: (req, file, cb) => {
-            cb(null, file.originalname);
-        }
-    }),
+    storage: multer.memoryStorage(),
     limits: {
         fileSize: 30000000
     },

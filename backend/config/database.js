@@ -11,6 +11,7 @@ const databaseConnect = () => {
             console.log(`Database connected to ${data.connection.host}`)
         })
         .catch((err) => {
+            console.log(err)
         })
 }
 

@@ -4,7 +4,7 @@ const Room = require('../models/Room');
 const Booking = require('../models/Booking');
 const ErrorHandler = require('../utils/errorHandler');
 const cloudinary = require('cloudinary').v2;
-const fs = require('fs');
+const getDataUri = require('../utils/getDataUri');
 
 // create hotel -- admin
 exports.createHotel = catchAsyncErrors(async (req, res, next) => {
@@ -31,21 +31,17 @@ exports.uploadHotelPictures = catchAsyncErrors(async (req, res, next) => {
     const hotel = await Hotel.findById(id);
 
     if (!hotel) {
-        // removing temp image file
-        pictures.map((picture) => {
-            fs.rm(picture.path, { recursive: true }, (err) => { });
-        })
         return next(new ErrorHandler('Hotel not found', 404));
     }
 
+    
     const picturePath = await Promise.all(pictures.map(async (picture) => {
-        const myCloud = await cloudinary.uploader.upload(picture.path, {
+        const pictureUri = getDataUri(picture);
+
+        const myCloud = await cloudinary.uploader.upload(pictureUri.content, {
             folder: '/spothotel/hotels',
             crop: "scale",
         })
-
-        // removing temp image file
-        fs.rm(picture.path, { recursive: true }, (err) => { });
 
         return {
             public_id: myCloud.public_id,
