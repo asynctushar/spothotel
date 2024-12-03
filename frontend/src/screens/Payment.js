@@ -44,7 +44,11 @@ const Payment = () => {
         payBtn.current.disabled = true;
 
         try {
-            const { data } = await axios.post('/api/v1/stripeclientkey', { amount: bookingDetails.totalPrice }, { headers: { "Content-Type": "application/json" } })
+           const { data } = await axios.post(
+				process.env.REACT_APP_API_URL + "/api/v1/stripeclientkey",
+				{ amount: bookingDetails.totalPrice },
+				{ headers: { "Content-Type": "application/json" }, withCredentials: true }
+			);
             const client_secret = data.client_secret;
 
             if (!stripe || !elements) return;
