@@ -1,4 +1,4 @@
-# MERN E-COMMERCE APPLICATION
+# MERN Hotel Booking APPLICATION
 
 Hi! My name is **Tushar Biswas**, I have developed this hotel booking application.
 
