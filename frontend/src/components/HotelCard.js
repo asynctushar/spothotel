@@ -1,11 +1,11 @@
 import { Slide } from 'react-slideshow-image';
-import 'react-slideshow-image/dist/styles.css'
+import 'react-slideshow-image/dist/styles.css';
 import picture from '../images/nopicture.jpg';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const HotelCard = ({ hotel }) => {
     return (
@@ -16,13 +16,16 @@ const HotelCard = ({ hotel }) => {
                         <img src={picture} alt="Not available" className="w-full h-full object-fill" />
                     </div>
                 ) : (
-                    <Slide duration={3000} transitionDuration={400} prevArrow={<ArrowBackIosNewIcon className="text-zinc-200" />} nextArrow={<ArrowForwardIosIcon className="text-zinc-200" />}>
-                        {hotel.pictures.map((pic) => (
-                            <div className="h-60" key={pic.public_id}>
-                                <img src={pic.url} alt={pic.public_id} className="w-full h-full object-cover" />
-                            </div>
-                        ))}
-                    </Slide>
+                    <div className="h-60 md:-mr-[21.33px]">
+                        <img src={hotel.pictures[0]?.url} alt={hotel.pictures[0]?.public_id} className="w-full h-full object-fill" />
+                    </div>
+                    // <Slide duration={3000} transitionDuration={400} prevArrow={<ArrowBackIosNewIcon className="text-zinc-200" />} nextArrow={<ArrowForwardIosIcon className="text-zinc-200" />}>
+                    //     {hotel.pictures.map((pic) => (
+                    //         <div className="h-60" key={pic.public_id}>
+                    //             <img src={pic.url} alt={pic.public_id} className="w-full h-full object-cover" />
+                    //         </div>
+                    //     ))}
+                    // </Slide>
                 )}
             </div >
             <div className="md:w-4/6 mx-4 md:my-6 mb-6">
@@ -40,6 +43,6 @@ const HotelCard = ({ hotel }) => {
                 </div>
             </div>
         </div >
-    )
-}
+    );
+};
 export default HotelCard;
