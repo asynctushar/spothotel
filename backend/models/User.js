@@ -14,13 +14,13 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true,
         validate: [validator.isEmail, "Please enter valid email"],
-        unique: true
+        unique: true,
+        index: true
     },
     password: {
         type: String,
         required: true,
         minlength: 8,
-        select: false
     },
     bookings: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -40,7 +40,7 @@ userSchema.methods.toJSON = function () {
     delete userObject.password;
 
     return userObject;
-}
+};
 
 // hash password before save 
 userSchema.pre('save', async function (next) {
@@ -48,18 +48,18 @@ userSchema.pre('save', async function (next) {
         next();
     }
 
-    this.password = await bcrypt.hash(this.password, 8) 
-})
+    this.password = await bcrypt.hash(this.password, 8);
+});
 
 // compare password while login 
 userSchema.methods.comparePassword = async function (givenPassword) {
     return await bcrypt.compare(givenPassword, this.password);
-}
+};
 
 // generate auth token
 userSchema.methods.generateAuthToken = function () {
-    return jwt.sign({id: this._id}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRE} )
-}
+    return jwt.sign({ id: this._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
+};
 
 const User = mongoose.model("Users", userSchema);
 

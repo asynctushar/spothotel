@@ -1,5 +1,5 @@
 const express = require('express');
-const { createBooking, updateBooking, getOwnBookings, getOwnBookingDetails, getBookingDetails, getAllBookings, sendStripeApiKey, sendStripeSecretKey } = require('../controllers/bookingController');
+const { createBooking, updateBooking, getOwnBookings, getOwnBookingDetails, getBookingDetails, getAllBookings, sendStripeApiKey, sendStripeSecretKey } = require('../controllers/booking.controller');
 const { isAuthenticatedUser, authorizedRole } = require('../middlewares/auth');
 
 const router = express.Router();
