@@ -13,7 +13,7 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 const authRoute = require("./routes/auth.route");
 const userRoute = require("./routes/user.route");
 const hotelRoute = require("./routes/hotel.route");
-// const roomRoute = require("./routes/room.route");
+const roomRoute = require("./routes/room.route");
 // const bookingRoute = require("./routes/booking.route");
 const errorMiddleware = require("./middlewares/errorMiddleware");
 
@@ -35,7 +35,7 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 app.use("/api/v2/auth", authRoute);
 app.use("/api/v2/users", userRoute);
 app.use("/api/v2/hotels", hotelRoute);
-// app.use("/api/v2/rooms", roomRoute);
+app.use("/api/v2/rooms", roomRoute);
 // app.use("/api/v2/bookings", bookingRoute);
 
 // production build

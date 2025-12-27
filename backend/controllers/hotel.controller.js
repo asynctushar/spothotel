@@ -210,3 +210,69 @@ exports.getAllHotels = catchAsyncErrors(async (req, res, next) => {
 });
 
 
+// create room -- admin
+exports.createHotelRoom = catchAsyncErrors(async (req, res, next) => {
+    const hotelId = req.params.id;
+    const { number, name, type, specification, pricePerDay } = req.body;
+
+    if (!number) {
+        return next(new ErrorHandler("Room number is required", 400));
+    }
+    if (!name) {
+        return next(new ErrorHandler("Name is required", 400));
+    }
+    if (!type) {
+        return next(new ErrorHandler("Room type is required", 400));
+    }
+    if (!specification || !Array.isArray(specification) || specification.length < 1) {
+        return next(new ErrorHandler("At least one spedifiction is required", 400));
+    }
+    if (!pricePerDay) {
+        return next(new ErrorHandler("Price per day is required", 400));
+    }
+
+    const hotel = await HotelService.getHotel({ id: hotelId });
+    if (!hotel) {
+        return next(new ErrorHandler("Hotel not found", 404));
+    }
+
+    const isDuplicate = await RoomService.getRoom({
+        hotel: hotel.id,
+        number
+    });
+    if (isDuplicate) {
+        return next(new ErrorHandler("Duplicate room number", 400));
+    }
+
+    const room = await RoomService.createRoom({
+        number,
+        name,
+        type,
+        specification,
+        pricePerDay,
+        hotel: hotel.id
+    });
+
+    await HotelService.updateHotel(hotelId, { rooms: [...hotel.rooms, room.id] });
+
+    res.status(201).json({
+        success: true,
+        room
+    });
+});
+
+// get all rooms
+exports.getHotelRooms = catchAsyncErrors(async (req, res, next) => {
+    const hotelId = req.params.id;
+
+    const hotel = await HotelService.getHotel({ id: hotelId });
+    if (!hotel) {
+        return next(new ErrorHandler("Hotel not found.", 404));
+    }
+
+    const rooms = await RoomService.getRooms(hotelId);
+    res.status(200).json({
+        success: true,
+        rooms
+    });
+});

@@ -6,42 +6,7 @@ const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const ErrorHandler = require('../utils/errorHandler');
 const getDataUri = require('../utils/getDataUri');
 
-// create room -- admin
-exports.createRoom = catchAsyncErrors(async (req, res, next) => {
-    const hotelId = req.params.id;
-    const { number, name, type, specification, pricePerDay } = req.body;
 
-    const hotel = await Hotel.findById(hotelId);
-    if (!hotel) {
-        return next(new ErrorHandler("Hotel not found", 404));
-    }
-
-    const isDuplicate = await Room.findOne({
-        hotel: hotel.id,
-        number
-    })
-
-    if (isDuplicate) {
-        return next(new ErrorHandler("Duplicate room number", 400))
-    }
-
-    const room = await Room.create({
-        number,
-        name,
-        type,
-        specification,
-        pricePerDay,
-        hotel: hotel.id
-    })
-
-    hotel.rooms.push(room.id);
-    await hotel.save();
-
-    res.status(201).json({
-        success: true,
-        room
-    })
-})
 
 // upload room pictures -- admin
 exports.uploadRoomPictures = catchAsyncErrors(async (req, res, next) => {
@@ -172,21 +137,4 @@ exports.getRoomDetails = catchAsyncErrors(async (req, res, next) => {
     })
 })
 
-// get all rooms
-exports.getHotelRooms = catchAsyncErrors(async (req, res, next) => {
-    const hotelId = req.params.id;
 
-    const hotel = await Hotel.findById(hotelId);
-    if (!hotel) {
-        return next(new ErrorHandler("Hotel not found.", 404));
-    }
-
-    const rooms = await Room.find({
-        hotel: hotelId
-    })
-
-    res.status(200).json({
-        success: true,
-        rooms
-    })
-})

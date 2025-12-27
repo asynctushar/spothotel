@@ -34,7 +34,8 @@ const roomSchema = new mongoose.Schema({
     hotel: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Hotels",
-        required: true
+        required: true, 
+        index: true
     }
 
 }, { timestamps: true });
