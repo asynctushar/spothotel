@@ -12,14 +12,22 @@ exports.getRooms = async (hotelId) => {
     return rooms;
 };
 
-exports.getRoom = async (filterData) => {
+exports.getRoom = async (filterData, populateHotel = false) => {
     const filterKeys = Object.keys(filterData);
     let room = null;
 
     if (filterKeys.length === 1 && filterKeys[0] === "id") {
-        room = await Room.findById(filterKeys[0]);
+        if (populateHotel) {
+            room = await Room.findById(filterData.id).populate("hotel");
+        } else {
+            room = await Room.findById(filterData.id);
+        }
     } else {
-        room = await Room.findOne(filterData);
+        if (populateHotel) {
+            room = await Room.findOne(filterData).populate("hotel");
+        } else {
+            room = await Room.findOne(filterData);
+        }
     }
 
     return room;
@@ -29,4 +37,21 @@ exports.createRoom = async (newData = []) => {
     const room = await Room.create({ ...newData });
 
     return room;
+};
+
+exports.updateRoom = async (id, newData) => {
+
+    const hotel = await Room.findByIdAndUpdate(id, {
+        $set: {
+            ...newData
+        }
+    }, { new: true, runValidators: true });
+
+    return hotel;
+};
+
+exports.deleteRoom = async (id) => {
+    await Room.findByIdAndDelete(id);
+
+    return;
 };

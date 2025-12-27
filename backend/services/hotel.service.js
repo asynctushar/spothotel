@@ -19,7 +19,6 @@ exports.getHotel = async ({ id }, populateRooms = false) => {
 };
 
 exports.updateHotel = async (id, newData) => {
-
     const hotel = await Hotel.findByIdAndUpdate(id, {
         $set: {
             ...newData

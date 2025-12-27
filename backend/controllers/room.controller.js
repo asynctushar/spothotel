@@ -1,11 +1,9 @@
-const Room = require('../models/Room');
-const Hotel = require('../models/Hotel');
-const Booking = require('../models/Booking');
-const cloudinary = require('cloudinary').v2;
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const ErrorHandler = require('../utils/errorHandler');
-const getDataUri = require('../utils/getDataUri');
-
+const HotelService = require("../services/hotel.service");
+const CloudService = require("../services/cloud.service");
+const BookingService = require("../services/booking.service");
+const RoomService = require("../services/room.service");
 
 
 // upload room pictures -- admin
@@ -17,43 +15,29 @@ exports.uploadRoomPictures = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Please upload room pictures', 400));
     }
 
-    const room = await Room.findById(id);
-
+    const room = await RoomService.getRoom({ id });
     if (!room) {
         return next(new ErrorHandler('Room not found', 404));
     }
 
-
     const picturePath = await Promise.all(pictures.map(async (picture) => {
-        const pictureUri = getDataUri(picture);
-
-        const myCloud = await cloudinary.uploader.upload(pictureUri.content, {
-            folder: '/spothotel/rooms',
-            crop: "scale",
-        })
-
-        return {
-            public_id: myCloud.public_id,
-            url: myCloud.secure_url
-        }
-    }))
+        return await CloudService.uploadImage(picture, "/spothotel/rooms");
+    }));
 
     // destroy previous pictures
     if (room.pictures.length > 0) {
         await Promise.all(room.pictures.map(async (picture) => {
-            await cloudinary.uploader.destroy(picture.public_id)
+            await CloudService.deleteFile(picture.public_id);
             return;
         }));
     }
 
-    room.pictures = picturePath;
-    await room.save();
-
+    const updatedRoom = await RoomService.updateRoom(id, { pictures: picturePath });
     res.status(200).json({
         success: true,
-        room
-    })
-})
+        room: updatedRoom
+    });
+});
 
 // update room details
 exports.updateRoom = catchAsyncErrors(async (req, res, next) => {
@@ -61,72 +45,60 @@ exports.updateRoom = catchAsyncErrors(async (req, res, next) => {
     const { number, name, type, bedCount, specification, pricePerDay } = req.body;
 
     if (number) {
-        return next(new ErrorHandler("Room number can't be changed", 400))
+        return next(new ErrorHandler("Room number can't be changed", 400));
     }
 
-    const room = await Room.findByIdAndUpdate(id, {
-        $set: {
-            name,
-            type,
-            bedCount,
-            specification,
-            pricePerDay,
-        }
-    }, { new: true })
-
+    const room = await RoomService.getRoom({ id });
     if (!room) {
         return next(new ErrorHandler('Room not found', 404));
     }
 
+    const updatedRoom = await RoomService.updateRoom(id, { name, type, bedCount, specification, pricePerDay });
     res.status(200).json({
         success: true,
-        room
-    })
-})
+        room: updatedRoom
+    });
+});
 
 
 // delete room -- admin
 exports.deleteRoom = catchAsyncErrors(async (req, res, next) => {
-    const room = await Room.findById(req.params.id);
-
+    const room = await RoomService.getRoom({ id: req.params.id });
     if (!room) {
         return next(new ErrorHandler("Room not found", 404));
     }
 
-    // delete room from hotel 
-    const roomsHotel = await Hotel.findById(room.hotel);
-    roomsHotel.rooms = roomsHotel.rooms.filter((room) => room.toString() !== req.params.id)
+    const hotel = await HotelService.getHotel({ id: room.hotel });
+    if (!hotel) {
+        return next(new ErrorHandler("Room's hotel not found", 404));
+    }
 
+    // delete room from hotel 
+    const hotelRooms = hotel.rooms.filter(roomId => roomId.toString() !== req.params.id);
+    await HotelService.updateHotel(hotel.id, { rooms: hotelRooms });
+
+    // delete room pictures
     if (room.pictures.length > 0) {
         await Promise.all(room.pictures.map(async (picture) => {
-            await cloudinary.uploader.destroy(picture.public_id)
-        }))
+            await CloudService.deleteFile(picture.public_id);
+
+            return;
+        }));
     }
 
-    // delete room's booking details
-    const bookings = await Booking.find({
-        room: room.id
-    })
-
-    if (bookings.length > 0) {
-        await Promise.all(bookings.map(async (booking) => await booking.delete()));
-    }
-
-    await roomsHotel.save();
-    await room.delete();
-    const hotel = await Hotel.findById(roomsHotel.id).populate('rooms');
+    // delete room's booking details and room itself
+    await BookingService.deleteBookings({ room: req.params.id });
+    await RoomService.deleteRoom(req.params.id);
 
     res.status(200).json({
         success: true,
-        hotel,
         message: "room deleted successfully"
-    })
-})
+    });
+});
 
 // get room details
 exports.getRoomDetails = catchAsyncErrors(async (req, res, next) => {
-    const room = await Room.findById(req.params.id).populate('hotel');
-
+    const room = await RoomService.getRoom({ id: req.params.id }, true);
     if (!room) {
         return next(new ErrorHandler("Room not found", 404));
     }
@@ -134,7 +106,7 @@ exports.getRoomDetails = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
         success: true,
         room
-    })
+    });
 })
 
 
