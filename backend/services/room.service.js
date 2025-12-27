@@ -1,6 +1,6 @@
 const Room = require("../models/Room");
 
-exports.deleteRooms = async (filterData) => {
+exports.deleteRooms = async (filterData = {}) => {
     await Room.deleteMany({ ...filterData });
 
     return;
@@ -12,35 +12,28 @@ exports.getRooms = async (hotelId) => {
     return rooms;
 };
 
-exports.getRoom = async (filterData, populateHotel = false) => {
+exports.getRoom = async (filterData = {}, populateQuery = []) => {
     const filterKeys = Object.keys(filterData);
     let room = null;
 
     if (filterKeys.length === 1 && filterKeys[0] === "id") {
-        if (populateHotel) {
-            room = await Room.findById(filterData.id).populate("hotel");
-        } else {
-            room = await Room.findById(filterData.id);
-        }
+        room = await Room.findById(filterData.id).populate(populateQuery);
+
     } else {
-        if (populateHotel) {
-            room = await Room.findOne(filterData).populate("hotel");
-        } else {
-            room = await Room.findOne(filterData);
-        }
+        room = await Room.findOne(filterData).populate(populateQuery);
+
     }
 
     return room;
 };
 
-exports.createRoom = async (newData = []) => {
+exports.createRoom = async (newData = {}) => {
     const room = await Room.create({ ...newData });
 
     return room;
 };
 
-exports.updateRoom = async (id, newData) => {
-
+exports.updateRoom = async (id, newData = {}) => {
     const hotel = await Room.findByIdAndUpdate(id, {
         $set: {
             ...newData

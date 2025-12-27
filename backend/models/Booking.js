@@ -4,17 +4,20 @@ const bookingSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Users",
-        required: true
+        required: true,
+        index: true
     },
     hotel: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Hotels",
-        required: true
+        required: true,
+        index: true
     },
     room: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Rooms",
-        required: true
+        required: true,
+        index: true
     },
     dates: [{
         type: Date,
@@ -33,7 +36,10 @@ const bookingSchema = new mongoose.Schema({
         required: true
     },
     paymentInfo: {
-        id: String,
+        id: {
+            type: String,
+            unique: true,
+        },
         status: String
     },
     status: {

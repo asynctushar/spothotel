@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const roomSchema = new mongoose.Schema({
     number: {
         type: Number,
-        required: true
+        required: true,
+        index: true
     },
     name: {
         type: String,
@@ -34,7 +35,7 @@ const roomSchema = new mongoose.Schema({
     hotel: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Hotels",
-        required: true, 
+        required: true,
         index: true
     }
 

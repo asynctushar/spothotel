@@ -1,92 +1,101 @@
-const Booking = require('../models/Booking');
-const Hotel = require('../models/Hotel');
-const Room = require('../models/Room');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const ErrorHandler = require('../utils/errorHandler');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const HotelService = require("../services/hotel.service");
+const BookingService = require("../services/booking.service");
+const RoomService = require("../services/room.service");
+const PaymentService = require("../services/payment.service");
 
 // new booking
 exports.createBooking = catchAsyncErrors(async (req, res, next) => {
     const { paymentInfo, dates, totalPrice, phone } = req.body;
 
-    // validation of payment info
-    const intent = await stripe.paymentIntents.retrieve(paymentInfo.id);
+    if (!paymentInfo || !paymentInfo.id) {
+        return next(new ErrorHandler("PaymentInfo is required", 400));
+    }
+    if (!dates || !Array.isArray(dates) || dates.length < 1) {
+        return next(new ErrorHandler("Dates are required", 400));
+    }
+    if (!totalPrice) {
+        return next(new ErrorHandler("TotalPrice is required", 400));
+    }
+    if (!phone) {
+        return next(new ErrorHandler("Phone number is required", 400));
+    }
 
+    // validation of payment info
+    const intent = await PaymentService.retrivePaymentIndent(paymentInfo);
     if (intent.status !== "succeeded" || intent.amount !== (totalPrice * 100)) {
         return next(new ErrorHandler("Invalid Payment Info", 400));
     }
-    
-    const hotel = await Hotel.findById(req.params.id);
+
+    const hotel = await HotelService.getHotel({ id: req.params.id });
     if (!hotel) {
         return next(new ErrorHandler("Hotel not found", 404));
     }
 
-    const room = await Room.findById(req.params.room);
+    const room = await RoomService.getRoom({ id: req.params.room });
     if (!room) {
-        return next(new ErrorHandler("Room not found", 404))
+        return next(new ErrorHandler("Room not found", 404));
     }
 
     const isHotelsRoom = hotel.rooms.includes(room.id);
     if (!isHotelsRoom) {
-        return next(new ErrorHandler("This Room is not available in this hotel", 400))
+        return next(new ErrorHandler("This Room is not available in this hotel", 400));
     }
 
-    if (dates.length < 1) {
-        return next(new ErrorHandler("Please insert booking dates", 400))
-    }
-
-    const isValidDate = dates.every((date) => Date.parse(new Date().toDateString()) <= Date.parse(new Date(date).toDateString()))
+    const isValidDate = dates.every((date) => Date.parse(new Date().toDateString()) <= Date.parse(new Date(date).toDateString()));
     if (!isValidDate) {
         return next(new ErrorHandler("given date is before than current date"));
     }
 
     const hasDuplicate = dates.length !== new Set(dates).size;
     if (hasDuplicate) {
-        return next(new ErrorHandler("Can't book same date more than once", 400))
+        return next(new ErrorHandler("Can't book same date more than once", 400));
     }
 
     if (room.notAvailable.length > 0) {
         const notAvailableCopy = room.notAvailable.map((room) => Date.parse(room));
-
         const isBooked = dates.some((date) => {
-            return notAvailableCopy.includes(Date.parse(new Date(date)))
+            return notAvailableCopy.includes(Date.parse(new Date(date)));
         });
 
         if (isBooked) return next(new ErrorHandler("Room already booked", 400));
     }
 
-    let formattedDates = [];
-    dates.forEach((date) => {
-        room.notAvailable.push(date);
-        formattedDates.push(date);
-    })
-
-    await Booking.create({
+    // create booking
+    const booking = await BookingService.createBooking({
         user: req.user.id,
         hotel: hotel.id,
         room: room.id,
-        dates: formattedDates,
+        dates,
         totalPrice,
         phone,
         paymentInfo,
         paidAt: Date.now()
-    })
+    });
 
-    await room.save();
+    // update room availabilities
+    const notAvailableDates = [...room.notAvailable.toObject(), ...dates];
+    await RoomService.updateRoom(room.id, { notAvailable: notAvailableDates });
 
     res.status(201).json({
-        success: true
-    })
-})
+        success: true,
+        booking
+    });
+});
 
 // update booking status -- admin
 exports.updateBooking = catchAsyncErrors(async (req, res, next) => {
     const status = req.body.status;
+    if (!["Processing", "Complete", "Checked"].includes(status)) {
+        return next(new ErrorHandler("Please select correct status", 400));
+    }
 
-    if (status !== "Complete" && status !== "Checked") {
+    if (status === "Processing") {
         return next(new ErrorHandler("Can't change booking status", 400));
     }
-    const booking = await Booking.findById(req.params.id);
+
+    let booking = await BookingService.getBooking({ id: req.params.id });
     if (!booking) {
         return next(new ErrorHandler("Booking not found", 404));
     }
@@ -94,38 +103,35 @@ exports.updateBooking = catchAsyncErrors(async (req, res, next) => {
     if (status === 'Complete') {
         if (booking.status === "Complete") return next(new ErrorHandler("Can't change booking status", 400));
 
-        const room = await Room.findById(booking.room);
+        const room = await RoomService.getRoom({ id: booking.room });
         const bookingDatesCopy = booking.dates.map((date) => Date.parse(date));
-
-        room.notAvailable = room.notAvailable.filter((date) => {
+        const notAvailableDates = room.notAvailable.filter((date) => {
             return !bookingDatesCopy.includes(Date.parse(date));
         });
 
-        await room.save();
-        booking.status = status;
-        await booking.save();
+        console.log(notAvailableDates);
+
+        await RoomService.updateRoom(room.id, { notAvailable: notAvailableDates });
+        booking = await BookingService.updateBooking(booking.id, { status });
     }
 
     if (status === "Checked") {
         if (booking.status === "Checked") return next(new ErrorHandler("User already checked in", 400));
         if (booking.status === "Complete") return next(new ErrorHandler("Can't change booking status", 400));
 
-        booking.status = status;
-        await booking.save();
+        booking = await BookingService.updateBooking(booking.id, { status });
     }
-
-    const bookings = await Booking.find();
 
     res.status(200).json({
         success: true,
-        bookings
-    })
-})
+        message: "Booking updated successfully.",
+        booking
+    });
+});
 
 // get own booking details
 exports.getOwnBookingDetails = catchAsyncErrors(async (req, res, next) => {
-    const booking = await Booking.findById(req.params.id).populate('room').populate('hotel');
-
+    const booking = await BookingService.getBooking({ id: req.params.id }, ["room", "hotel"]);
     if (!booking) {
         return next(new ErrorHandler("Booking not found", 404));
     }
@@ -137,15 +143,14 @@ exports.getOwnBookingDetails = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
         success: true,
         booking
-    })
-})
+    });
+});
 
 // get own all bookings
 exports.getOwnBookings = catchAsyncErrors(async (req, res, next) => {
-    const bookings = await Booking.find({
+    const bookings = await BookingService.getBookings({
         user: req.user.id
-    })
-
+    });
     if (!bookings) {
         return next(new ErrorHandler("You have no booking yet", 404));
     }
@@ -153,22 +158,22 @@ exports.getOwnBookings = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
         success: true,
         bookings
-    })
-})
+    });
+});
 
 // get all bookings -- admin 
 exports.getAllBookings = catchAsyncErrors(async (req, res, next) => {
-    const bookings = await Booking.find();
+    const bookings = await BookingService.getBookings();
 
     res.status(200).json({
         success: true,
         bookings
-    })
-})
+    });
+});
 
 // get booking details -- admin
 exports.getBookingDetails = catchAsyncErrors(async (req, res, next) => {
-    const booking = await Booking.findById(req.params.id).populate('room').populate('hotel');
+    const booking = await BookingService.getBooking({ id: req.params.id }, ["room", "hotel"]);
     if (!booking) {
         return next(new ErrorHandler("Booking not found", 404));
     }
@@ -176,26 +181,33 @@ exports.getBookingDetails = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
         success: true,
         booking
-    })
-})
+    });
+});
 
 // send stripe api key to client
-exports.sendStripeApiKey = catchAsyncErrors((req, res, next) => {
+exports.sendStripePublicApiKey = catchAsyncErrors((req, res, next) => {
     res.status(200).json({
         message: "success",
         stripeApiKey: process.env.STRIPE_API_KEY
-    })
-})
+    });
+});
 
 // send stripe secret key
-exports.sendStripeSecretKey = catchAsyncErrors(async (req, res, next) => {
-    const myPayment = await stripe.paymentIntents.create({
+exports.createPayment = catchAsyncErrors(async (req, res, next) => {
+    const { amount } = req.body;
+    if (!amount) {
+        return next(new ErrorHandler("Amount is required", 400));
+    }
+
+    const myPayment = await PaymentService.createPaymentIntent({
         amount: (req.body.amount * 100),
         currency: 'bdt',
         metadata: {
             company: 'Spothotel'
         }
     });
+
+    console.log(myPayment);
 
     res.status(200).json({
         success: true,

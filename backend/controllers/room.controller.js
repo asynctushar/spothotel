@@ -98,7 +98,7 @@ exports.deleteRoom = catchAsyncErrors(async (req, res, next) => {
 
 // get room details
 exports.getRoomDetails = catchAsyncErrors(async (req, res, next) => {
-    const room = await RoomService.getRoom({ id: req.params.id }, true);
+    const room = await RoomService.getRoom({ id: req.params.id }, ["hotel"]);
     if (!room) {
         return next(new ErrorHandler("Room not found", 404));
     }

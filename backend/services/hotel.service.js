@@ -1,24 +1,19 @@
 const Hotel = require("../models/Hotel");
 
-exports.createHotel = async (newData = []) => {
+exports.createHotel = async (newData = {}) => {
     const hotel = await Hotel.create({ ...newData });
 
     return hotel;
 };
 
-exports.getHotel = async ({ id }, populateRooms = false) => {
+exports.getHotel = async ({ id }, populateQuery = []) => {
     let hotel = null;
-
-    if (populateRooms) {
-        hotel = await Hotel.findById(id).populate("rooms");
-    } else {
-        hotel = await Hotel.findById(id);
-    }
+    hotel = await Hotel.findById(id).populate(populateQuery);
 
     return hotel;
 };
 
-exports.updateHotel = async (id, newData) => {
+exports.updateHotel = async (id, newData = {}) => {
     const hotel = await Hotel.findByIdAndUpdate(id, {
         $set: {
             ...newData
@@ -34,14 +29,10 @@ exports.deleteHotel = async (id) => {
     return;
 };
 
-exports.getHotels = async (filterData, populateRooms = false) => {
+exports.getHotels = async (filterData = {}, populateQuery = []) => {
     let hotels = [];
+    hotels = await Hotel.find(filterData).populate(populateQuery);
 
-    if (populateRooms) {
-        hotels = await Hotel.find(filterData).populate("rooms");
-    } else {
-        hotels = await Hotel.find(filterData);
-    }
 
     return hotels;
 };

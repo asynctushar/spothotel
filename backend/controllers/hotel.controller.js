@@ -125,7 +125,7 @@ exports.deleteHotel = catchAsyncErrors(async (req, res, next) => {
 
 // get hotel details
 exports.getHotelDetails = catchAsyncErrors(async (req, res, next) => {
-    const hotel = await HotelService.getHotel({ id: req.params.id }, true);
+    const hotel = await HotelService.getHotel({ id: req.params.id }, ["rooms"]);
 
     if (!hotel) {
         return next(new ErrorHandler("Hotel not found", 404));
@@ -201,7 +201,7 @@ exports.getAllHotels = catchAsyncErrors(async (req, res, next) => {
         };
     }
 
-    const hotels = await HotelService.getHotels(filterData, true);
+    const hotels = await HotelService.getHotels(filterData, ["rooms"]);
 
     res.status(200).json({
         success: true,

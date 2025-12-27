@@ -14,7 +14,7 @@ const authRoute = require("./routes/auth.route");
 const userRoute = require("./routes/user.route");
 const hotelRoute = require("./routes/hotel.route");
 const roomRoute = require("./routes/room.route");
-// const bookingRoute = require("./routes/booking.route");
+const bookingRoute = require("./routes/booking.route");
 const errorMiddleware = require("./middlewares/errorMiddleware");
 
 app.use(express.json({ limit: "50mb" }));
@@ -36,7 +36,7 @@ app.use("/api/v2/auth", authRoute);
 app.use("/api/v2/users", userRoute);
 app.use("/api/v2/hotels", hotelRoute);
 app.use("/api/v2/rooms", roomRoute);
-// app.use("/api/v2/bookings", bookingRoute);
+app.use("/api/v2/bookings", bookingRoute);
 
 // production build
 if (process.env.NODE_ENV === "PRODUCTION") {
