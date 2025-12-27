@@ -24,7 +24,6 @@ exports.register = catchAsyncErrors(async (req, res, next) => {
 
     const user = await UserService.createUser({ name, email, password });
     const token = user.generateAuthToken();
-
     const options = {
         expires: new Date(
             Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000
@@ -41,7 +40,6 @@ exports.register = catchAsyncErrors(async (req, res, next) => {
 // login user
 exports.login = catchAsyncErrors(async (req, res, next) => {
     const { email, password } = req.body;
-
     if (!email) {
         return next(new ErrorHandler("Email is required", 400));
     }
@@ -51,19 +49,16 @@ exports.login = catchAsyncErrors(async (req, res, next) => {
     }
 
     const user = await UserService.getUser({ email });
-
     if (!user) {
         return next(new ErrorHandler("User not found", 404));
     }
 
     const isMatch = await user.comparePassword(password);
-
     if (!isMatch) {
         return next(new ErrorHandler("Password incorrect"));
     }
 
     const token = user.generateAuthToken();
-
     const options = {
         expires: new Date(
             Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000

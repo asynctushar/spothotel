@@ -3,8 +3,6 @@ const UserService = require("../services/user.service");
 const BookingService = require("../services/booking.service");
 const ErrorHandler = require('../utils/errorHandler');
 
-
-
 // get user
 exports.getOwnUser = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
@@ -54,7 +52,6 @@ exports.changePassword = catchAsyncErrors(async (req, res, next) => {
 
     const user = await UserService.updatePassword(req.user, newPassword);
     const token = user.generateAuthToken();
-
     const options = {
         expires: new Date(
             Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000
@@ -95,7 +92,6 @@ exports.getUsers = catchAsyncErrors(async (req, res, next) => {
 exports.chageUserRole = catchAsyncErrors(async (req, res, next) => {
     const id = req.params.id;
     const role = req.body.role;
-
     if (id === req.user.id) {
         return next(new ErrorHandler("You can't change change your own role", 400));
     }
@@ -110,7 +106,6 @@ exports.chageUserRole = catchAsyncErrors(async (req, res, next) => {
     }
 
     const newUser = await UserService.updateUser(id, { role });
-
     res.status(200).json({
         success: true,
         user: newUser

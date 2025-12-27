@@ -12,8 +12,9 @@ const hotelSchema = new mongoose.Schema({
         trim: true
     },
     distance: {
-        type: Number,
-        require: true
+        type: String,
+        require: true,
+        trim: true
     },
     specification: [String],
     description: {

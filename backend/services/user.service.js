@@ -36,7 +36,6 @@ exports.updateUser = async (id, newData) => {
 
 exports.updatePassword = async (user, newPassword) => {
     user.password = newPassword;
-
     await user.save();
 
     return user;
