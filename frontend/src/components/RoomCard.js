@@ -19,7 +19,7 @@ const RoomCard = ({ room }) => {
             const dates = room.notAvailable.map((date) => new Date(date));
             setDisableDates(dates);
         }
-    }, [room])
+    }, [room]);
 
     return (
         <div className="flex flex-col w-80 gap-8 bg-stone-100 shadow-md rounded-md">
@@ -61,6 +61,6 @@ const RoomCard = ({ room }) => {
                 </Dialog>
             </div>
         </div >
-    )
-}
+    );
+};
 export default RoomCard;

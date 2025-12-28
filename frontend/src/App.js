@@ -57,7 +57,7 @@ const App = () => {
 				try {
 					setStripeLoading(true);
 					const { data } = await axios.get(
-						process.env.REACT_APP_API_URL + "/api/v1/stripeapikey",
+						process.env.REACT_APP_API_URL + "/api/v2/bookings/stripepublicapikey",
 						{ withCredentials: true }
 					);
 					setStripeApiKey(data.stripeApiKey);

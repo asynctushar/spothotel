@@ -20,23 +20,23 @@ import axios from "axios";
 // search hotel
 export const searchHotelsAction =
 	({ location, person, room, d1, d2 }) =>
-	async (dispatch) => {
-		try {
-			dispatch(setHasSearched(true));
-			dispatch(setLoader(true));
-			const { data } = await axios.get(
-				process.env.REACT_APP_API_URL +
-					`/api/v1/hotels?location=${location}&person=${person}&room=${room}&d1=${d1}&d2=${d2}`,
-				{ withCredentials: true }
-			);
+		async (dispatch) => {
+			try {
+				dispatch(setHasSearched(true));
+				dispatch(setLoader(true));
+				const { data } = await axios.get(
+					process.env.REACT_APP_API_URL +
+					`/api/v2/hotels?location=${location}&person=${person}&room=${room}&d1=${d1}&d2=${d2}`,
+					{ withCredentials: true }
+				);
 
-			dispatch(setHotels(data.hotels));
-			dispatch(setLoader(false));
-		} catch (err) {
-			dispatch(setLoader(false));
-			dispatch(setError(err.response.data.message));
-		}
-	};
+				dispatch(setHotels(data.hotels));
+				dispatch(setLoader(false));
+			} catch (err) {
+				dispatch(setLoader(false));
+				dispatch(setError(err.response.data.message));
+			}
+		};
 
 // get featured hotels
 export const getFeturedHotels = () => async (dispatch) => {
@@ -44,7 +44,7 @@ export const getFeturedHotels = () => async (dispatch) => {
 		dispatch(setHasSearched(false));
 		dispatch(setLoader(true));
 		const { data } = await axios.get(
-			process.env.REACT_APP_API_URL + `/api/v1/hotels`,
+			process.env.REACT_APP_API_URL + `/api/v2/hotels`,
 			{ withCredentials: true }
 		);
 
@@ -62,7 +62,7 @@ export const getHotelAction = (id) => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		const { data } = await axios.get(
-			process.env.REACT_APP_API_URL + `/api/v1/hotel/${id}`,
+			process.env.REACT_APP_API_URL + `/api/v2/hotels/${id}`,
 			{ withCredentials: true }
 		);
 
@@ -79,7 +79,7 @@ export const getRoomAction = (id) => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		const { data } = await axios.get(
-			process.env.REACT_APP_API_URL + `/api/v1/room/${id}`,
+			process.env.REACT_APP_API_URL + `/api/v2/rooms/${id}`,
 			{ withCredentials: true }
 		);
 		dispatch(setRoom(data.room));
@@ -96,7 +96,7 @@ export const newBookingAction =
 		try {
 			await axios.post(
 				process.env.REACT_APP_API_URL +
-					`/api/v1/hotel/${hotelId}/${roomId}/book`,
+				`/api/v2/bookings/hotels/${hotelId}/rooms/${roomId}`,
 				formData,
 				{ headers: { "Content-Type": "application/json" }, withCredentials: true }
 			);
@@ -112,7 +112,7 @@ export const getUsersBookings = () => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		const { data } = await axios.get(
-			process.env.REACT_APP_API_URL + "/api/v1/me/bookings",
+			process.env.REACT_APP_API_URL + "/api/v2/bookings/me",
 			{ withCredentials: true }
 		);
 
@@ -129,7 +129,7 @@ export const getUserBooking = (id) => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		const { data } = await axios.get(
-			process.env.REACT_APP_API_URL + `/api/v1/me/booking/${id}`,
+			process.env.REACT_APP_API_URL + `/api/v2/bookings/${id}/me`,
 			{ withCredentials: true }
 		);
 
@@ -146,7 +146,7 @@ export const getAllHotels = () => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		const { data } = await axios.get(
-			process.env.REACT_APP_API_URL + `/api/v1/hotels`,
+			process.env.REACT_APP_API_URL + `/api/v2/hotels`,
 			{ withCredentials: true }
 		);
 
@@ -163,9 +163,9 @@ export const uploadHotelPicture = (formData, id) => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		await axios.put(
-			process.env.REACT_APP_API_URL + `/api/v1/hotel/${id}/images`,
+			process.env.REACT_APP_API_URL + `/api/v2/hotels/${id}/images`,
 			formData,
-			{ headers: { "Content-Type": "multipart/form-data" } , withCredentials: true}
+			{ headers: { "Content-Type": "multipart/form-data" }, withCredentials: true }
 		);
 
 		dispatch(setSuccess("Image uploaded successfully"));
@@ -182,7 +182,7 @@ export const uploadRoomPicture = (formData, id) => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		await axios.put(
-			process.env.REACT_APP_API_URL + `/api/v1/room/${id}/images`,
+			process.env.REACT_APP_API_URL + `/api/v2/rooms/${id}/images`,
 			formData,
 			{ headers: { "Content-Type": "multipart/form-data" }, withCredentials: true }
 		);
@@ -200,7 +200,7 @@ export const deleteHotel = (id) => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		const { data } = await axios.delete(
-			process.env.REACT_APP_API_URL + `/api/v1/hotel/${id}`,
+			process.env.REACT_APP_API_URL + `/api/v2/hotels/${id}`,
 			{ withCredentials: true }
 		);
 
@@ -218,7 +218,7 @@ export const deleteRoom = (id) => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		const { data } = await axios.delete(
-			process.env.REACT_APP_API_URL + `/api/v1/room/${id}`,
+			process.env.REACT_APP_API_URL + `/api/v2/rooms/${id}`,
 			{ withCredentials: true }
 		);
 
@@ -236,7 +236,7 @@ export const createHotel = (formData) => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		await axios.post(
-			process.env.REACT_APP_API_URL + `/api/v1/hotel/new`,
+			process.env.REACT_APP_API_URL + `/api/v2/hotels`,
 			formData,
 			{ headers: { "Content-Type": "application/json" }, withCredentials: true }
 		);
@@ -254,7 +254,7 @@ export const updateHotel = (formData, hotelId) => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		await axios.put(
-			process.env.REACT_APP_API_URL + `/api/v1/hotel/${hotelId}`,
+			process.env.REACT_APP_API_URL + `/api/v2/hotels/${hotelId}`,
 			formData,
 			{ headers: { "Content-Type": "application/json" }, withCredentials: true }
 		);
@@ -272,7 +272,7 @@ export const createRoom = (formData, hotelId) => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		await axios.post(
-			process.env.REACT_APP_API_URL + `/api/v1/hotel/${hotelId}/room/new`,
+			process.env.REACT_APP_API_URL + `/api/v2/hotels/${hotelId}/rooms`,
 			formData,
 			{
 				headers: { "Content-Type": "application/json" },
@@ -293,7 +293,7 @@ export const updateRoom = (formData, roomId) => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		await axios.put(
-			process.env.REACT_APP_API_URL + `/api/v1/room/${roomId}`,
+			process.env.REACT_APP_API_URL + `/api/v2/rooms/${roomId}`,
 			formData,
 			{
 				headers: { "Content-Type": "application/json" },
@@ -314,7 +314,7 @@ export const getAllBookings = () => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		const { data } = await axios.get(
-			process.env.REACT_APP_API_URL + `/api/v1/bookings`,
+			process.env.REACT_APP_API_URL + `/api/v2/bookings`,
 			{ withCredentials: true }
 		);
 
@@ -330,7 +330,7 @@ export const getAllBookings = () => async (dispatch) => {
 export const changeBookingStatus = (status, bookingId) => async (dispatch) => {
 	try {
 		const { data } = await axios.put(
-			process.env.REACT_APP_API_URL + `/api/v1/booking/${bookingId}`,
+			process.env.REACT_APP_API_URL + `/api/v2/bookings/${bookingId}`,
 			{ status },
 			{
 				headers: { "Content-Type": "application/json" },
@@ -349,7 +349,7 @@ export const getBookingDetails = (id) => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		const { data } = await axios.get(
-			process.env.REACT_APP_API_URL + `/api/v1/booking/${id}`,
+			process.env.REACT_APP_API_URL + `/api/v2/bookings/${id}`,
 			{ withCredentials: true }
 		);
 

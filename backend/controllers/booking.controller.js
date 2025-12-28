@@ -109,8 +109,6 @@ exports.updateBooking = catchAsyncErrors(async (req, res, next) => {
             return !bookingDatesCopy.includes(Date.parse(date));
         });
 
-        console.log(notAvailableDates);
-
         await RoomService.updateRoom(room.id, { notAvailable: notAvailableDates });
         booking = await BookingService.updateBooking(booking.id, { status });
     }
@@ -206,8 +204,6 @@ exports.createPayment = catchAsyncErrors(async (req, res, next) => {
             company: 'Spothotel'
         }
     });
-
-    console.log(myPayment);
 
     res.status(200).json({
         success: true,

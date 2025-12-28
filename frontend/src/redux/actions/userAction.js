@@ -13,7 +13,7 @@ export const signUpAction = (formData) => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		const { data } = await axios.post(
-			process.env.REACT_APP_API_URL + "/api/v1/user/new",
+			process.env.REACT_APP_API_URL + "/api/v2/auth/register",
 			formData,
 			{
 				headers: { "Content-Type": "application/json" },
@@ -34,7 +34,7 @@ export const signInAction = (formData) => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		const { data } = await axios.post(
-			process.env.REACT_APP_API_URL + "/api/v1/login",
+			process.env.REACT_APP_API_URL + "/api/v2/auth/login",
 			formData,
 			{
 				headers: { "Content-Type": "application/json" },
@@ -55,12 +55,13 @@ export const getUserAction = () => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
 		const { data } = await axios.get(
-			process.env.REACT_APP_API_URL + "/api/v1/me",
+			process.env.REACT_APP_API_URL + "/api/v2/users/me",
 			{ withCredentials: true }
 		);
 
 		dispatch(setUser(data.user));
 		dispatch(setLoader(false));
+
 	} catch (err) {
 		dispatch(setLoader(false));
 	}
@@ -70,7 +71,7 @@ export const getUserAction = () => async (dispatch) => {
 export const logoutAction = () => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
-		await axios.get(process.env.REACT_APP_API_URL + "/api/v1/logout", {
+		await axios.get(process.env.REACT_APP_API_URL + "/api/v2/auth/logout", {
 			withCredentials: true,
 		});
 
@@ -86,7 +87,7 @@ export const logoutAction = () => async (dispatch) => {
 export const updateUserAction = (formData) => async (dispatch) => {
 	try {
 		const { data } = await axios.put(
-			process.env.REACT_APP_API_URL + "/api/v1/me",
+			process.env.REACT_APP_API_URL + "/api/v2/users/me",
 			formData,
 			{
 				headers: { "Content-Type": "application/json" },
@@ -104,7 +105,7 @@ export const updateUserAction = (formData) => async (dispatch) => {
 export const changePasswordAction = (formData) => async (dispatch) => {
 	try {
 		const { data } = await axios.put(
-			process.env.REACT_APP_API_URL + "/api/v1/me/password",
+			process.env.REACT_APP_API_URL + "/api/v2/users/me/password",
 			formData,
 			{
 				headers: { "Content-Type": "application/json" },
@@ -122,7 +123,7 @@ export const changePasswordAction = (formData) => async (dispatch) => {
 export const deleteUserAction = () => async (dispatch) => {
 	try {
 		dispatch(setLoader(true));
-		await axios.delete(process.env.REACT_APP_API_URL + "/api/v1/me", {
+		await axios.delete(process.env.REACT_APP_API_URL + "/api/v2/users/me", {
 			withCredentials: true,
 		});
 
@@ -139,7 +140,7 @@ export const getAllUsers = () => async (dispatch) => {
 	try {
 		dispatch(setUsersLoader(true));
 		const { data } = await axios.get(
-			process.env.REACT_APP_API_URL + "/api/v1/admin/users",
+			process.env.REACT_APP_API_URL + "/api/v2/users",
 			{ withCredentials: true }
 		);
 
@@ -155,7 +156,7 @@ export const getAllUsers = () => async (dispatch) => {
 export const updateUserRole = (id, role) => async (dispatch) => {
 	try {
 		const { data } = await axios.put(
-			process.env.REACT_APP_API_URL + `/api/v1/admin/user/${id}`,
+			process.env.REACT_APP_API_URL + `/api/v2/users/${id}`,
 			{ role },
 			{
 				headers: { "Content-Type": "application/json" },

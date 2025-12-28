@@ -31,7 +31,7 @@ const Payment = () => {
             navigate('/booking/success');
             dispatch(setHasBooked(false));
         }
-    }, [hasBooked, dispatch, navigate])
+    }, [hasBooked, dispatch, navigate]);
 
     useEffect(() => {
         if (bookingDetails === null) {
@@ -44,11 +44,11 @@ const Payment = () => {
         payBtn.current.disabled = true;
 
         try {
-           const { data } = await axios.post(
-				process.env.REACT_APP_API_URL + "/api/v1/stripeclientkey",
-				{ amount: bookingDetails.totalPrice },
-				{ headers: { "Content-Type": "application/json" }, withCredentials: true }
-			);
+            const { data } = await axios.post(
+                process.env.REACT_APP_API_URL + "/api/v2/bookings/payment",
+                { amount: bookingDetails.totalPrice },
+                { headers: { "Content-Type": "application/json" }, withCredentials: true }
+            );
             const client_secret = data.client_secret;
 
             if (!stripe || !elements) return;
@@ -91,7 +91,7 @@ const Payment = () => {
             dispatch(setError(err.response.data.message));
         }
 
-    }
+    };
 
     return (
         <Fragment>
@@ -117,6 +117,6 @@ const Payment = () => {
                 </div>
             </div >
         </Fragment>
-    )
-}
+    );
+};
 export default Payment;
