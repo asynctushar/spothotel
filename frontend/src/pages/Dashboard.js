@@ -1,7 +1,7 @@
-import SideBar from "../components/SideBar";
+import SideBar from "../components/layout/SideBar";
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllUsers } from '../redux/actions/userAction';
-import { getAllBookings, getAllHotels } from '../redux/actions/hotelAction';
+import { getAllUsers } from '../redux/actions/user.action';
+import { getAllBookings, getAllHotels } from '../redux/actions/hotel.action';
 import { Fragment, useEffect } from "react";
 import { Card, CardContent } from "@mui/material";
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';

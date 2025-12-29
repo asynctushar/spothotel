@@ -1,13 +1,13 @@
-import AppleIcon from '../images/icon-app-store.png';
-import PlayStoreIcon from '../images/icon-play-store.png';
+import AppleIcon from '../assets/images/icon-app-store.png';
+import PlayStoreIcon from '../assets/images/icon-play-store.png';
 import { Link } from "react-router-dom";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useDispatch, useSelector } from "react-redux";
 import { Fragment, useEffect, useState } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { updateUserAction, changePasswordAction, deleteUserAction } from '../redux/actions/userAction';
-import Loader from '../components/Loader';
+import { updateUserAction, changePasswordAction, deleteUserAction } from '../redux/actions/user.action';
+import Loader from '../components/ui/Loader';
 import Meta from '../utils/Meta';
 
 const UpdateProfile = () => {
@@ -33,31 +33,31 @@ const UpdateProfile = () => {
     const changeNameHandler = () => {
         if (name.length < 1) return;
 
-        dispatch(updateUserAction({ name }))
+        dispatch(updateUserAction({ name }));
         setIsNameOpen(!isNameOpen);
         setName(user.name);
-    }
+    };
 
     const changeEmailHandler = () => {
         if (email.length < 1) return;
 
-        dispatch(updateUserAction({ email }))
+        dispatch(updateUserAction({ email }));
         setIsEmailOpen(!isEmailOpen);
         setEmail(user.email);
-    }
+    };
 
     const changePasswordHandler = () => {
         if (confirmPassword !== newPassword || newPassword.length < 8) return;
 
-        dispatch(changePasswordAction({ oldPassword, newPassword }))
+        dispatch(changePasswordAction({ oldPassword, newPassword }));
         setIsPasswordOpen(!isPasswordOpen);
-    }
+    };
 
     const deleteAccountHandler = () => {
 
         dispatch(deleteUserAction());
         setIsDeleteOpen(!isDeleteOpen);
-    }
+    };
 
     return (
         <Fragment>
@@ -135,6 +135,6 @@ const UpdateProfile = () => {
                 )}
             </Fragment>
         </Fragment>
-    )
-}
+    );
+};
 export default UpdateProfile;

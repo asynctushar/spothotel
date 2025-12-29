@@ -1,10 +1,10 @@
-import AppleIcon from '../images/icon-app-store.png';
-import PlayStoreIcon from '../images/icon-play-store.png';
-import Profile from '../images/profile.png';
+import AppleIcon from '../assets/images/icon-app-store.png';
+import PlayStoreIcon from '../assets/images/icon-play-store.png';
+import Profile from '../assets/images/profile.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { logoutAction } from '../redux/actions/userAction';
+import { logout } from '../redux/actions/auth.action';
 import { Fragment } from 'react';
 import Meta from '../utils/Meta';
 
@@ -14,12 +14,12 @@ const Account = () => {
     const dispatch = useDispatch();
 
     const logoutHandler = () => {
-        dispatch(logoutAction());
-    }
+        dispatch(logout());
+    };
 
     return (
         <Fragment>
-            <Meta title={user.name}/>
+            <Meta title={user.name} />
             <div className="mx-auto px-4 md:px-10 lg:px-20 xl:px-48 mt-4 flex flex-col md:flex-row justify-between pb-6 h-[calc(100vh-115px)]">
                 <div className="w-full h-full mb-6 bg-slate-100 border border-solid border-gray-300 rounded flex flex-col">
                     <img src={Profile} alt="avatar" className="w-32 h-32 mx-auto mt-6" />
@@ -51,6 +51,6 @@ const Account = () => {
                 </div>
             </div>
         </Fragment>
-    )
-}
+    );
+};
 export default Account;

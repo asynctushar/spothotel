@@ -1,4 +1,4 @@
-import { setError, setSuccess } from "../slices/appSlice";
+import { setError, setSuccess } from "../slices/app.slice";
 import {
 	setLoader,
 	setHotels,
@@ -14,7 +14,7 @@ import {
 	setIsHotelUPdated,
 	setIsRoomUpdated,
 	setAllBookings,
-} from "../slices/hotelSlice";
+} from "../slices/hotel.slice";
 import axios from "axios";
 
 // search hotel

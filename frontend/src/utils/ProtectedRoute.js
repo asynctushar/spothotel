@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import Loader from "../components/Loader";
+import Loader from "../components/ui/Loader";
 
 
 const ProtectedRoute = ({ role, children }) => {
@@ -15,6 +15,6 @@ const ProtectedRoute = ({ role, children }) => {
             {role === 'admin' && !isLoading && isAuthenticated && user.role !== 'admin' && <Navigate to="/account" />}
             {isLoading && <Loader />}
         </Fragment>
-    )
-}
+    );
+};
 export default ProtectedRoute;

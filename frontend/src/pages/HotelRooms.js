@@ -1,8 +1,8 @@
-import SideBar from "../components/SideBar";
+import SideBar from "../components/layout/SideBar";
 import { Fragment, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteRoom, getHotelAction, uploadRoomPicture } from '../redux/actions/hotelAction';
-import Loader from '../components/Loader';
+import { deleteRoom, getHotelAction, uploadRoomPicture } from '../redux/actions/hotel.action';
+import Loader from '../components/ui/Loader';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import WeekendIcon from '@mui/icons-material/Weekend';
@@ -11,7 +11,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableFooter, TablePagination, IconButton, Dialog, DialogContent, DialogTitle, DialogActions, Button, DialogContentText } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { setError } from "../redux/slices/appSlice";
+import { setError } from "../redux/slices/app.slice";
 import NotFound from './NotFound';
 import Meta from '../utils/Meta';
 

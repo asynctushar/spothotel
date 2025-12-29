@@ -1,8 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Fragment, useEffect, useState } from 'react';
-import { getUserBooking } from '../redux/actions/hotelAction';
-import Loader from '../components/Loader';
+import { getUserBooking } from '../redux/actions/hotel.action';
+import Loader from '../components/ui/Loader';
 import NotFound from './NotFound';
 import { format } from 'date-fns';
 import Meta from '../utils/Meta';

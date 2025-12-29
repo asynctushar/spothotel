@@ -1,14 +1,14 @@
 import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AirlineStopsIcon from '@mui/icons-material/AirlineStops';
-import SideBar from "../components/SideBar";
+import SideBar from "../components/layout/SideBar";
 import { Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, styled } from '@mui/material';
 import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { setIsHotelUPdated } from '../redux/slices/hotelSlice';
-import { getHotelAction, updateHotel } from '../redux/actions/hotelAction';
-import Loader from '../components/Loader';
+import { setIsHotelUPdated } from '../redux/slices/hotel.slice';
+import { getHotelAction, updateHotel } from '../redux/actions/hotel.action';
+import Loader from '../components/ui/Loader';
 import Meta from '../utils/Meta';
 
 const availableSpecifications = [

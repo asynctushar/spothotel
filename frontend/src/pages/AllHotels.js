@@ -1,8 +1,8 @@
-import SideBar from "../components/SideBar";
+import SideBar from "../components/layout/SideBar";
 import { Fragment, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteHotel, getAllHotels, uploadHotelPicture } from '../redux/actions/hotelAction';
-import Loader from '../components/Loader';
+import { deleteHotel, getAllHotels, uploadHotelPicture } from '../redux/actions/hotel.action';
+import Loader from '../components/ui/Loader';
 import { Link } from 'react-router-dom';
 import LaunchIcon from '@mui/icons-material/Launch';
 import HolidayVillageIcon from '@mui/icons-material/HolidayVillage';
@@ -11,7 +11,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableFooter, TablePagination, IconButton, Dialog, DialogContent, DialogTitle, DialogActions, Button, DialogContentText } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { setError } from "../redux/slices/appSlice";
+import { setError } from "../redux/slices/app.slice";
 import Meta from "../utils/Meta";
 
 const AllHotels = () => {
@@ -38,19 +38,19 @@ const AllHotels = () => {
 
         images.forEach((image) => {
             formData.append('pictures', image);
-        })
+        });
 
-        dispatch(uploadHotelPicture(formData, hotelRef._id))
+        dispatch(uploadHotelPicture(formData, hotelRef._id));
         setOpen(!open);
         setImages([]);
         setHotelRef(undefined);
-    }
+    };
 
     const deleteHandler = () => {
         dispatch(deleteHotel(hotelRef._id));
         setIsDeleteOpen(false);
         setHotelRef(undefined);
-    }
+    };
 
 
     return (
@@ -142,7 +142,7 @@ const AllHotels = () => {
                                                     if (e.target.files.length <= 5) {
                                                         setImages(Array.from(e.target.files));
                                                     } else {
-                                                        dispatch(setError("Maximum 5 Images can be uploaded."))
+                                                        dispatch(setError("Maximum 5 Images can be uploaded."));
                                                     }
                                                 }
                                                 } />
@@ -187,6 +187,6 @@ const AllHotels = () => {
                 </Fragment>
             </div>
         </Fragment>
-    )
-}
+    );
+};
 export default AllHotels;

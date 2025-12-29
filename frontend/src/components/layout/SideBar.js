@@ -11,7 +11,7 @@ import AddHomeWorkSharpIcon from '@mui/icons-material/AddHomeWorkSharp';
 import BookmarkAddedSharpIcon from '@mui/icons-material/BookmarkAddedSharp';
 import DashboardSharpIcon from '@mui/icons-material/DashboardSharp';
 import { useSelector, useDispatch } from 'react-redux';
-import {setAdminbar} from '../redux/slices/appSlice';
+import { setAdminbar } from '../../redux/slices/app.slice';
 import { NavLink } from 'react-router-dom';
 
 const openedMixin = (theme) => ({
@@ -68,7 +68,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const SideBar = () => {
     const open = useSelector((state) => state.appState.isAdminbarOpen);
     const dispatch = useDispatch();
-    const isMobileDevice = useMediaQuery('(max-width:640px)')
+    const isMobileDevice = useMediaQuery('(max-width:640px)');
 
     const handleDrawerOpen = () => {
         dispatch(setAdminbar(!open));
@@ -78,7 +78,7 @@ const SideBar = () => {
         if (isMobileDevice) {
             dispatch(setAdminbar(false));
         }
-    }, [isMobileDevice, dispatch])
+    }, [isMobileDevice, dispatch]);
 
     return (
         <Drawer variant="permanent" open={open}>
@@ -229,6 +229,6 @@ const SideBar = () => {
             </List>
         </Drawer>
     );
-}
+};
 
 export default SideBar;

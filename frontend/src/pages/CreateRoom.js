@@ -2,14 +2,14 @@ import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import SideBar from "../components/SideBar";
+import SideBar from "../components/layout/SideBar";
 import { Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, styled } from '@mui/material';
 import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { setIsRoomCreated } from '../redux/slices/hotelSlice';
-import { createRoom, getHotelAction } from '../redux/actions/hotelAction';
-import Loader from '../components/Loader';
+import { setIsRoomCreated } from '../redux/slices/hotel.slice';
+import { createRoom, getHotelAction } from '../redux/actions/hotel.action';
+import Loader from '../components/ui/Loader';
 import NotFound from './NotFound';
 import Meta from '../utils/Meta';
 
@@ -22,7 +22,7 @@ const availableSpecifications = [
 const availableType = [
     'Single',
     'Double'
-]
+];
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -95,10 +95,10 @@ const CreateRoom = () => {
             pricePerDay: Number(price),
             specification,
             type
-        }
+        };
 
         dispatch(createRoom(formData, id));
-    }
+    };
 
     return (
         <Fragment>
@@ -186,6 +186,6 @@ const CreateRoom = () => {
                 )}
             </div >
         </Fragment>
-    )
-}
+    );
+};
 export default CreateRoom;

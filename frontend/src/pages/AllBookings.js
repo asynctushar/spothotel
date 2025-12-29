@@ -1,8 +1,8 @@
-import SideBar from "../components/SideBar";
+import SideBar from "../components/layout/SideBar";
 import { Fragment, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeBookingStatus, getAllBookings } from '../redux/actions/hotelAction';
-import Loader from '../components/Loader';
+import { changeBookingStatus, getAllBookings } from '../redux/actions/hotel.action';
+import Loader from '../components/ui/Loader';
 import { Link } from 'react-router-dom';
 import LaunchIcon from '@mui/icons-material/Launch';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableFooter, TablePagination, IconButton, Dialog, DialogContent, DialogTitle, DialogActions, FormControl, InputLabel, Select, MenuItem, Tooltip, } from '@mui/material';
@@ -31,7 +31,7 @@ const AllBookings = () => {
         dispatch(changeBookingStatus(status, bookingRef._id));
         setOpen(false);
         setBookingRef(undefined);
-    }
+    };
 
     return (
         <Fragment>
@@ -67,7 +67,7 @@ const AllBookings = () => {
                                                         }}
                                                             disabled={booking.status === "Complete" ? true : false}
                                                             className="disabled:text-gray-600">
-                                                            <EditIcon fontSize="medium"/>
+                                                            <EditIcon fontSize="medium" />
                                                         </IconButton>
                                                     </Tooltip>
                                                 </TableCell>
@@ -128,6 +128,6 @@ const AllBookings = () => {
                 </Fragment>
             </div>
         </Fragment>
-    )
-}
+    );
+};
 export default AllBookings;

@@ -4,84 +4,9 @@ import {
 	logoutUser,
 	setUsersLoader,
 	setAllUsers,
-} from "../slices/userSlice";
-import { setError } from "../slices/appSlice";
+} from "../slices/user.slice";
+import { setError } from "../slices/app.slice";
 import axios from "axios";
-
-// sign up user
-export const signUpAction = (formData) => async (dispatch) => {
-	try {
-		dispatch(setLoader(true));
-		const { data } = await axios.post(
-			process.env.REACT_APP_API_URL + "/api/v2/auth/register",
-			formData,
-			{
-				headers: { "Content-Type": "application/json" },
-				withCredentials: true,
-			}
-		);
-
-		dispatch(setUser(data.user));
-		dispatch(setLoader(false));
-	} catch (err) {
-		dispatch(setLoader(false));
-		dispatch(setError(err.response.data.message));
-	}
-};
-
-// log in user
-export const signInAction = (formData) => async (dispatch) => {
-	try {
-		dispatch(setLoader(true));
-		const { data } = await axios.post(
-			process.env.REACT_APP_API_URL + "/api/v2/auth/login",
-			formData,
-			{
-				headers: { "Content-Type": "application/json" },
-				withCredentials: true,
-			}
-		);
-
-		dispatch(setUser(data.user));
-		dispatch(setLoader(false));
-	} catch (err) {
-		dispatch(setLoader(false));
-		dispatch(setError(err.response.data.message));
-	}
-};
-
-// get user
-export const getUserAction = () => async (dispatch) => {
-	try {
-		dispatch(setLoader(true));
-		const { data } = await axios.get(
-			process.env.REACT_APP_API_URL + "/api/v2/users/me",
-			{ withCredentials: true }
-		);
-
-		dispatch(setUser(data.user));
-		dispatch(setLoader(false));
-
-	} catch (err) {
-		dispatch(setLoader(false));
-	}
-};
-
-// log out user
-export const logoutAction = () => async (dispatch) => {
-	try {
-		dispatch(setLoader(true));
-		await axios.get(process.env.REACT_APP_API_URL + "/api/v2/auth/logout", {
-			withCredentials: true,
-		});
-
-		dispatch(logoutUser());
-		dispatch(setLoader(false));
-	} catch (err) {
-		dispatch(setLoader(false));
-		dispatch(setError(err.response.data.message));
-	}
-};
 
 // update user data
 export const updateUserAction = (formData) => async (dispatch) => {

@@ -4,10 +4,10 @@ import { DateRange } from 'react-date-range';
 import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import Loader from '../components/Loader';
-import { getRoomAction } from '../redux/actions/hotelAction';
+import Loader from '../components/ui/Loader';
+import { getRoomAction } from '../redux/actions/hotel.action';
 import { addDays, format } from 'date-fns';
-import { setError } from '../redux/slices/appSlice';
+import { setError } from '../redux/slices/app.slice';
 import NotFound from './NotFound';
 import Meta from '../utils/Meta';
 
@@ -17,9 +17,9 @@ const Booking = () => {
     const { room, isLoading } = useSelector((state) => state.hotelState);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [phone, setPhone] = useState('')
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [dates, setDates] = useState([]);
     const [isDateOpen, setIsDateOpen] = useState(false);
     const [disableDates, setDisableDates] = useState([]);
@@ -40,7 +40,7 @@ const Booking = () => {
         dates,
         room: id,
         hotel: room?.hotel._id
-    }
+    };
 
     useEffect(() => {
         dispatch(getRoomAction(id));
@@ -60,7 +60,7 @@ const Booking = () => {
         let tempDates = [];
         let startDate = dateRange[0].startDate;
         while (startDate <= dateRange[0].endDate) {
-            tempDates.push(format(new Date(startDate), 'yyyy-MM-dd'))
+            tempDates.push(format(new Date(startDate), 'yyyy-MM-dd'));
             startDate = addDays(new Date(startDate), 1);
         }
 
@@ -69,7 +69,7 @@ const Booking = () => {
 
     const dateRangeHanler = (item) => {
         setDateRange([item.selection]);
-    }
+    };
 
     const onCheckout = () => {
         const notAvailAble = room.notAvailable.map((date) => Date.parse(date));
@@ -82,7 +82,7 @@ const Booking = () => {
 
         sessionStorage.setItem("bookingDetails", JSON.stringify(bookingDetails));
         navigate('/booking/payment');
-    }
+    };
 
     return (
         <Fragment>
@@ -185,6 +185,6 @@ const Booking = () => {
                 )}
             </Fragment >
         </Fragment>
-    )
-}
+    );
+};
 export default Booking;

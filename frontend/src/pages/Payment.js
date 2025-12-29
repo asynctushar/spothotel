@@ -5,8 +5,8 @@ import { Fragment, useEffect, useRef } from 'react';
 import { useDispatch, useSelector, } from 'react-redux';
 import { useNavigate, } from 'react-router-dom';
 import axios from 'axios';
-import { setError } from '../redux/slices/appSlice';
-import { newBookingAction } from '../redux/actions/hotelAction';
+import { setError } from '../redux/slices/app.slice';
+import { newBookingAction } from '../redux/actions/hotel.action';
 import {
     CardNumberElement,
     CardCvcElement,
@@ -14,7 +14,7 @@ import {
     useStripe,
     useElements
 } from "@stripe/react-stripe-js";
-import { setHasBooked } from '../redux/slices/hotelSlice';
+import { setHasBooked } from '../redux/slices/hotel.slice';
 import Meta from '../utils/Meta';
 
 const Payment = () => {

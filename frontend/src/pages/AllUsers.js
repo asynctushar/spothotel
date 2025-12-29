@@ -1,8 +1,8 @@
-import SideBar from "../components/SideBar";
+import SideBar from "../components/layout/SideBar";
 import { Fragment, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllUsers, updateUserRole } from '../redux/actions/userAction';
-import Loader from '../components/Loader';
+import { getAllUsers, updateUserRole } from '../redux/actions/user.action';
+import Loader from '../components/ui/Loader';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableFooter, TablePagination, IconButton, Tooltip, Dialog, DialogContent, DialogTitle, DialogActions, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import Meta from '../utils/Meta';
@@ -28,7 +28,7 @@ const AllUsers = () => {
     const editHandler = () => {
         dispatch(updateUserRole(userRef._id, role));
         setOpen(!open);
-    }
+    };
 
     return (
         <Fragment>
@@ -61,7 +61,7 @@ const AllUsers = () => {
                                                         <IconButton onClick={() => {
                                                             setOpen(!open);
                                                             setUserRef(singleUser);
-                                                            setRole(singleUser.role)
+                                                            setRole(singleUser.role);
                                                         }}
                                                             disabled={singleUser._id === user._id} className="disabled:text-gray-600">
                                                             <EditIcon fontSize="medium" />
@@ -117,6 +117,6 @@ const AllUsers = () => {
                 </Fragment>
             </div>
         </Fragment>
-    )
-}
+    );
+};
 export default AllUsers;

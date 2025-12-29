@@ -1,14 +1,14 @@
 import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AirlineStopsIcon from '@mui/icons-material/AirlineStops';
-import SideBar from "../components/SideBar";
+import SideBar from "../components/layout/SideBar";
 import { Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, styled } from '@mui/material';
 import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setIsHotelCreated } from '../redux/slices/hotelSlice';
-import { createHotel } from '../redux/actions/hotelAction';
-import Loader from '../components/Loader';
+import { setIsHotelCreated } from '../redux/slices/hotel.slice';
+import { createHotel } from '../redux/actions/hotel.action';
+import Loader from '../components/ui/Loader';
 import Meta from '../utils/Meta';
 
 const availableSpecifications = [
@@ -77,10 +77,10 @@ const CreateHotel = () => {
             distance: Number(distance),
             description,
             specification
-        }
+        };
 
         dispatch(createHotel(formData));
-    }
+    };
 
     return (
         <Fragment>
@@ -130,6 +130,6 @@ const CreateHotel = () => {
                 )}
             </div >
         </Fragment>
-    )
-}
+    );
+};
 export default CreateHotel;

@@ -1,12 +1,12 @@
 import { useEffect, useState, forwardRef } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/layout/Navbar";
 import Booking from "./pages/Booking";
 import Home from "./pages/Home";
 import Hotel from "./pages/Hotel";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Account from "./pages/Account";
 import Bookings from "./pages/Bookings";
 import Payment from "./pages/Payment";
@@ -18,8 +18,8 @@ import AllBookings from "./pages/AllBookings";
 import Dashboard from "./pages/Dashboard";
 import UpdateProfile from "./pages/UpdateProfile.js";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import { getUserAction } from "./redux/actions/userAction";
-import { setError, clearError, clearSuccess } from "./redux/slices/appSlice";
+import { loadUser } from "./redux/actions/auth.action";
+import { setError, clearError, clearSuccess } from "./redux/slices/app.slice";
 import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
@@ -36,7 +36,7 @@ import { HelmetProvider } from "react-helmet-async";
 const App = () => {
 	const [stripeApiKey, setStripeApiKey] = useState("");
 	const isAuthenticated = useSelector(
-		(state) => state.userState.isAuthenticated
+		(state) => state.authState.isAuthenticated
 	);
 	const { error, success } = useSelector((state) => state.appState);
 	const dispatch = useDispatch();
@@ -48,7 +48,7 @@ const App = () => {
 	));
 
 	useEffect(() => {
-		dispatch(getUserAction());
+		dispatch(loadUser());
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -98,8 +98,8 @@ const App = () => {
 					<hr className=" border-t border-grey-400" />
 					<Routes>
 						<Route path="/" element={<Home />} />
-						<Route path="/login" element={<SignIn />} />
-						<Route path="/signup" element={<SignUp />} />
+						<Route path="/login" element={<Login />} />
+						<Route path="/register" element={<Register />} />
 						<Route path="/hotel/:id" element={<Hotel />} />
 						{!isStripeLoading && (
 							<Route

@@ -9,9 +9,9 @@ import { Fragment, useEffect, useState } from 'react';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { addDays, format } from 'date-fns';
-import { searchHotelsAction, getFeturedHotels } from '../redux/actions/hotelAction';
+import { searchHotelsAction, getFeturedHotels } from '../redux/actions/hotel.action';
 import { useDispatch, useSelector } from 'react-redux';
-import HotelCard from '../components/HotelCard';
+import HotelCard from '../components/hotel/HotelCard';
 import Meta from '../utils/Meta';
 
 const Home = () => {

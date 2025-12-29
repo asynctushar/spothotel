@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getUsersBookings } from '../redux/actions/hotelAction';
-import Loader from '../components/Loader';
+import { getUsersBookings } from '../redux/actions/hotel.action';
+import Loader from '../components/ui/Loader';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableFooter, TablePagination } from '@mui/material';
 import LaunchIcon from '@mui/icons-material/Launch';
 import { Link } from 'react-router-dom';
@@ -42,7 +42,7 @@ const Bookings = () => {
                                 </TableHead>
                                 <TableBody>
                                     {(rowsPerPage > 2 ? bookings?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : bookings)?.map((booking) => (
-                                        <TableRow key={booking._id} style={{height: 72.8}}>
+                                        <TableRow key={booking._id} style={{ height: 72.8 }}>
                                             <TableCell align="center" >{booking._id}</TableCell>
                                             <TableCell align="center" >{booking.status}</TableCell>
                                             <TableCell align="center" >{format(new Date(booking.dates[0]), "yyyy-MM-dd")}</TableCell>
@@ -71,6 +71,6 @@ const Bookings = () => {
                 )}
             </Fragment>
         </Fragment>
-    )
-}
+    );
+};
 export default Bookings;
