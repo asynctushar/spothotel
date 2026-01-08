@@ -18,6 +18,7 @@ exports.updateUser = catchAsyncErrors(async (req, res, next) => {
 
     res.status(200).json({
         success: true,
+        message: "Profile updated successfully",
         user
     });
 });
@@ -29,7 +30,7 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
 
     res.status(200).json({
         success: true,
-        message: "User deleted succussfully"
+        message: "User deleted successfully"
     });
 });
 
@@ -61,6 +62,7 @@ exports.changePassword = catchAsyncErrors(async (req, res, next) => {
 
     res.status(200).cookie('token', token, options).json({
         success: true,
+        message: "Password changed successfully",
         user
     });
 });

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { login, logout, register } from '../actions/auth.action';
+import { login, logout, register, updateProfile, changePassword, deleteProfile } from '../actions/auth.action';
 
 const initialState = {
     error: undefined,
@@ -50,6 +50,30 @@ const appSlice = createSlice({
                 state.success = action.payload.message;
             })
             .addCase(logout.rejected, (state, action) => {
+                state.error = action.payload;
+            })
+
+            // Update Profile
+            .addCase(updateProfile.fulfilled, (state, action) => {
+                state.success = action.payload.message;
+            })
+            .addCase(updateProfile.rejected, (state, action) => {
+                state.error = action.payload;
+            })
+
+            // Change Password 
+            .addCase(changePassword.fulfilled, (state, action) => {
+                state.success = action.payload.message;
+            })
+            .addCase(changePassword.rejected, (state, action) => {
+                state.error = action.payload;
+            })
+
+            // Delete Profile 
+            .addCase(deleteProfile.fulfilled, (state, action) => {
+                state.success = action.payload.message;
+            })
+            .addCase(deleteProfile.rejected, (state, action) => {
                 state.error = action.payload;
             });
     }

@@ -11,3 +11,12 @@ export const logout = () =>
 
 export const getMe = () =>
     axios.get("/users/me");
+
+export const changePassword = (data) =>
+    axios.put("/users/me/password", { ...data });
+
+export const updateProfile = (data) =>
+    axios.put("/users/me", { ...data });
+
+export const deleteProfile = () =>
+    axios.delete("/users/me");

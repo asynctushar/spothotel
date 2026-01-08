@@ -52,3 +52,43 @@ export const logout = createAsyncThunk(
         }
     }
 );
+
+
+// Update Profile
+export const updateProfile = createAsyncThunk(
+    "auth/updateProfile",
+    async (newData, { rejectWithValue }) => {
+        try {
+            const { data } = await authService.updateProfile(newData);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err.response?.data?.message);
+        }
+    }
+);
+
+// Change Password
+export const changePassword = createAsyncThunk(
+    "auth/changePassword",
+    async (newData, { rejectWithValue }) => {
+        try {
+            const { data } = await authService.changePassword(newData);
+            return data;
+        } catch (err) {
+            return rejectWithValue(err.response?.data?.message);
+        }
+    }
+);
+
+// Delete Profile
+export const deleteProfile = createAsyncThunk(
+    "auth/deleteProfile",
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } = await authService.deleteProfile();
+            return data;
+        } catch (err) {
+            return rejectWithValue(err.response?.data?.message);
+        }
+    }
+);

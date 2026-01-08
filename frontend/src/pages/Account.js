@@ -9,7 +9,7 @@ import { Fragment } from 'react';
 import Meta from '../utils/Meta';
 
 const Account = () => {
-    const { user } = useSelector((state) => state.userState);
+    const { user } = useSelector((state) => state.authState);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 

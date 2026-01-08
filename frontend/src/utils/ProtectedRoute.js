@@ -5,15 +5,15 @@ import Loader from "../components/ui/Loader";
 
 
 const ProtectedRoute = ({ role, children }) => {
-    const { isLoading, isAuthenticated, user } = useSelector((state) => state.userState);
+    const { checkingAuth, isAuthenticated, user } = useSelector((state) => state.authState);
 
     return (
         <Fragment>
-            {!isLoading && !isAuthenticated && <Navigate to="/login" />}
-            {role !== 'admin' && !isLoading && isAuthenticated && children}
-            {role === 'admin' && !isLoading && isAuthenticated && user.role === 'admin' && children}
-            {role === 'admin' && !isLoading && isAuthenticated && user.role !== 'admin' && <Navigate to="/account" />}
-            {isLoading && <Loader />}
+            {!checkingAuth && !isAuthenticated && <Navigate to="/login" />}
+            {role !== 'admin' && !checkingAuth && isAuthenticated && children}
+            {role === 'admin' && !checkingAuth && isAuthenticated && user.role === 'admin' && children}
+            {role === 'admin' && !checkingAuth && isAuthenticated && user.role !== 'admin' && <Navigate to="/account" />}
+            {checkingAuth && <Loader />}
         </Fragment>
     );
 };
