@@ -9,16 +9,17 @@ import { Fragment, useEffect, useState } from 'react';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { addDays, format } from 'date-fns';
-import { searchHotelsAction, getFeturedHotels } from '../redux/actions/hotel.action';
+import { searchHotelsAction } from '../redux/actions/hotel.action';
 import { useDispatch, useSelector } from 'react-redux';
 import HotelCard from '../components/hotel/HotelCard';
 import Meta from '../utils/Meta';
+import { useHotelsQuery } from '../redux/api/hotel.api';
 
 const Home = () => {
     const dispatch = useDispatch();
-    const { hotels, isLoading, hasSearched } = useSelector((state) => state.hotelState);
+    const { hasSearched } = useSelector((state) => state.hotelState);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [isPersonOpen, setIsPersonOpen] = useState(false)
+    const [isPersonOpen, setIsPersonOpen] = useState(false);
     const [isDateOpen, setIsDateOpen] = useState(false);
     const [keyword, setKeyword] = useState('');
     const [travellers, setTravellers] = useState({ room: 1, person: 1 });
@@ -28,26 +29,22 @@ const Home = () => {
         key: 'selection',
     }]);
 
+    const { isLoading, data, isError, error } = useHotelsQuery();
+
     const dateRangeHanler = (item) => {
         setDateRange([item.selection]);
-    }
+    };
 
     const searchHandler = () => {
         if (keyword.length < 1) return;
         setIsSearchOpen(false);
 
-        dispatch(searchHotelsAction({ location: keyword, room: travellers.room, person: travellers.person, d1: format(dateRange[0].startDate, 'yyyy-MM-dd'), d2: format(dateRange[0].endDate, 'yyyy-MM-dd') }))
-    }
+        dispatch(searchHotelsAction({ location: keyword, room: travellers.room, person: travellers.person, d1: format(dateRange[0].startDate, 'yyyy-MM-dd'), d2: format(dateRange[0].endDate, 'yyyy-MM-dd') }));
+    };
 
     const travellersHandler = () => {
         setIsPersonOpen(!isPersonOpen);
-    }
-
-    useEffect(() => {
-        if (!hasSearched) {
-            dispatch(getFeturedHotels());
-        }
-    }, [dispatch, hasSearched])
+    };
 
     return (
         <Fragment>
@@ -145,9 +142,9 @@ const Home = () => {
                             ) : (
                                 <div className="h-96">
                                     <h2 className="text-xl text-center mb-4">Search Results</h2>
-                                    {hotels.length < 1 && <p className="text-center text-gray-600 my-48">No hotel available on based on your requirements</p>}
-                                    {hotels.length > 0 && <p className="text-sm">{hotels.length} {hotels.length === 1 ? "hotel" : "hotels"} found.</p>}
-                                    {hotels?.map((hotel) => (
+                                    {data && data.hotels.length < 1 && <p className="text-center text-gray-600 my-48">No hotel available on based on your requirements</p>}
+                                    {data && data.hotels.length > 0 && <p className="text-sm">{data.hotels.length} {data.hotels.length === 1 ? "hotel" : "hotels"} found.</p>}
+                                    {data && data.hotels?.map((hotel) => (
                                         <HotelCard key={hotel._id} hotel={hotel} />
                                     ))}
                                 </div>
@@ -163,7 +160,7 @@ const Home = () => {
                             ) : (
                                 <div>
                                     <h2 className="text-xl font-medium mb-6 text-center">Featured</h2>
-                                    {hotels?.map((hotel) => (
+                                    {data && data.hotels?.map((hotel) => (
                                         <HotelCard key={hotel._id} hotel={hotel} />
                                     ))}
                                 </div>
@@ -172,6 +169,6 @@ const Home = () => {
                 </Fragment>
             </div >
         </Fragment>
-    )
-}
+    );
+};
 export default Home;

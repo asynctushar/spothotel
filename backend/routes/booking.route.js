@@ -5,7 +5,7 @@ const { isAuthenticatedUser, authorizedRole } = require('../middlewares/auth');
 const router = express.Router();
 
 router.route('/hotels/:id/rooms/:room').post(isAuthenticatedUser, createBooking);
-router.route('/me/').get(isAuthenticatedUser, getOwnBookings);
+router.route('/me').get(isAuthenticatedUser, getOwnBookings);
 router.route('/stripepublicapikey').get(isAuthenticatedUser, sendStripePublicApiKey);
 router.route('/payment').post(isAuthenticatedUser, createPayment);;
 router.route('/:id/me').get(isAuthenticatedUser, getOwnBookingDetails);

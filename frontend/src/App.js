@@ -20,7 +20,7 @@ import UpdateProfile from "./pages/UpdateProfile.js";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import { loadUser } from "./redux/actions/auth.action";
 import { setError, clearError, clearSuccess } from "./redux/slices/app.slice";
-import axios from "axios";
+import * as bookingService from "./services/booking.service";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import BookingDetails from "./pages/BookingDetails";
@@ -55,11 +55,9 @@ const App = () => {
 		if (isAuthenticated) {
 			const getStripeApiKey = async () => {
 				try {
+
 					setStripeLoading(true);
-					const { data } = await axios.get(
-						process.env.REACT_APP_API_URL + "/api/v2/bookings/stripepublicapikey",
-						{ withCredentials: true }
-					);
+					const { data } = await bookingService.getStripePublicKey();
 					setStripeApiKey(data.stripeApiKey);
 					setStripeLoading(false);
 				} catch (err) {
@@ -100,7 +98,7 @@ const App = () => {
 						<Route path="/" element={<Home />} />
 						<Route path="/login" element={<Login />} />
 						<Route path="/register" element={<Register />} />
-						<Route path="/hotel/:id" element={<Hotel />} />
+						<Route path="/hotels/:id" element={<Hotel />} />
 						{!isStripeLoading && (
 							<Route
 								path="/booking/payment"
@@ -116,7 +114,7 @@ const App = () => {
 							/>
 						)}
 						<Route
-							path="/room/:id/book"
+							path="/rooms/:id/book"
 							element={
 								<ProtectedRoute>
 									<Booking />
@@ -156,7 +154,7 @@ const App = () => {
 							}
 						/>
 						<Route
-							path="/me/booking/:id"
+							path="/me/bookings/:id"
 							element={
 								<ProtectedRoute>
 									<BookingDetails />
@@ -196,7 +194,7 @@ const App = () => {
 							}
 						/>
 						<Route
-							path="/admin/hotel/new"
+							path="/admin/hotels/new"
 							element={
 								<ProtectedRoute role="admin">
 									<CreateHotel />
@@ -204,7 +202,7 @@ const App = () => {
 							}
 						/>
 						<Route
-							path="/admin/hotel/:id/update"
+							path="/admin/hotels/:id/update"
 							element={
 								<ProtectedRoute role="admin">
 									<UpdateHotel />
@@ -212,7 +210,7 @@ const App = () => {
 							}
 						/>
 						<Route
-							path="/admin/hotel/:id/rooms"
+							path="/admin/hotels/:id/rooms"
 							element={
 								<ProtectedRoute role="admin">
 									<HotelRooms />
@@ -220,7 +218,7 @@ const App = () => {
 							}
 						/>
 						<Route
-							path="/admin/hotel/:id/room/new"
+							path="/admin/hotels/:id/room/new"
 							element={
 								<ProtectedRoute role="admin">
 									<CreateRoom />
@@ -228,7 +226,7 @@ const App = () => {
 							}
 						/>
 						<Route
-							path="/admin/room/:id/update"
+							path="/admin/rooms/:id/update"
 							element={
 								<ProtectedRoute role="admin">
 									<UpdateRoom />
@@ -244,7 +242,7 @@ const App = () => {
 							}
 						/>
 						<Route
-							path="/admin/booking/:id"
+							path="/admin/bookings/:id"
 							element={
 								<ProtectedRoute role="admin">
 									<SingleBookingDetails />

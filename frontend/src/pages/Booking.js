@@ -5,16 +5,16 @@ import { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import Loader from '../components/ui/Loader';
-import { getRoomAction } from '../redux/actions/hotel.action';
 import { addDays, format } from 'date-fns';
 import { setError } from '../redux/slices/app.slice';
 import NotFound from './NotFound';
 import Meta from '../utils/Meta';
+import { useRoomQuery } from '../redux/api/room.api';
 
 const Booking = () => {
     const id = useParams().id;
-    const user = useSelector((state) => state.userState.user);
-    const { room, isLoading } = useSelector((state) => state.hotelState);
+    const { isLoading, data, isError, error } = useRoomQuery(id);
+    const user = useSelector((state) => state.authState.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [name, setName] = useState('');
@@ -28,8 +28,11 @@ const Booking = () => {
         endDate: new Date(),
         key: 'selection',
     }]);
-    const prices = room?.pricePerDay * dates?.length;
-    const vat = room?.pricePerDay * dates?.length * (18 / 100);
+
+
+    console.log({ dates, isDateOpen, disableDates, dateRange });
+    const prices = data?.room?.pricePerDay * dates?.length;
+    const vat = data?.room?.pricePerDay * dates?.length * (18 / 100);
     const totalPrice = prices + vat;
     const willCheckOut = phone.length > 10;
     const bookingDetails = {
@@ -39,22 +42,20 @@ const Booking = () => {
         totalPrice,
         dates,
         room: id,
-        hotel: room?.hotel._id
+        hotel: data?.room?.hotel._id
     };
 
     useEffect(() => {
-        dispatch(getRoomAction(id));
-
         setName(user.name);
         setEmail(user.email);
-    }, [user, id, dispatch]);
+    }, [user]);
 
     useEffect(() => {
-        if (room && room.notAvailable.length > 0) {
-            const dates = room.notAvailable.map((date) => new Date(date));
+        if (data && data.room && data?.room.notAvailable.length > 0) {
+            const dates = data.room.notAvailable.map((date) => new Date(date));
             setDisableDates(dates);
         }
-    }, [room]);
+    }, [data]);
 
     useEffect(() => {
         let tempDates = [];
@@ -72,7 +73,7 @@ const Booking = () => {
     };
 
     const onCheckout = () => {
-        const notAvailAble = room.notAvailable.map((date) => Date.parse(date));
+        const notAvailAble = data?.room.notAvailable.map((date) => Date.parse(date));
         const isValidDate = dates.every((date) => !notAvailAble.includes(Date.parse(date)));
 
         if (!isValidDate) {
@@ -90,7 +91,7 @@ const Booking = () => {
             <Fragment>
                 {isLoading ? <Loader /> : (
                     <Fragment>
-                        {!room ? <NotFound /> : (
+                        {!data?.room ? <NotFound /> : (
                             <div className="mx-auto px-4 md:px-10 lg:px-20 xl:px-48 mt-4 flex flex-col md:flex-row  md:justify-between">
                                 <div className="flex flex-col items-center">
                                     <div className="px-1 sm:px-3">
@@ -112,23 +113,23 @@ const Booking = () => {
                                         <h2 className="text-xl font-medium mb-4 mt-16">Room details:</h2>
                                         <div className="ml-8 flex mb-4">
                                             <span className="font-medium inline-block  w-28">Hotel Name:</span>
-                                            <span className="font-mono">{room?.hotel.name}</span>
+                                            <span className="font-mono">{data?.room?.hotel.name}</span>
                                         </div>
                                         <div className="ml-8 flex  mb-4">
                                             <span className="font-medium inline-block  w-28">Room Name:</span>
-                                            <span className="font-mono">{room?.name}</span>
+                                            <span className="font-mono">{data?.room?.name}</span>
                                         </div>
                                         <div className="ml-8 flex mb-4">
                                             <span className="font-medium inline-block  w-28">Room No:</span>
-                                            <span className="font-mono">{room?.number}</span>
+                                            <span className="font-mono">{data?.room?.number}</span>
                                         </div>
                                         <div className="ml-8 flex items-center mb-4">
                                             <span className="font-medium inline-block  w-28">Room Type:</span>
-                                            <span className="font-mono">{room?.type}</span>
+                                            <span className="font-mono">{data?.room?.type}</span>
                                         </div>
                                         <div className="ml-8 flex mb-4">
                                             <span className="font-medium inline-block w-28">Price(per day):</span>
-                                            <span className="font-mono">{room?.pricePerDay} taka</span>
+                                            <span className="font-mono">{data?.room?.pricePerDay} taka</span>
                                         </div>
                                     </div>
                                 </div>
@@ -137,12 +138,12 @@ const Booking = () => {
                                         <h2 className="text-xl font-medium mb-4 mt-16">Booking details:</h2>
                                         <div className="ml-8 flex  mb-4">
                                             <span className="font-medium inline-block  w-28">Room ID:</span>
-                                            <span className="font-mono break-all">{room?._id}</span>
+                                            <span className="font-mono break-all">{data?.room?._id}</span>
                                         </div>
                                         <div className="ml-8 flex mb-4">
                                             <span className="font-medium inline-block  w-28">Dates:</span>
                                             <button onClick={() => setIsDateOpen(!isDateOpen)}>
-                                                <textarea value={dates?.toString()} disabled={true} id="phone" rows={dates.length + 1} cols={10} className="py-2 px-1 sm:px-2 rounded-md border border-solid border-gray-400 text-gray-700 font-mono cursor-pointer break-all resize-none hover:bg-red-200 transition duration-200" />
+                                                <textarea value={dates?.toString()} id="phone" rows={dates.length + 1} cols={10} className="py-2 px-1 sm:px-2 rounded-md border border-solid border-gray-400 text-gray-700 font-mono cursor-pointer break-all resize-none hover:bg-red-200 transition duration-200" />
                                             </button>
                                             <Modal disableAutoFocus={true} open={isDateOpen} onClose={() => setIsDateOpen(false)} className="flex justify-center items-center mb-20">
                                                 <div className="flex flex-col bg-white pb-8 rounded-md">

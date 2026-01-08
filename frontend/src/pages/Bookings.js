@@ -1,23 +1,18 @@
 import { Fragment, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getUsersBookings } from '../redux/actions/hotel.action';
 import Loader from '../components/ui/Loader';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableFooter, TablePagination } from '@mui/material';
 import LaunchIcon from '@mui/icons-material/Launch';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import Meta from '../utils/Meta';
+import { useOwnBookingsQuery } from '../redux/api/booking.api';
 
 const Bookings = () => {
-    const dispatch = useDispatch();
-    const { isLoading, bookings } = useSelector((state) => state.hotelState);
+    const { isLoading, data, isError, error } = useOwnBookingsQuery();
     const [page, setPage] = useState(0);
     const rowsPerPage = 5;
-    const emptyRows = Math.max(0, (1 + page) * rowsPerPage - bookings?.length);
+    const emptyRows = Math.max(0, (1 + page) * rowsPerPage - data?.bookings?.length);
 
-    useEffect(() => {
-        dispatch(getUsersBookings());
-    }, [dispatch]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -41,12 +36,12 @@ const Bookings = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {(rowsPerPage > 2 ? bookings?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : bookings)?.map((booking) => (
+                                    {(rowsPerPage > 2 ? data?.bookings?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : data?.bookings)?.map((booking) => (
                                         <TableRow key={booking._id} style={{ height: 72.8 }}>
                                             <TableCell align="center" >{booking._id}</TableCell>
                                             <TableCell align="center" >{booking.status}</TableCell>
                                             <TableCell align="center" >{format(new Date(booking.dates[0]), "yyyy-MM-dd")}</TableCell>
-                                            <TableCell align="center" ><Link to={`/me/booking/${booking._id}`} ><LaunchIcon /></Link> </TableCell>
+                                            <TableCell align="center" ><Link to={`/me/bookings/${booking._id}`} ><LaunchIcon /></Link> </TableCell>
                                         </TableRow>
                                     ))}
                                     {emptyRows > 0 && (
@@ -59,7 +54,7 @@ const Bookings = () => {
                                     <TableRow>
                                         <TablePagination
                                             page={page}
-                                            count={bookings?.length}
+                                            count={data?.bookings?.length}
                                             rowsPerPageOptions={[]}
                                             onPageChange={handleChangePage}
                                             rowsPerPage={rowsPerPage} />

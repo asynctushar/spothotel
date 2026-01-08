@@ -2,11 +2,10 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import EventIcon from '@mui/icons-material/Event';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import { Fragment, useEffect, useRef } from 'react';
-import { useDispatch, useSelector, } from 'react-redux';
+import { useDispatch, } from 'react-redux';
 import { useNavigate, } from 'react-router-dom';
-import axios from 'axios';
+import * as bookingService from "../services/booking.service";
 import { setError } from '../redux/slices/app.slice';
-import { newBookingAction } from '../redux/actions/hotel.action';
 import {
     CardNumberElement,
     CardCvcElement,
@@ -14,8 +13,8 @@ import {
     useStripe,
     useElements
 } from "@stripe/react-stripe-js";
-import { setHasBooked } from '../redux/slices/hotel.slice';
 import Meta from '../utils/Meta';
+import { useCreateBookingMutation } from '../redux/api/booking.api';
 
 const Payment = () => {
     const payBtn = useRef();
@@ -24,14 +23,14 @@ const Payment = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const bookingDetails = JSON.parse(sessionStorage.getItem('bookingDetails'));
-    const hasBooked = useSelector((state) => state.hotelState.hasBooked);
+    const [createBooking, { isLoading, error, isError, isSuccess }] = useCreateBookingMutation();
 
     useEffect(() => {
-        if (hasBooked) {
-            navigate('/booking/success');
-            dispatch(setHasBooked(false));
+        if (isSuccess) {
+            navigate('/booking/success', { state: { success: true } });
+
         }
-    }, [hasBooked, dispatch, navigate]);
+    }, [isSuccess, navigate]);
 
     useEffect(() => {
         if (bookingDetails === null) {
@@ -44,11 +43,7 @@ const Payment = () => {
         payBtn.current.disabled = true;
 
         try {
-            const { data } = await axios.post(
-                process.env.REACT_APP_API_URL + "/api/v2/bookings/payment",
-                { amount: bookingDetails.totalPrice },
-                { headers: { "Content-Type": "application/json" }, withCredentials: true }
-            );
+            const { data } = await bookingService.payment({ amount: bookingDetails.totalPrice });
             const client_secret = data.client_secret;
 
             if (!stripe || !elements) return;
@@ -74,12 +69,17 @@ const Payment = () => {
                         status: result.paymentIntent.status,
                     };
 
-                    dispatch(newBookingAction({
-                        paymentInfo,
-                        dates: bookingDetails.dates,
-                        totalPrice: bookingDetails.totalPrice,
-                        phone: bookingDetails.phone
-                    }, bookingDetails.hotel, bookingDetails.room));
+
+                    createBooking({
+                        data: {
+                            paymentInfo,
+                            dates: bookingDetails.dates,
+                            totalPrice: bookingDetails.totalPrice,
+                            phone: bookingDetails.phone
+                        },
+                        hotelId: bookingDetails.hotel,
+                        roomId: bookingDetails.room
+                    });
 
                 } else {
                     dispatch(setError("There's some issue while processing payment "));

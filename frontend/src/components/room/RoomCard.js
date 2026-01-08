@@ -52,7 +52,7 @@ const RoomCard = ({ room }) => {
                 <span className="text-xl font-medium"><RequestQuoteIcon className="mb-1 mr-1" />{room.pricePerDay} Taka/day</span>
                 <div className="flex justify-between gap-4 mt-4">
                     <button onClick={() => setIsDateOpen(!isDateOpen)} className=" border-red-400 text-red-400 hover:text-red-500 hover:border-red-500 hover:bg-red-200 border-solid border py-2 rounded-lg w-36 text-center transition duration-200 box-border">Availability</button>
-                    <button onClick={() => navigate(`/room/${room._id}/book`)} className="bg-red-400 hover:bg-red-500 py-2 rounded-lg w-36 text-center text-neutral-50  transition duration-200 font-semibold">Reserve</button>
+                    <button onClick={() => navigate(`/rooms/${room._id}/book`)} className="bg-red-400 hover:bg-red-500 py-2 rounded-lg w-36 text-center text-neutral-50  transition duration-200 font-semibold">Reserve</button>
                 </div>
                 <Dialog className="flex items-center justify-center" open={isDateOpen} onClose={() => setIsDateOpen(!isDateOpen)}>
                     <div className=" bg-white sm:p-8 rounded">
