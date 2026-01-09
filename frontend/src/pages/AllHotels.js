@@ -1,7 +1,7 @@
 import SideBar from "../components/layout/SideBar";
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteHotel, getAllHotels, uploadHotelPicture } from '../redux/actions/hotel.action';
+import { deleteHotel, uploadHotelPicture } from '../redux/actions/hotel.action';
 import Loader from '../components/ui/Loader';
 import { Link } from 'react-router-dom';
 import LaunchIcon from '@mui/icons-material/Launch';
@@ -13,41 +13,41 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { setError } from "../redux/slices/app.slice";
 import Meta from "../utils/Meta";
+import { useDeleteHotelMutation, useHotelsQuery, useUploadHotelImagesMutation } from "../redux/api/hotel.api";
 
 const AllHotels = () => {
     const dispatch = useDispatch();
-    const { isLoading, allHotels } = useSelector((state) => state.hotelState);
+    const { isLoading, data, isError, error } = useHotelsQuery();
+    const [uploadHotelImages, { isLoading: isUploadHotelImagesLoading, isError: isUploadHotelImagesError, error: uploadHotelImagesError }] = useUploadHotelImagesMutation();
+    const [deleteHotel, { isLoading: isDeleteHotelLoading, isError: isDeleteHotelImagesError, error: deleteHotelError }] = useDeleteHotelMutation();
     const [open, setOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [hotelRef, setHotelRef] = useState(undefined);
     const [images, setImages] = useState([]);
     const [page, setPage] = useState(0);
     const rowsPerPage = 5;
-    const emptyRows = Math.max(0, (1 + page) * rowsPerPage - allHotels?.length);
-
-    useEffect(() => {
-        dispatch(getAllHotels());
-    }, [dispatch]);
+    const emptyRows = Math.max(0, (1 + page) * rowsPerPage - data?.hotels?.length);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
 
-    const updloadImageHandler = () => {
+    const updloadImageHandler = async () => {
         const formData = new FormData();
 
         images.forEach((image) => {
             formData.append('pictures', image);
         });
 
-        dispatch(uploadHotelPicture(formData, hotelRef._id));
+        uploadHotelImages({ id: hotelRef._id, formData });
+
         setOpen(!open);
         setImages([]);
         setHotelRef(undefined);
     };
 
     const deleteHandler = () => {
-        dispatch(deleteHotel(hotelRef._id));
+        deleteHotel(hotelRef._id);
         setIsDeleteOpen(false);
         setHotelRef(undefined);
     };
@@ -76,7 +76,7 @@ const AllHotels = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {(rowsPerPage > 2 ? allHotels?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : allHotels)?.map((hotel) => (
+                                        {(rowsPerPage > 2 ? data?.hotels?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : data?.hotels)?.map((hotel) => (
                                             <TableRow key={hotel._id} style={{ height: 72.8 }}>
                                                 <TableCell align="center">{hotel._id}</TableCell>
                                                 <TableCell align="center">{hotel.name}</TableCell>
@@ -89,7 +89,7 @@ const AllHotels = () => {
                                                     </IconButton>
                                                 </TableCell>
                                                 <TableCell align="center">
-                                                    <Link to={`/admin/hotel/${hotel._id}/update`}>
+                                                    <Link to={`/admin/hotels/${hotel._id}/update`}>
                                                         <IconButton><EditIcon /></IconButton>
                                                     </Link>
                                                 </TableCell>
@@ -102,12 +102,12 @@ const AllHotels = () => {
                                                     </IconButton>
                                                 </TableCell>
                                                 <TableCell align="center">
-                                                    <Link to={`/admin/hotel/${hotel._id}/rooms`}>
+                                                    <Link to={`/admin/hotels/${hotel._id}/rooms`}>
                                                         <IconButton><HolidayVillageIcon /></IconButton>
                                                     </Link>
                                                 </TableCell>
                                                 <TableCell align="center">
-                                                    <Link to={`/hotel/${hotel._id}`}>
+                                                    <Link to={`/hotels/${hotel._id}`}>
                                                         <IconButton><LaunchIcon /></IconButton>
                                                     </Link>
                                                 </TableCell>
@@ -123,7 +123,7 @@ const AllHotels = () => {
                                         <TableRow>
                                             <TablePagination
                                                 page={page}
-                                                count={allHotels?.length}
+                                                count={data?.hotels?.length}
                                                 rowsPerPageOptions={[]}
                                                 onPageChange={handleChangePage}
                                                 rowsPerPage={rowsPerPage} />
