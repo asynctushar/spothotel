@@ -47,7 +47,7 @@ const Hotel = () => {
                                     </div>
                                     <h4 className="font-medium">{data?.hotel?.location}</h4>
                                     <p className="my-3">{data?.hotel?.description}</p>
-                                    <span className="font-medium text-gray-700"><LocationOnIcon className="mb-1" /><span className=" font-normal">{data?.hotel?.distance}m from zero point.</span></span>
+                                    <span className="font-medium text-gray-700"><LocationOnIcon className="mb-1" /><span className=" font-normal">{data?.hotel?.distance}</span></span>
                                     <div className="flex gap-4 flex-wrap mt-6">
                                         {data && data.hotel?.specification?.map((spec) => (
                                             <div key={spec} className="py-2 px-3 bg-gray-100 rounded-lg">

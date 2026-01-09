@@ -1,7 +1,6 @@
 import SideBar from "../components/layout/SideBar";
 import { Fragment, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { deleteHotel, uploadHotelPicture } from '../redux/actions/hotel.action';
+import { useDispatch } from 'react-redux';
 import Loader from '../components/ui/Loader';
 import { Link } from 'react-router-dom';
 import LaunchIcon from '@mui/icons-material/Launch';

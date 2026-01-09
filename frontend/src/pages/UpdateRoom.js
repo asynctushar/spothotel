@@ -5,13 +5,11 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import SideBar from "../components/layout/SideBar";
 import { Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, styled } from '@mui/material';
 import { Fragment, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { setIsRoomUpdated } from '../redux/slices/hotel.slice';
-import { getRoomAction, updateRoom } from '../redux/actions/hotel.action';
 import Loader from '../components/ui/Loader';
 import NotFound from './NotFound';
 import Meta from '../utils/Meta';
+import { useRoomQuery, useUpdateRoomMutation } from '../redux/api/room.api';
 
 const availableSpecifications = [
     "Free Wi-fi",
@@ -54,34 +52,27 @@ const UpdateRoom = () => {
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
     const [price, setPrice] = useState('');
-    const { isRoomUpdated, isLoading, room } = useSelector((state) => state.hotelState);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const id = useParams().id;
+    const { isLoading, data, error, isError } = useRoomQuery(id);
+    const [updateRoom, { isLoading: isUpdateRoomLoading, isError: isUpdateRoomError, error: updateRoomError, isSuccess }] = useUpdateRoomMutation();
 
     useEffect(() => {
-        if (isRoomUpdated) {
-            navigate(`/admin/hotel/${id}/rooms`);
-            dispatch(setIsRoomUpdated(false));
+        if (data && isSuccess) {
+            navigate(`/admin/hotels/${data?.room.hotel._id}/rooms`);
         }
-    }, [isRoomUpdated, dispatch, navigate, id]);
+    }, [isSuccess, data, navigate]);
+
 
     useEffect(() => {
-        if (id) {
-            dispatch(getRoomAction(id));
+        if (data && data.room) {
+            setName(data.room.name);
+            setNumber(data.room.number);
+            setPrice(data.room.pricePerDay);
+            setType(data.room.type);
+            setSpecification(data.room.specification);
         }
-
-    }, [dispatch, id]);
-
-    useEffect(() => {
-        if (room) {
-            setName(room.name);
-            setNumber(room.number);
-            setPrice(room.pricePerDay);
-            setType(room.type);
-            setSpecification(room.specification);
-        }
-    }, [room]);
+    }, [data]);
 
     const handleSpecificationChange = (event) => {
         const {
@@ -107,7 +98,7 @@ const UpdateRoom = () => {
             type
         };
 
-        dispatch(updateRoom(formData, id));
+        updateRoom({ formData, id });
     };
 
     return (
@@ -117,11 +108,11 @@ const UpdateRoom = () => {
                 <SideBar />
                 {isLoading ? <Loader /> : (
                     <Fragment>
-                        {!room ? <NotFound /> : (
+                        {!data?.room ? <NotFound /> : (
                             <div className="w-[80%] sm:w-[60%] md:w-[70%] mx-auto mt-3">
                                 <div className="flex flex-col md:flex-row gap-6 md:gap-4 items-center md:justify-between ">
                                     <div className="flex">
-                                        <Button onClick={() => navigate(`/admin/hotel/${room?.hotel._id}/rooms`)} variant="contained"
+                                        <Button onClick={() => navigate(`/admin/hotels/${data?.hotel._id}/rooms`)} variant="contained"
                                             className="!text-gray-100 !bg-red-400 w-60 !py-3 md:w-min">
                                             <ArrowBackIosNewIcon fontSize="small" className="mr-2" />
                                             Back
@@ -129,7 +120,7 @@ const UpdateRoom = () => {
                                     </div>
                                     <div>
                                         <div className="flex gap-4">
-                                            <h4 className="font-medium">Hotel Name:</h4><p className="font-normal text-blue-400"><Link to={`/hotel/${room?.hotel._id}`} >{room?.hotel.name}</Link></p>
+                                            <h4 className="font-medium">Hotel Name:</h4><p className="font-normal text-blue-400"><Link to={`/hotels/${data?.room.hotel._id}`} >{data?.room.hotel.name}</Link></p>
                                         </div>
                                         <div className="flex gap-4">
                                             <h4 className="font-medium">Id: </h4> <p className="break-words break-all">{id}</p>

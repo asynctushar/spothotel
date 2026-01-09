@@ -1,7 +1,5 @@
 import SideBar from "../components/layout/SideBar";
-import { Fragment, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { deleteRoom, getHotelAction, uploadRoomPicture } from '../redux/actions/hotel.action';
+import { Fragment, useState } from 'react';
 import Loader from '../components/ui/Loader';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -14,25 +12,26 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { setError } from "../redux/slices/app.slice";
 import NotFound from './NotFound';
 import Meta from '../utils/Meta';
+import { useHotelQuery } from "../redux/api/hotel.api";
+import { useDeleteRoomMutation, useUploadRoomImagesMutation } from "../redux/api/room.api";
+import { useDispatch } from "react-redux";
 
 const HotelRooms = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { id } = useParams();
-    const { isLoading, hotel } = useSelector((state) => state.hotelState);
+    const { isLoading, data, error, isError } = useHotelQuery(id);
+    const [uploadRoomImages, { isLoading: isUploadRoomImagesLoading, isError: isUploadRoomImagesError, error: uploadRoomImagesError, isSuccess: isUploadRoomImagesSuccess }] = useUploadRoomImagesMutation();
+    const [deleteRoom, { isLoading: isDeleteRoomLoading, isError: isDeleteRoomError, error: deleteRoomError, isSuccess: isDeleteRoomSuccess }] = useDeleteRoomMutation();
+
     const [open, setOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [roomRef, setRoomRef] = useState(undefined);
     const [images, setImages] = useState([]);
     const [page, setPage] = useState(0);
     const rowsPerPage = 5;
-    const emptyRows = Math.max(0, (1 + page) * rowsPerPage - hotel?.rooms.length);
+    const emptyRows = Math.max(0, (1 + page) * rowsPerPage - data?.hotel?.rooms.length);
 
-    useEffect(() => {
-        if (id) {
-            dispatch(getHotelAction(id));
-        }
-    }, [dispatch, id]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -43,38 +42,38 @@ const HotelRooms = () => {
 
         images.forEach((image) => {
             formData.append('pictures', image);
-        })
+        });
 
-        dispatch(uploadRoomPicture(formData, roomRef._id))
+        uploadRoomImages({ formData, id: roomRef._id });
         setOpen(!open);
         setImages([]);
-    }
+    };
 
 
     const deleteHandler = () => {
-        dispatch(deleteRoom(roomRef._id));
+        deleteRoom(roomRef._id);
         setIsDeleteOpen(false);
         setRoomRef(undefined);
-    }
+    };
 
     return (
         <Fragment>
-            <Meta title={`${hotel?.name}'s Rooms`} />
+            <Meta title={`${data?.hotel?.name}'s Rooms`} />
             <div className="flex">
                 <SideBar />
                 <Fragment>
                     {isLoading ? <Loader /> : (
                         <Fragment>
-                            {!hotel ? <NotFound /> : (
+                            {!data?.hotel ? <NotFound /> : (
                                 <div className="w-[80%] sm:w-[60%] md:w-[70%] mx-auto mt-3">
                                     <div className="flex flex-col md:flex-row gap-6 md:gap-4 justify-between">
                                         <div className="flex gap-4">
                                             <Button onClick={() => navigate('/admin/hotels')} variant="contained" className="!text-gray-100 !bg-red-400"><ArrowBackIosNewIcon fontSize="small" className="mr-2" />Back</Button>
-                                            <Button onClick={() => navigate(`/admin/hotel/${id}/room/new`)} variant="outlined" className="!border-red-400 !text-red-400"><WeekendIcon fontSize="small" className="mr-2" />Add Room</Button>
+                                            <Button onClick={() => navigate(`/admin/hotels/${id}/rooms/new`)} variant="outlined" className="!border-red-400 !text-red-400"><WeekendIcon fontSize="small" className="mr-2" />Add Room</Button>
                                         </div>
                                         <div>
                                             <div className="flex gap-4">
-                                                <h4 className="font-medium">Hotel Name:</h4><p className="font-normal text-blue-400"><Link to={`/hotel/${id}`} >{hotel?.name}</Link></p>
+                                                <h4 className="font-medium">Hotel Name:</h4><p className="font-normal text-blue-400"><Link to={`/hotels/${id}`} >{data?.hotel?.name}</Link></p>
                                             </div>
                                             <div className="flex gap-4">
                                                 <h4 className="font-medium">Id: </h4> <p className="break-words break-all">{id}</p>
@@ -95,7 +94,7 @@ const HotelRooms = () => {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {(rowsPerPage > 2 ? hotel?.rooms.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : hotel.rooms)?.map((room) => (
+                                                {(rowsPerPage > 2 ? data?.hotel?.rooms.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : data?.hotel.rooms)?.map((room) => (
                                                     <TableRow key={room._id} style={{ height: 72.8 }}>
                                                         <TableCell align="center">{room._id}</TableCell>
                                                         <TableCell align="center">{room.name}</TableCell>
@@ -109,7 +108,7 @@ const HotelRooms = () => {
                                                             </IconButton>
                                                         </TableCell>
                                                         <TableCell align="center">
-                                                            <Link to={`/admin/room/${room._id}/update`}>
+                                                            <Link to={`/admin/rooms/${room._id}/update`}>
                                                                 <IconButton><EditIcon /></IconButton>
                                                             </Link>
                                                         </TableCell>
@@ -133,7 +132,7 @@ const HotelRooms = () => {
                                                 <TableRow>
                                                     <TablePagination
                                                         page={page}
-                                                        count={hotel.rooms.length}
+                                                        count={data?.hotel.rooms.length}
                                                         rowsPerPageOptions={[]}
                                                         onPageChange={handleChangePage}
                                                         rowsPerPage={rowsPerPage} />
@@ -152,7 +151,7 @@ const HotelRooms = () => {
                                                             if (e.target.files.length <= 5) {
                                                                 setImages(Array.from(e.target.files));
                                                             } else {
-                                                                dispatch(setError("Maximum 5 Images can be uploaded."))
+                                                                dispatch(setError("Maximum 5 Images can be uploaded."));
                                                             }
                                                         }
                                                         } />
@@ -200,6 +199,6 @@ const HotelRooms = () => {
                 </Fragment>
             </div >
         </Fragment>
-    )
-}
+    );
+};
 export default HotelRooms;

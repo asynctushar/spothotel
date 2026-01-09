@@ -218,7 +218,7 @@ const App = () => {
 							}
 						/>
 						<Route
-							path="/admin/hotels/:id/room/new"
+							path="/admin/hotels/:id/rooms/new"
 							element={
 								<ProtectedRoute role="admin">
 									<CreateRoom />

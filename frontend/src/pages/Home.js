@@ -5,19 +5,15 @@ import { Button, CircularProgress, Modal } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import { DateRange } from 'react-date-range';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { addDays, format } from 'date-fns';
-import { searchHotelsAction } from '../redux/actions/hotel.action';
-import { useDispatch, useSelector } from 'react-redux';
 import HotelCard from '../components/hotel/HotelCard';
 import Meta from '../utils/Meta';
 import { useHotelsQuery } from '../redux/api/hotel.api';
 
 const Home = () => {
-    const dispatch = useDispatch();
-    const { hasSearched } = useSelector((state) => state.hotelState);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isPersonOpen, setIsPersonOpen] = useState(false);
     const [isDateOpen, setIsDateOpen] = useState(false);
@@ -39,7 +35,7 @@ const Home = () => {
         if (keyword.length < 1) return;
         setIsSearchOpen(false);
 
-        dispatch(searchHotelsAction({ location: keyword, room: travellers.room, person: travellers.person, d1: format(dateRange[0].startDate, 'yyyy-MM-dd'), d2: format(dateRange[0].endDate, 'yyyy-MM-dd') }));
+        // dispatch(searchHotelsAction({ location: keyword, room: travellers.room, person: travellers.person, d1: format(dateRange[0].startDate, 'yyyy-MM-dd'), d2: format(dateRange[0].endDate, 'yyyy-MM-dd') }));
     };
 
     const travellersHandler = () => {
@@ -133,7 +129,7 @@ const Home = () => {
                     </div>
                 </div>
                 <Fragment>
-                    {hasSearched && (
+                    {/* {hasSearched && (
                         <Fragment>
                             {isLoading ? (
                                 <div className="flex justify-center items-center w-full h-96 " >
@@ -150,22 +146,23 @@ const Home = () => {
                                 </div>
                             )}
                         </Fragment>
-                    )}
-                    {!hasSearched && (
-                        <Fragment>
-                            {isLoading ? (
-                                <div className="flex justify-center items-center w-full h-96 " >
-                                    <CircularProgress color="warning" />
-                                </div>
-                            ) : (
-                                <div>
-                                    <h2 className="text-xl font-medium mb-6 text-center">Featured</h2>
-                                    {data && data.hotels?.map((hotel) => (
-                                        <HotelCard key={hotel._id} hotel={hotel} />
-                                    ))}
-                                </div>
-                            )}
-                        </Fragment>)}
+                    )} */}
+                    {/* {!hasSearched && ( */}
+                    <Fragment>
+                        {isLoading ? (
+                            <div className="flex justify-center items-center w-full h-96 " >
+                                <CircularProgress color="warning" />
+                            </div>
+                        ) : (
+                            <div>
+                                <h2 className="text-xl font-medium mb-6 text-center">Featured</h2>
+                                {data && data.hotels?.map((hotel) => (
+                                    <HotelCard key={hotel._id} hotel={hotel} />
+                                ))}
+                            </div>
+                        )}
+                    </Fragment>
+                    {/* )} */}
                 </Fragment>
             </div >
         </Fragment>

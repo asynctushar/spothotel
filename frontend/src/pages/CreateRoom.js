@@ -5,13 +5,12 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import SideBar from "../components/layout/SideBar";
 import { Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, styled } from '@mui/material';
 import { Fragment, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { setIsRoomCreated } from '../redux/slices/hotel.slice';
-import { createRoom, getHotelAction } from '../redux/actions/hotel.action';
 import Loader from '../components/ui/Loader';
 import NotFound from './NotFound';
 import Meta from '../utils/Meta';
+import { useHotelQuery } from '../redux/api/hotel.api';
+import { useCreateRoomMutation } from '../redux/api/room.api';
 
 const availableSpecifications = [
     "Free Wi-fi",
@@ -54,23 +53,17 @@ const CreateRoom = () => {
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
     const [price, setPrice] = useState('');
-    const { isRoomCreated, isLoading, hotel } = useSelector((state) => state.hotelState);
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
     const { id } = useParams();
+    const { isLoading, data, error, isError } = useHotelQuery(id);
+    const [createRoom, { isLoading: isCreateRoomLoading, isError: isCreateRoomError, error: createRoomError, isSuccess }] = useCreateRoomMutation();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (isRoomCreated) {
-            navigate(`/admin/hotel/${id}/rooms`);
-            dispatch(setIsRoomCreated(false));
+        if (isSuccess) {
+            navigate(`/admin/hotels/${id}/rooms`);
         }
-    }, [isRoomCreated, dispatch, navigate, id]);
+    }, [isSuccess, navigate, id]);
 
-    useEffect(() => {
-        if (id) {
-            dispatch(getHotelAction(id));
-        }
-    }, [dispatch, id]);
 
     const handleSpecificationChange = (event) => {
         const {
@@ -97,7 +90,7 @@ const CreateRoom = () => {
             type
         };
 
-        dispatch(createRoom(formData, id));
+        createRoom({ formData, id });
     };
 
     return (
@@ -107,11 +100,11 @@ const CreateRoom = () => {
                 <SideBar />
                 {isLoading ? <Loader /> : (
                     <Fragment>
-                        {!hotel ? <NotFound /> : (
+                        {!data?.hotel ? <NotFound /> : (
                             <div className="w-[80%] sm:w-[60%] md:w-[70%] mx-auto mt-3">
                                 <div className="flex flex-col md:flex-row gap-6 md:gap-4 items-center md:justify-between ">
                                     <div className="flex">
-                                        <Button onClick={() => navigate(`/admin/hotel/${hotel?._id}/rooms`)} variant="contained"
+                                        <Button onClick={() => navigate(`/admin/hotel/${data?.hotel?._id}/rooms`)} variant="contained"
                                             className="!text-gray-100 !bg-red-400 w-60 !py-3 md:w-min">
                                             <ArrowBackIosNewIcon fontSize="small" className="mr-2" />
                                             Back
@@ -119,7 +112,7 @@ const CreateRoom = () => {
                                     </div>
                                     <div>
                                         <div className="flex gap-4">
-                                            <h4 className="font-medium">Hotel Name:</h4><p className="font-normal text-blue-400"><Link to={`/hotel/${id}`} >{hotel?.name}</Link></p>
+                                            <h4 className="font-medium">Hotel Name:</h4><p className="font-normal text-blue-400"><Link to={`/hotels/${id}`} >{data?.hotel?.name}</Link></p>
                                         </div>
                                         <div className="flex gap-4">
                                             <h4 className="font-medium">Id: </h4> <p className="break-words break-all">{id}</p>

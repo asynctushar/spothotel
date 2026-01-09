@@ -32,7 +32,7 @@ const HotelCard = ({ hotel }) => {
                 <Link to={`/hotels/${hotel._id}`} className="text-xl capitalize font-semibold">{hotel.name}</Link>
                 <h4 className="font-medium">{hotel.location}</h4>
                 <p className="my-3">{hotel.description}</p>
-                <span className="font-medium text-gray-700"><LocationOnIcon className="mb-1" /><span className=" font-normal">{hotel.distance}m from zero point.</span></span>
+                <span className="font-medium text-gray-700"><LocationOnIcon className="mb-1" /><span className=" font-normal">{hotel.distance}</span></span>
                 <div className="flex gap-4 flex-wrap mt-6">
                     {hotel.specification?.map((spec) => (
                         <div key={spec} className="py-2 px-3 bg-gray-100 rounded-lg">

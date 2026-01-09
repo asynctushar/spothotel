@@ -1,7 +1,5 @@
 import SideBar from "../components/layout/SideBar";
-import { Fragment, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { changeBookingStatus, getAllBookings } from '../redux/actions/hotel.action';
+import { Fragment, useState } from 'react';
 import Loader from '../components/ui/Loader';
 import { Link } from 'react-router-dom';
 import LaunchIcon from '@mui/icons-material/Launch';
@@ -11,7 +9,6 @@ import Meta from '../utils/Meta';
 import { useBookingsQuery, useUpdateBookingStatusMutation } from "../redux/api/booking.api";
 
 const AllBookings = () => {
-    const dispatch = useDispatch();
     const { isLoading, data, isError, error } = useBookingsQuery();
     const [updateBookingStatus, { isError: isUpdateBookingStatusError, isLoading: isUpdateBookingStatusLoading, error: updateBookingStatusError }] = useUpdateBookingStatusMutation();
 

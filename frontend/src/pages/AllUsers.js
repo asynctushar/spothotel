@@ -1,7 +1,6 @@
 import SideBar from "../components/layout/SideBar";
 import { Fragment, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { updateUserRole } from '../redux/actions/user.action';
+import { useSelector } from 'react-redux';
 import Loader from '../components/ui/Loader';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableFooter, TablePagination, IconButton, Tooltip, Dialog, DialogContent, DialogTitle, DialogActions, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -9,7 +8,6 @@ import Meta from '../utils/Meta';
 import { useChangeUserRoleMutation, useUsersQuery } from "../redux/api/user.api";
 
 const AllUsers = () => {
-    const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authState);
     const { isLoading, data, isError, error } = useUsersQuery();
     const [changeUserRole, { isError: isChangeUserRoleError, isLoading: isChangeUserRoleLoading, error: changeUserRoleError }] = useChangeUserRoleMutation();

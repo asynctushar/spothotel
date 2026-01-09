@@ -3,7 +3,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Popover from '@mui/material/Popover';
 import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { setHasSearched } from '../../redux/slices/hotel.slice';
 import { logout } from "../../redux/actions/auth.action";
 
 const Navbar = () => {
@@ -24,7 +23,6 @@ const Navbar = () => {
 
     const handleLogoClick = () => {
         navigate('/');
-        dispatch(setHasSearched(false));
     };
 
     const loginHandler = () => {
