@@ -21,8 +21,12 @@ exports.createHotel = catchAsyncErrors(async (req, res, next) => {
     if (!specification || !Array.isArray(specification) || specification.length < 1) {
         return next(new ErrorHandler("At least one spedifiction is required", 400));
     }
-    if (!description || description.length < 20) {
+    if (!description) {
         return next(new ErrorHandler("Description is required", 400));
+    }
+
+    if (description.length < 20) {
+        return next(new ErrorHandler("Description length must be more than 20 characters", 400));
     }
 
     const hotel = await HotelService.createHotel({

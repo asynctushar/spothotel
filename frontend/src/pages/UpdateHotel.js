@@ -4,12 +4,10 @@ import AirlineStopsIcon from '@mui/icons-material/AirlineStops';
 import SideBar from "../components/layout/SideBar";
 import { Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, styled } from '@mui/material';
 import { Fragment, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { setIsHotelUPdated } from '../redux/slices/hotel.slice';
-import { getHotelAction, updateHotel } from '../redux/actions/hotel.action';
 import Loader from '../components/ui/Loader';
 import Meta from '../utils/Meta';
+import { useHotelQuery, useUpdateHotelMutation } from '../redux/api/hotel.api';
 
 const availableSpecifications = [
     "Car Parking",
@@ -47,33 +45,26 @@ const UpdateHotel = () => {
     const [location, setLocation] = useState('');
     const [distance, setDistance] = useState('');
     const [description, setDescription] = useState('');
-    const { isHotelUpdated, isLoading, hotel } = useSelector((state) => state.hotelState);
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
     const { id } = useParams();
+    const navigate = useNavigate();
+    const { isLoading, data, error, isError } = useHotelQuery(id);
+    const [updateHotel, { isLoading: isUpdateHotelLoading, isError: isUpdateHotelError, error: updateHotelError, isSuccess }] = useUpdateHotelMutation();
 
     useEffect(() => {
-        if (id) {
-            dispatch(getHotelAction(id))
+        if (data && data.hotel) {
+            setName(data?.hotel.name);
+            setLocation(data?.hotel.location);
+            setDistance(data?.hotel.distance);
+            setDescription(data?.hotel.description);
+            setSpecification(data?.hotel.specification);
         }
-    }, [id, dispatch]);
+    }, [data]);
 
     useEffect(() => {
-        if (hotel) {
-            setName(hotel.name);
-            setLocation(hotel.location);
-            setDistance(hotel.distance);
-            setDescription(hotel.description);
-            setSpecification(hotel.specification);
-        }
-    }, [hotel])
-
-    useEffect(() => {
-        if (isHotelUpdated) {
+        if (isSuccess) {
             navigate('/admin/hotels');
-            dispatch(setIsHotelUPdated(false));
         }
-    }, [isHotelUpdated, dispatch, navigate]);
+    }, [isSuccess, navigate]);
 
     const handleChange = (event) => {
         const {
@@ -91,13 +82,13 @@ const UpdateHotel = () => {
         const formData = {
             name,
             location,
-            distance: Number(distance),
+            distance,
             description,
             specification
-        }
+        };
 
-        dispatch(updateHotel(formData, id));
-    }
+        updateHotel({ formData, id });
+    };
 
     return (
         <Fragment>
@@ -118,7 +109,7 @@ const UpdateHotel = () => {
                             </div>
                             <div className="border border-solid border-gray-400 py-3 px-5 rounded">
                                 <AirlineStopsIcon className="text-gray-600" />
-                                <input type="number" required={true} value={distance} onChange={(e) => setDistance(e.target.value)} placeholder="Distance" className="w-40 sm:w-60 md:w-80 ml-3 outline-none bg-transparent" />
+                                <input type="text" required={true} value={distance} onChange={(e) => setDistance(e.target.value)} placeholder="Distance" className="w-40 sm:w-60 md:w-80 ml-3 outline-none bg-transparent" />
                             </div>
                             <FormControl className="md:w-[25rem] w-60 sm:w-80">
                                 <InputLabel id="demo-multiple-checkbox-label" className="!text-gray-400">Specifications</InputLabel>
@@ -147,6 +138,6 @@ const UpdateHotel = () => {
                 )}
             </div >
         </Fragment>
-    )
-}
+    );
+};
 export default UpdateHotel;

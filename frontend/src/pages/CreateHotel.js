@@ -4,12 +4,10 @@ import AirlineStopsIcon from '@mui/icons-material/AirlineStops';
 import SideBar from "../components/layout/SideBar";
 import { Button, Checkbox, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, styled } from '@mui/material';
 import { Fragment, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setIsHotelCreated } from '../redux/slices/hotel.slice';
-import { createHotel } from '../redux/actions/hotel.action';
 import Loader from '../components/ui/Loader';
 import Meta from '../utils/Meta';
+import { useCreateHotelMutation } from '../redux/api/hotel.api';
 
 const availableSpecifications = [
     "Car Parking",
@@ -47,16 +45,15 @@ const CreateHotel = () => {
     const [location, setLocation] = useState('');
     const [distance, setDistance] = useState('');
     const [description, setDescription] = useState('');
-    const { isHotelCreated, isLoading } = useSelector((state) => state.hotelState);
+    const [createHotel, { isLoading, isError, error, isSuccess }] = useCreateHotelMutation();
+
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     useEffect(() => {
-        if (isHotelCreated) {
+        if (isSuccess) {
             navigate('/admin/hotels');
-            dispatch(setIsHotelCreated(false));
         }
-    }, [isHotelCreated, dispatch, navigate]);
+    }, [isSuccess, navigate]);
 
     const handleChange = (event) => {
         const {
@@ -74,12 +71,12 @@ const CreateHotel = () => {
         const formData = {
             name,
             location,
-            distance: Number(distance),
+            distance,
             description,
             specification
         };
 
-        dispatch(createHotel(formData));
+        createHotel(formData);
     };
 
     return (
@@ -101,7 +98,7 @@ const CreateHotel = () => {
                             </div>
                             <div className="border border-solid border-gray-400 py-3 px-5 rounded">
                                 <AirlineStopsIcon className="text-gray-600" />
-                                <input type="number" required={true} value={distance} onChange={(e) => setDistance(e.target.value)} placeholder="Distance" className="w-40 sm:w-60 md:w-80 ml-3 outline-none bg-transparent" />
+                                <input type="text" required={true} value={distance} onChange={(e) => setDistance(e.target.value)} placeholder="Distance" className="w-40 sm:w-60 md:w-80 ml-3 outline-none bg-transparent" />
                             </div>
                             <FormControl className="md:w-[25rem] w-60 sm:w-80">
                                 <InputLabel id="demo-multiple-checkbox-label" className="!text-gray-400">Specifications</InputLabel>
