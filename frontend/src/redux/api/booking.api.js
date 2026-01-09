@@ -7,14 +7,14 @@ export const bookingApi = baseApi.injectEndpoints({
                 url: '/bookings/me',
                 method: 'GET',
             }),
-            providesTags: [{ type: "Booking", id: "self" }]
+            providesTags: [{ type: "Booking", id: "SELF_LIST " }]
         }),
         ownBooking: builder.query({
             query: (id) => ({
                 url: '/bookings/' + id + "/me",
                 method: 'GET',
             }),
-            providesTags: (_, __, id) => [{ type: "Booking", id: "self-" + id }]
+            providesTags: (_, __, id) => [{ type: "Booking", id: "SELF_" + id }]
         }),
         createBooking: builder.mutation({
             query: ({ data, hotelId, roomId }) => ({
@@ -22,13 +22,45 @@ export const bookingApi = baseApi.injectEndpoints({
                 method: "POST",
                 body: data
             }),
-            invalidatesTags: [{ type: 'Booking', id: "self" }],
-        })
+            invalidatesTags: [
+                { type: 'Booking', id: "SELF_LIST" },
+                { type: 'Booking', id: "ADMIN_LIST" },
+            ],
+        }),
+        bookings: builder.query({
+            query: () => ({
+                url: "/bookings",
+                method: "GET"
+            }),
+            providesTags: [{ type: "Booking", id: "ADMIN_LIST" }]
+        }),
+        booking: builder.query({
+            query: (id) => ({
+                url: '/bookings/' + id,
+                method: 'GET',
+            }),
+            providesTags: (_, __, id) => [{ type: "Booking", id: id }]
+        }),
+        updateBookingStatus: builder.mutation({
+            query: ({ status, id }) => ({
+                url: `/bookings/${id}`,
+                method: "PUT",
+                body: { status }
+            }),
+            invalidatesTags: (_, __, { id }) => [
+                { type: 'Booking', id: "SELF_LIST" },
+                { type: 'Booking', id: "ADMIN_LIST" },
+                { type: 'Booking', id },
+            ]
+        }),
     }),
 });
 
 export const {
     useOwnBookingsQuery,
     useOwnBookingQuery,
-    useCreateBookingMutation
+    useCreateBookingMutation,
+    useBookingsQuery,
+    useUpdateBookingStatusMutation,
+    useBookingQuery
 } = bookingApi;

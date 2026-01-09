@@ -6,6 +6,6 @@ export const baseApi = createApi({
         baseUrl: process.env.REACT_APP_API_URL + "/api/v2",
         credentials: "include",
     }),
-    tagTypes: ['Hotel', "Room", "Booking"],
+    tagTypes: ['Hotel', "Room", "Booking", "User"],
     endpoints: () => ({}),
 });

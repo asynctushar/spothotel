@@ -11,7 +11,7 @@ const Navbar = () => {
     const dispatch = useDispatch();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-    const { loading, isAuthenticated, user } = useSelector((state) => state.authState);
+    const { authLoading, isAuthenticated, user } = useSelector((state) => state.authState);
 
 
     const handleClick = (event) => {
@@ -59,7 +59,7 @@ const Navbar = () => {
                             <AccountCircleIcon className="text-red-400 cursor-pointer" />
                         </span>
                         <span className="capitalize text-red-400 font-medium hidden md:block cursor-pointer">
-                            {!loading && (isAuthenticated ? user.name : "Login")}
+                            {!authLoading && (isAuthenticated ? user.name : "Login")}
                         </span>
                     </div>
 
@@ -109,10 +109,10 @@ const Navbar = () => {
                                     </button>
                                     <button
                                         onClick={logoutHandler}
-                                        disabled={loading}
+                                        disabled={authLoading}
                                         className="border-red-400 text-red-400 hover:text-red-500 hover:border-red-500 hover:bg-red-200 border-solid border py-2 rounded-lg w-48 text-center transition duration-200 box-border disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        {loading ? 'Logging out...' : 'Log out'}
+                                        {authLoading ? 'Logging out...' : 'Log out'}
                                     </button>
                                 </Fragment>
                             )}

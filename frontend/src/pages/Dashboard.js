@@ -1,8 +1,5 @@
 import SideBar from "../components/layout/SideBar";
-import { useDispatch, useSelector } from 'react-redux';
-import { getAllUsers } from '../redux/actions/user.action';
-import { getAllBookings, getAllHotels } from '../redux/actions/hotel.action';
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 import { Card, CardContent } from "@mui/material";
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import ApartmentIcon from '@mui/icons-material/Apartment';
@@ -11,6 +8,9 @@ import { Link } from "react-router-dom";
 import { Chart as ChartJS, Tooltip, Legend, Title, BarElement, CategoryScale, LinearScale } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import Meta from '../utils/Meta';
+import { useHotelsQuery } from "../redux/api/hotel.api";
+import { useBookingsQuery } from "../redux/api/booking.api";
+import { useUsersQuery } from "../redux/api/user.api";
 
 ChartJS.register(
     Title,
@@ -22,17 +22,13 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
-    const dispatch = useDispatch();
-    const allUsers = useSelector((state) => state.userState.allUsers);
-    const { allBookings, allHotels } = useSelector((state) => state.hotelState);
-    const allDates = allBookings?.map(booking => booking.createdAt);
+    const { isLoading: userLoading, data: userData, isError: isUserError, error: userError } = useUsersQuery();
+    const { isLoading: hotelLoading, data: hotelData, isError: isHotelError, error: hotelError } = useHotelsQuery();
+    const { isLoading: bookingLoading, data: bookingData, isError: isBookingError, error: bookingError } = useBookingsQuery();
 
-    useEffect(() => {
-        dispatch(getAllUsers());
-        dispatch(getAllBookings());
-        dispatch(getAllHotels());
+    const allDates = bookingData?.bookings?.map(booking => booking.createdAt);
 
-    }, [dispatch]);
+
 
     const generateMonthlyBookingCount = (dates) => {
         const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -50,9 +46,9 @@ const Dashboard = () => {
         });
 
         return monthCounts;
-    }
+    };
 
-    const lineState = {
+    const lineState = allDates && {
         labels: Object.keys(generateMonthlyBookingCount(allDates)),
         datasets: [
             {
@@ -66,7 +62,7 @@ const Dashboard = () => {
 
     const options = {
         maintainAspectRation: true
-    }
+    };
 
     return (
         <Fragment>
@@ -79,8 +75,8 @@ const Dashboard = () => {
                         <Card className="px-5 py-3 shadow-2xl sm:w-1/4 sm:px-2 sm:py-2 !bg-zinc-200">
                             <CardContent className="w-full flex justify-between items-center sm:aspect-square sm:flex-col-reverse sm:justify-center">
                                 <div className="text-center">
-                                    <Link to="/admin/users" className="text-3xl font-medium text-red-500"> {allUsers.length}</Link>
-                                    <p className="text-gray-500 text-md">{allUsers.length > 1 ? "Users" : "User"}</p>
+                                    <Link to="/admin/users" className="text-3xl font-medium text-red-500"> {userData?.users?.length}</Link>
+                                    <p className="text-gray-500 text-md">{userData?.users?.length > 1 ? "Users" : "User"}</p>
                                 </div>
                                 <PeopleAltIcon className="text-red-400 !text-4xl mb-4" />
                             </CardContent>
@@ -88,8 +84,8 @@ const Dashboard = () => {
                         <Card className="px-5 py-3 shadow-2xl sm:w-1/4 sm:px-2 sm:py-2 !bg-zinc-200">
                             <CardContent className="w-full flex justify-between items-center sm:aspect-square sm:flex-col-reverse sm:justify-center">
                                 <div className="text-center">
-                                    <Link to="/admin/hotels" className="text-3xl font-medium text-red-500"> {allHotels.length}</Link>
-                                    <p className="text-gray-500 text-md">{allHotels.length > 1 ? "Hotels" : "Hotel"}</p>
+                                    <Link to="/admin/hotels" className="text-3xl font-medium text-red-500"> {hotelData?.hotels?.length}</Link>
+                                    <p className="text-gray-500 text-md">{hotelData?.hotels?.length > 1 ? "Hotels" : "Hotel"}</p>
                                 </div>
                                 <ApartmentIcon className="text-red-400 !text-4xl mb-4" />
                             </CardContent>
@@ -97,8 +93,8 @@ const Dashboard = () => {
                         <Card className="px-5 py-3 shadow-2xl sm:w-1/4 sm:px-2 sm:py-2 !bg-zinc-200">
                             <CardContent className="w-full flex justify-between items-center sm:aspect-square sm:flex-col-reverse sm:justify-center">
                                 <div className="text-center">
-                                    <Link to="/admin/bookings" className="text-3xl font-medium text-red-500"> {allBookings.length}</Link>
-                                    <p className="text-gray-500 text-md">{allBookings.length > 1 ? "Bookings" : "Booking"}</p>
+                                    <Link to="/admin/bookings" className="text-3xl font-medium text-red-500"> {bookingData?.bookings?.length}</Link>
+                                    <p className="text-gray-500 text-md">{bookingData?.bookings?.length > 1 ? "Bookings" : "Booking"}</p>
                                 </div>
                                 <BookmarkAddedIcon className="text-red-400 !text-4xl mb-4" />
                             </CardContent>
@@ -106,11 +102,11 @@ const Dashboard = () => {
                     </div>
                     <div className="w-11/12 md:w-3/5 aspect-auto my-20 mx-auto">
                         <h2 className="text-center mb-8 font-medium text-xl text-red-400">Monthly Bookings</h2>
-                        <Bar data={lineState} options={options} className="w-full" />
+                        {allDates && <Bar data={lineState} options={options} className="w-full" />}
                     </div>
                 </div>
             </div>
         </Fragment>
-    )
-}
+    );
+};
 export default Dashboard;

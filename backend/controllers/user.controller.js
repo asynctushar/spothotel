@@ -91,7 +91,7 @@ exports.getUsers = catchAsyncErrors(async (req, res, next) => {
 });
 
 // change user role -- admin
-exports.chageUserRole = catchAsyncErrors(async (req, res, next) => {
+exports.changeUserRole = catchAsyncErrors(async (req, res, next) => {
     const id = req.params.id;
     const role = req.body.role;
     if (id === req.user.id) {

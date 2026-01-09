@@ -8,27 +8,28 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableFooter, TablePagination, IconButton, Dialog, DialogContent, DialogTitle, DialogActions, FormControl, InputLabel, Select, MenuItem, Tooltip, } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import Meta from '../utils/Meta';
+import { useBookingsQuery, useUpdateBookingStatusMutation } from "../redux/api/booking.api";
 
 const AllBookings = () => {
     const dispatch = useDispatch();
-    const { isLoading, allBookings } = useSelector((state) => state.hotelState);
+    const { isLoading, data, isError, error } = useBookingsQuery();
+    const [updateBookingStatus, { isError: isUpdateBookingStatusError, isLoading: isUpdateBookingStatusLoading, error: updateBookingStatusError }] = useUpdateBookingStatusMutation();
+
+
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState('');
     const [bookingRef, setBookingRef] = useState(undefined);
     const [page, setPage] = useState(0);
     const rowsPerPage = 5;
-    const emptyRows = Math.max(0, (1 + page) * rowsPerPage - allBookings?.length);
+    const emptyRows = Math.max(0, (1 + page) * rowsPerPage - data?.bookings?.length);
 
-    useEffect(() => {
-        dispatch(getAllBookings());
-    }, [dispatch]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
 
     const editHandler = () => {
-        dispatch(changeBookingStatus(status, bookingRef._id));
+        updateBookingStatus({ status, id: bookingRef._id });
         setOpen(false);
         setBookingRef(undefined);
     };
@@ -53,7 +54,7 @@ const AllBookings = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {(rowsPerPage > 2 ? allBookings?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : allBookings)?.map((booking) => (
+                                        {(rowsPerPage > 2 ? data?.bookings?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : data?.bookings)?.map((booking) => (
                                             <TableRow key={booking._id} style={{ height: 72.8 }}>
                                                 <TableCell align="center">{booking._id}</TableCell>
                                                 <TableCell align="center" className="capitalize">{booking.paymentInfo.status}</TableCell>
@@ -72,7 +73,7 @@ const AllBookings = () => {
                                                     </Tooltip>
                                                 </TableCell>
                                                 <TableCell align="center">
-                                                    <Link to={`/admin/booking/${booking._id}`}>
+                                                    <Link to={`/admin/bookings/${booking._id}`}>
                                                         <IconButton><LaunchIcon /></IconButton>
                                                     </Link>
                                                 </TableCell>
@@ -88,7 +89,7 @@ const AllBookings = () => {
                                         <TableRow>
                                             <TablePagination
                                                 page={page}
-                                                count={allBookings?.length}
+                                                count={data?.bookings?.length}
                                                 rowsPerPageOptions={[]}
                                                 onPageChange={handleChangePage}
                                                 rowsPerPage={rowsPerPage} />

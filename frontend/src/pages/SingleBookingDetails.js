@@ -1,31 +1,27 @@
 import { useParams, Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Fragment, useEffect, useState } from 'react';
-import { getBookingDetails } from '../redux/actions/hotel.action';
 import Loader from '../components/ui/Loader';
 import { format } from 'date-fns';
 import NotFound from './NotFound';
 import Meta from '../utils/Meta';
+import { useBookingQuery } from '../redux/api/booking.api';
 
 const SingleBookingDetails = () => {
-    const dispatch = useDispatch();
     const id = useParams().id;
+    const { isLoading, data, isError, error } = useBookingQuery(id);
+
     const [dates, setDates] = useState([]);
-    const { isLoading, booking } = useSelector((state) => state.hotelState);
-    const user = useSelector((state) => state.userState.user);
-    const prices = booking?.room.pricePerDay * dates?.length;
-    const vat = booking?.room.pricePerDay * dates?.length * (18 / 100);
+    const user = useSelector((state) => state.authState.user);
+    const prices = data?.booking?.room.pricePerDay * dates?.length;
+    const vat = data?.booking?.room.pricePerDay * dates?.length * (18 / 100);
 
     useEffect(() => {
-        dispatch(getBookingDetails(id));
-    }, [id, dispatch])
-
-    useEffect(() => {
-        if (booking) {
-            const tempDates = booking.dates.map((date) => format(new Date(date), 'yyyy-MM-dd'))
+        if (data && data.booking) {
+            const tempDates = data.booking.dates.map((date) => format(new Date(date), 'yyyy-MM-dd'));
             setDates(tempDates);
         }
-    }, [booking]);
+    }, [data]);
 
     return (
         <Fragment>
@@ -33,7 +29,7 @@ const SingleBookingDetails = () => {
             <Fragment>
                 {isLoading ? <Loader /> : (
                     <Fragment>
-                        {!booking ? <NotFound /> : (
+                        {!data?.booking ? <NotFound /> : (
                             <div className="mx-auto px-4 md:px-10 lg:px-20 xl:px-48 mt-4 flex flex-col md:flex-row  md:justify-between">
                                 <div className="flex flex-col items-center">
                                     <div className="px-1 sm:px-3">
@@ -48,30 +44,30 @@ const SingleBookingDetails = () => {
                                         </div>
                                         <div className="ml-8 flex items-center mb-4">
                                             <label htmlFor="phone" className="font-medium w-16">Mobile:</label>
-                                            <input value={booking?.phone} disabled={true} placeholder="Your phone number" id="phone" type="number" className="outline-none py-2 px-1 sm:px-2 rounded-md border border-solid border-gray-400  font-mono" />
+                                            <input value={data?.booking?.phone} disabled={true} placeholder="Your phone number" id="phone" type="number" className="outline-none py-2 px-1 sm:px-2 rounded-md border border-solid border-gray-400  font-mono" />
                                         </div>
                                     </div>
                                     <div className="px-1 sm:px-3">
                                         <h2 className="text-xl font-medium mb-4 mt-16">Room details:</h2>
                                         <div className="ml-8 flex mb-4">
                                             <span className="font-medium inline-block  w-28">Hotel Name:</span>
-                                            <Link to={`/hotel/${booking?.hotel._id}`} className="font-mono text-blue-700">{booking?.hotel.name}</Link>
+                                            <Link to={`/hotel/${data?.booking?.hotel._id}`} className="font-mono text-blue-700">{data?.booking?.hotel.name}</Link>
                                         </div>
                                         <div className="ml-8 flex  mb-4">
                                             <span className="font-medium inline-block  w-28">Room Name:</span>
-                                            <span className="font-mono">{booking?.room.name}</span>
+                                            <span className="font-mono">{data?.booking?.room.name}</span>
                                         </div>
                                         <div className="ml-8 flex mb-4">
                                             <span className="font-medium inline-block  w-28">Room No:</span>
-                                            <span className="font-mono">{booking?.room.number}</span>
+                                            <span className="font-mono">{data?.booking?.room.number}</span>
                                         </div>
                                         <div className="ml-8 flex items-center mb-4">
                                             <span className="font-medium inline-block  w-28">Room Type:</span>
-                                            <span className="font-mono">{booking?.room.type}</span>
+                                            <span className="font-mono">{data?.booking?.room.type}</span>
                                         </div>
                                         <div className="ml-8 flex mb-4">
                                             <span className="font-medium inline-block w-28">Price(per day):</span>
-                                            <span className="font-mono">{booking?.room.pricePerDay} taka</span>
+                                            <span className="font-mono">{data?.booking?.room.pricePerDay} taka</span>
                                         </div>
                                     </div>
                                 </div>
@@ -80,11 +76,11 @@ const SingleBookingDetails = () => {
                                         <h2 className="text-xl font-medium mb-4 mt-16 md:mt-5">Booking details:</h2>
                                         <div className="ml-8 flex  mb-4">
                                             <span className="font-medium inline-block  w-28">Room ID:</span>
-                                            <span className="font-mono break-all">{booking?.room._id}</span>
+                                            <span className="font-mono break-all">{data?.booking?.room._id}</span>
                                         </div>
                                         <div className="ml-8 flex mb-4">
                                             <span className="font-medium inline-block w-28"> Status:</span>
-                                            <span className="font-mono">{booking?.status}</span>
+                                            <span className="font-mono">{data?.booking?.status}</span>
                                         </div>
                                         <div className="ml-8 flex mb-4">
                                             <span className="font-medium inline-block  w-28">Dates:</span>
@@ -100,11 +96,11 @@ const SingleBookingDetails = () => {
                                         </div>
                                         <div className="ml-8 flex mb-4">
                                             <span className="font-medium inline-block w-28">Total Price:</span>
-                                            <span className="font-mono">{booking?.totalPrice} taka</span>
+                                            <span className="font-mono">{data?.booking?.totalPrice} taka</span>
                                         </div>
                                         <div className="ml-8 flex mb-4">
                                             <span className="font-medium inline-block w-28"> Paid:</span>
-                                            <span className="font-mono">{booking?.paymentInfo.status}</span>
+                                            <span className="font-mono">{data?.booking?.paymentInfo.status}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -114,6 +110,6 @@ const SingleBookingDetails = () => {
                 )}
             </Fragment>
         </Fragment>
-    )
-}
+    );
+};
 export default SingleBookingDetails;

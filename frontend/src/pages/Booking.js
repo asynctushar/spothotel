@@ -29,8 +29,6 @@ const Booking = () => {
         key: 'selection',
     }]);
 
-
-    console.log({ dates, isDateOpen, disableDates, dateRange });
     const prices = data?.room?.pricePerDay * dates?.length;
     const vat = data?.room?.pricePerDay * dates?.length * (18 / 100);
     const totalPrice = prices + vat;

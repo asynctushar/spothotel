@@ -1,33 +1,35 @@
 import SideBar from "../components/layout/SideBar";
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllUsers, updateUserRole } from '../redux/actions/user.action';
+import { updateUserRole } from '../redux/actions/user.action';
 import Loader from '../components/ui/Loader';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TableFooter, TablePagination, IconButton, Tooltip, Dialog, DialogContent, DialogTitle, DialogActions, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import Meta from '../utils/Meta';
+import { useChangeUserRoleMutation, useUsersQuery } from "../redux/api/user.api";
 
 const AllUsers = () => {
     const dispatch = useDispatch();
-    const { isUsersLoading, allUsers, user } = useSelector((state) => state.userState);
+    const { user } = useSelector((state) => state.authState);
+    const { isLoading, data, isError, error } = useUsersQuery();
+    const [changeUserRole, { isError: isChangeUserRoleError, isLoading: isChangeUserRoleLoading, error: changeUserRoleError }] = useChangeUserRoleMutation();
+
     const [open, setOpen] = useState(false);
     const [role, setRole] = useState("");
     const [userRef, setUserRef] = useState(undefined);
     const [page, setPage] = useState(0);
     const rowsPerPage = 5;
-    const emptyRows = Math.max(0, (1 + page) * rowsPerPage - allUsers?.length);
+    const emptyRows = Math.max(0, (1 + page) * rowsPerPage - data?.users?.length);
 
-    useEffect(() => {
-        dispatch(getAllUsers());
-    }, [dispatch]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
 
     const editHandler = () => {
-        dispatch(updateUserRole(userRef._id, role));
+        changeUserRole({ id: userRef._id, role });
         setOpen(!open);
+
     };
 
     return (
@@ -36,7 +38,7 @@ const AllUsers = () => {
             <div className="flex">
                 <SideBar />
                 <Fragment>
-                    {isUsersLoading ? <Loader /> : (
+                    {isLoading ? <Loader /> : (
                         <div className="w-[80%] sm:w-[60%] md:w-[70%] mx-auto mt-3">
                             <h2 className="text-2xl font-medium text-center my-8">All Users</h2>
                             <TableContainer component={Paper}>
@@ -50,7 +52,7 @@ const AllUsers = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {(rowsPerPage > 2 ? allUsers?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : allUsers)?.map((singleUser) => (
+                                        {(rowsPerPage > 2 ? data?.users?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : data?.users)?.map((singleUser) => (
                                             <TableRow key={singleUser._id} style={{ height: 72.8 }}>
                                                 <TableCell align="center" >{singleUser._id}</TableCell>
                                                 <TableCell align="center" >{singleUser.name}</TableCell>
@@ -80,7 +82,7 @@ const AllUsers = () => {
                                         <TableRow>
                                             <TablePagination
                                                 page={page}
-                                                count={allUsers?.length}
+                                                count={data?.users?.length}
                                                 rowsPerPageOptions={[]}
                                                 onPageChange={handleChangePage}
                                                 rowsPerPage={rowsPerPage} />
