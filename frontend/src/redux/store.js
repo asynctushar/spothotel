@@ -17,7 +17,7 @@ const store = configureStore({
     reducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(baseApi.middleware),
-    devTools: process.env.NODE_ENV !== "production",
+    devTools: import.meta.env.MODE !== "production",
 });
 
 export default store;

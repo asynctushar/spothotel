@@ -4,7 +4,6 @@ import { login, logout, register, updateProfile, changePassword, deleteProfile }
 const initialState = {
     error: undefined,
     success: undefined,
-    isAdminbarOpen: true
 };
 
 const appSlice = createSlice({
@@ -23,9 +22,6 @@ const appSlice = createSlice({
         clearSuccess: (state, action) => {
             state.success = undefined;
         },
-        setAdminbar: (state, action) => {
-            state.isAdminbarOpen = action.payload;
-        }
     },
     extraReducers: (builder) => {
         builder
@@ -79,6 +75,6 @@ const appSlice = createSlice({
     }
 });
 
-export const { setError, setSuccess, clearError, clearSuccess, setAdminbar } = appSlice.actions;
+export const { setError, setSuccess, clearError, clearSuccess } = appSlice.actions;
 
 export default appSlice.reducer;

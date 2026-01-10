@@ -1,4 +1,4 @@
-import axios from "../utils/axios";
+import axios from "../lib/axios";
 
 export const register = (credentials) =>
     axios.post("/auth/register", credentials);
