@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router";
 import App from "../App";
 
 import PublicLayout from "../components/layout/PublicLayout";
+import GuestLayout from "../components/layout/GuestLayout.jsx";
 import PrivateLayout from "../components/layout/PrivateLayout";
 import AdminLayout from "../components/layout/AdminLayout";
 
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
                 element: <GuestRoute />,
                 children: [
                     {
-                        element: <PublicLayout />,
+                        element: <GuestLayout />,
                         children: guestRoutes,
                     },
                 ],
