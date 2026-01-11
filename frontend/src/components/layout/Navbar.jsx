@@ -20,7 +20,7 @@ const Navbar = ({ layout = "NORMAL" }) => {
 
                     {/* Desktop Navigation */}
                     <div className="flex items-center gap-6">
-                        {layout === "GUEST" ? null : (
+                        {layout === "AUTH" ? null : (
                             <>
                                 {!isAuthenticated ? (
                                     <Link

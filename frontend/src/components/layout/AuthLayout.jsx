@@ -2,12 +2,12 @@ import { Outlet } from "react-router";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
-const GuestLayout = () => (
+const AuthLayout = () => (
     <>
-        <Navbar layout="GUEST" />
+        <Navbar layout="AUTH" />
         <Outlet />
         <Footer />
     </>
 );
 
-export default GuestLayout;
+export default AuthLayout;

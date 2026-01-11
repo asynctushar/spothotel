@@ -2,16 +2,16 @@ import { createBrowserRouter } from "react-router";
 import App from "../App";
 
 import PublicLayout from "../components/layout/PublicLayout";
-import GuestLayout from "../components/layout/GuestLayout.jsx";
+import AuthLayout from "../components/layout/AuthLayout.jsx";
 import PrivateLayout from "../components/layout/PrivateLayout";
 import AdminLayout from "../components/layout/AdminLayout";
 
-import GuestRoute from "../components/guards/GuestRoute";
+import AuthRoute from "../components/guards/AuthRoute";
 import PrivateRoute from "../components/guards/PrivateRoute";
 import AdminRoute from "../components/guards/AdminRoute";
 
 import publicRoutes from "./public.route";
-import guestRoutes from "./guest.route";
+import authRoutes from "./auth.route";
 import privateRoutes from "./private.route";
 import adminRoutes from "./admin.route";
 
@@ -28,13 +28,13 @@ const router = createBrowserRouter([
                 children: publicRoutes,
             },
 
-            // 👤 Guest-only pages
+            // 👤 auth pages (un-authenticated users only)
             {
-                element: <GuestRoute />,
+                element: <AuthRoute />,
                 children: [
                     {
-                        element: <GuestLayout />,
-                        children: guestRoutes,
+                        element: <AuthLayout />,
+                        children: authRoutes,
                     },
                 ],
             },

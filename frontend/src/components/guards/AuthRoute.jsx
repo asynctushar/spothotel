@@ -2,7 +2,7 @@ import { Navigate, Outlet } from "react-router";
 import { useSelector } from "react-redux";
 import Loader from "../ui/Loader";
 
-const GuestRoute = () => {
+const AuthRoute = () => {
     const { checkingAuth, isAuthenticated } = useSelector(
         (state) => state.authState
     );
@@ -15,4 +15,4 @@ const GuestRoute = () => {
     return <Outlet />;
 };
 
-export default GuestRoute;
+export default AuthRoute;
