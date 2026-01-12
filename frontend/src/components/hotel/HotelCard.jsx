@@ -40,7 +40,7 @@ const HotelCard = ({ hotel }) => {
                 </p>
 
                 <div className='flex flex-wrap gap-2 mb-4 min-h-8'>
-                    {hotel.specification.slice(0, 3).map((item, index) => (
+                    {hotel.specification.map((item, index) => (
                         <Badge key={index} variant="secondary" className='text-xs'>
                             {item}
                         </Badge>

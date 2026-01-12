@@ -6,9 +6,9 @@ import AuthLayout from "../components/layout/AuthLayout.jsx";
 import PrivateLayout from "../components/layout/PrivateLayout";
 import AdminLayout from "../components/layout/AdminLayout";
 
-import AuthRoute from "../components/guards/AuthRoute";
-import PrivateRoute from "../components/guards/PrivateRoute";
-import AdminRoute from "../components/guards/AdminRoute";
+import AuthRoute from "../components/guard/AuthRoute";
+import PrivateRoute from "../components/guard/PrivateRoute";
+import AdminRoute from "../components/guard/AdminRoute";
 
 import publicRoutes from "./public.route";
 import authRoutes from "./auth.route";
