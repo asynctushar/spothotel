@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import HotelCardLoader from '@/components/hotel/HotelCardLoader';
+import { useLocation } from 'react-router';
 
 const Home = () => {
     const [isPersonOpen, setIsPersonOpen] = useState(false);
@@ -24,6 +25,13 @@ const Home = () => {
     const [queryParams, setQueryParams] = useState({});
     const { data, isLoading, isError, error } = useHotelsQuery(queryParams);
     const dispatch = useDispatch();
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.pathname === '/' && location.search === '') {
+            setQueryParams({});
+        }
+    }, [location]);
 
     useEffect(() => {
         if (isError && error) {
@@ -78,7 +86,7 @@ const Home = () => {
                             <div className="md:col-span-1">
                                 <Popover open={isDateOpen} onOpenChange={setIsDateOpen}>
                                     <PopoverTrigger asChild>
-                                        <Button variant="outline" className="w-full h-12 justify-start text-left font-normal">
+                                        <Button variant="outline" className="w-full h-12 justify-start text-left font-normal cursor-pointer">
                                             <Calendar className="mr-2 h-5 w-5 text-muted-foreground" />
                                             <span className="truncate">
                                                 {dateRange && dateRange.from && dateRange.to ? (
@@ -107,7 +115,7 @@ const Home = () => {
                             <div className="md:col-span-1">
                                 <Popover open={isPersonOpen} onOpenChange={setIsPersonOpen}>
                                     <PopoverTrigger asChild>
-                                        <Button variant="outline" className="w-full h-12 justify-start text-left font-normal">
+                                        <Button variant="outline" className="w-full h-12 justify-start text-left font-normal cursor-pointer">
                                             <Users className="mr-2 h-5 w-5 text-muted-foreground" />
                                             <span className="truncate">
                                                 {travellers.room} Room{travellers.room > 1 ? 's' : ''}, {travellers.person} Guest{travellers.person > 1 ? 's' : ''}
@@ -120,6 +128,7 @@ const Home = () => {
                                                 <span className="font-medium">Rooms</span>
                                                 <div className="flex items-center gap-3">
                                                     <Button
+                                                        className="cursor-pointer"
                                                         size="sm"
                                                         variant="outline"
                                                         onClick={decrementRoom}
@@ -129,6 +138,7 @@ const Home = () => {
                                                     </Button>
                                                     <span className="w-8 text-center">{travellers.room}</span>
                                                     <Button
+                                                        className="cursor-pointer"
                                                         size="sm"
                                                         variant="outline"
                                                         onClick={incrementRoom}
@@ -141,6 +151,7 @@ const Home = () => {
                                                 <span className="font-medium">Guests</span>
                                                 <div className="flex items-center gap-3">
                                                     <Button
+                                                        className="cursor-pointer"
                                                         size="sm"
                                                         variant="outline"
                                                         onClick={decrementPerson}
@@ -150,6 +161,7 @@ const Home = () => {
                                                     </Button>
                                                     <span className="w-8 text-center">{travellers.person}</span>
                                                     <Button
+                                                        className="cursor-pointer"
                                                         size="sm"
                                                         variant="outline"
                                                         onClick={incrementPerson}
@@ -181,31 +193,70 @@ const Home = () => {
 
             {/* Hotels Section */}
             <div className="max-w-7xl mx-auto px-4 py-12">
-                <h2 className="text-3xl font-bold mb-2">
-                    {Object.keys(queryParams).length > 0 ? 'Search Results' : 'Hotels'}
-                </h2>
-                <h5 className="text-muted-foreground mb-8">
-                    {Object.keys(queryParams).length > 0
-                        ? `Hotels in ${queryParams.location || 'your destination'}`
-                        : 'Handpicked exceptional stays for your next adventure.'}
-                </h5>
-
                 {isLoading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {[...Array(6)].map((_, index) => (
-                            <HotelCardLoader key={index} />
-                        ))}
-                    </div>
+                    <>
+                        <h2 className="text-3xl font-bold mb-2">Finding Hotels</h2>
+                        <h5 className="text-muted-foreground mb-8">Please wait while we search for the best stays...</h5>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {[...Array(6)].map((_, index) => (
+                                <HotelCardLoader key={index} />
+                            ))}
+                        </div>
+                    </>
                 ) : data && data.hotels.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {data.hotels.map((hotel) => (
-                            <HotelCard hotel={hotel} key={hotel._id} />
-                        ))}
-                    </div>
+                    <>
+                        <div className="flex justify-between items-center mb-8">
+                            <div>
+                                <h2 className="text-3xl font-bold mb-2">
+                                    {Object.keys(queryParams).length > 0
+                                        ? `Hotels in ${queryParams.location}`
+                                        : 'Discover Your Perfect Stay'}
+                                </h2>
+                                <h5 className="text-muted-foreground">
+                                    {Object.keys(queryParams).length > 0
+                                        ? `${data.hotels.length} propert${data.hotels.length === 1 ? 'y' : 'ies'} found`
+                                        : 'Handpicked exceptional stays for your next adventure'}
+                                </h5>
+                            </div>
+                            {Object.keys(queryParams).length > 0 && (
+                                <Button
+                                    className="cursor-pointer"
+                                    onClick={() => {
+                                        setQueryParams({});
+                                        setKeyword('');
+                                    }}
+                                >
+                                    Clear Search
+                                </Button>
+                            )}
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {data.hotels.map((hotel) => (
+                                <HotelCard hotel={hotel} key={hotel._id} />
+                            ))}
+                        </div>
+                    </>
                 ) : (
-                    <div className="text-center py-16">
-                        <h3 className="text-2xl font-semibold mb-2">No hotels found</h3>
-                        <p className="text-muted-foreground">Try adjusting your search criteria or explore other destinations.</p>
+                    <div className="flex flex-col items-center justify-center py-16 text-center">
+                        <div className="max-w-md">
+                            <h2 className="text-3xl font-bold mb-3">No Hotels Found</h2>
+                            <p className="text-muted-foreground mb-6">
+                                {Object.keys(queryParams).length > 0
+                                    ? `We couldn't find any hotels matching your search in ${queryParams.location}. Try adjusting your dates or search criteria.`
+                                    : 'No hotels available at the moment. Please check back later.'}
+                            </p>
+                            {Object.keys(queryParams).length > 0 && (
+                                <Button
+                                    className="cursor-pointer"
+                                    onClick={() => {
+                                        setQueryParams({});
+                                        setKeyword('');
+                                    }}
+                                >
+                                    Browse All Hotels
+                                </Button>
+                            )}
+                        </div>
                     </div>
                 )}
             </div>
