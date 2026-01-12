@@ -4,6 +4,7 @@ const HotelService = require("../services/hotel.service");
 const CloudService = require("../services/cloud.service");
 const BookingService = require("../services/booking.service");
 const RoomService = require("../services/room.service");
+const Hotel = require('../models/Hotel');
 
 
 // create hotel -- admin
@@ -148,31 +149,25 @@ exports.getAllHotels = catchAsyncErrors(async (req, res, next) => {
     const personCount = Number(req.query.person);
     const dates = [];
 
-    // for search query
-    if (req.query.person && personCount < 1) return next(new ErrorHandler("At least one person required", 400));
-    if (req.query.room && roomCount < 1) return next(new ErrorHandler("At least one room required", 400));
+    // validations (unchanged)
+    if (req.query.person && personCount < 1)
+        return next(new ErrorHandler("At least one person required", 400));
+
+    if (req.query.room && roomCount < 1)
+        return next(new ErrorHandler("At least one room required", 400));
+
     if (req.query.d1 && req.query.d2) {
         let startDate = req.query.d1;
         let endDate = req.query.d2;
 
-        // Get today's date at midnight (00:00:00) for fair comparison
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        // Check if start date is in the past
-        if (new Date(startDate) < today) {
-            return next(new ErrorHandler("Start date cannot be in the past", 400));
-        }
+        if (new Date(startDate) < today || new Date(endDate) < today)
+            return next(new ErrorHandler("Date cannot be in the past", 400));
 
-        // Check if end date is in the past
-        if (new Date(endDate) < today) {
-            return next(new ErrorHandler("End date cannot be in the past", 400));
-        }
-
-        // Check if start date is after end date
-        if (startDate > endDate) {
+        if (startDate > endDate)
             return next(new ErrorHandler("Please check start and end date", 400));
-        }
 
         while (new Date(startDate) <= new Date(endDate)) {
             dates.push(Date.parse(new Date(startDate)));
@@ -180,32 +175,100 @@ exports.getAllHotels = catchAsyncErrors(async (req, res, next) => {
         }
     }
 
-    // Build the base filter
-    const filterData = {
-        location: {
-            $regex: keyword ? keyword : '',
-            $options: 'i'
-        },
-        $expr: { $gte: [{ $size: "$rooms" }, req.query.room ? roomCount : 0] }
-    };
-
-    // Add person filter if specified
-    if (req.query.person && personCount > 1) {
-        filterData['rooms.type'] = 'Double';
-    }
-
-    // Add date availability filter if dates are specified
-    if (dates.length > 0) {
-        filterData['rooms.notAvailable'] = {
-            $not: {
-                $elemMatch: {
-                    $in: dates
+    const pipeline = [
+        // 1️⃣ Location filter
+        {
+            $match: {
+                location: {
+                    $regex: keyword || "",
+                    $options: "i"
                 }
             }
-        };
+        },
+
+        // 2️⃣ Preserve original room IDs
+        {
+            $addFields: {
+                roomIds: "$rooms"
+            }
+        },
+
+        // 3️⃣ Lookup rooms for calculation
+        {
+            $lookup: {
+                from: "rooms",
+                localField: "rooms",
+                foreignField: "_id",
+                as: "roomsData"
+            }
+        },
+
+        // 4️⃣ Room count filter
+        {
+            $match: {
+                $expr: {
+                    $gte: [
+                        { $size: "$roomsData" },
+                        req.query.room ? roomCount : 0
+                    ]
+                }
+            }
+        }
+    ];
+
+    // 5️⃣ Person filter
+    if (req.query.person && personCount > 1) {
+        pipeline.push({
+            $match: {
+                "roomsData.type": "Double"
+            }
+        });
     }
 
-    const hotels = await HotelService.getHotels(filterData, ["rooms"]);
+    // 6️⃣ Availability filter
+    if (dates.length > 0) {
+        pipeline.push({
+            $match: {
+                "roomsData.notAvailable": {
+                    $not: {
+                        $elemMatch: { $in: dates }
+                    }
+                }
+            }
+        });
+    }
+
+    // 7️⃣ Calculate startingFrom
+    pipeline.push({
+        $addFields: {
+            startingFrom: {
+                $cond: [
+                    { $gt: [{ $size: "$roomsData" }, 0] },
+                    { $min: "$roomsData.pricePerDay" },
+                    null
+                ]
+            }
+        }
+    });
+
+    // populate rooms - remove if not populate "rooms"
+    pipeline.push({
+        $addFields: {
+            rooms: "$roomsData"
+        }
+    });
+
+    // remove extra fields
+    pipeline.push({
+        $project: {
+            roomsData: 0,
+            roomIds: 0
+        }
+    });
+
+
+
+    const hotels = await HotelService.getHotels({}, pipeline);
 
     res.status(200).json({
         success: true,

@@ -29,10 +29,34 @@ exports.deleteHotel = async (id) => {
     return;
 };
 
-exports.getHotels = async (filterData = {}, populateQuery = []) => {
+exports.getHotels = async (filterData = {}, pipeline = [], populateQuery = []) => {
     let hotels = [];
+
+    // 🔹 Aggregation mode
+    if (Array.isArray(pipeline) && pipeline.length > 0) {
+        hotels = await Hotel.aggregate(pipeline);
+    }
+
     hotels = await Hotel.find(filterData).populate(populateQuery);
 
 
     return hotels;
 };
+
+exports.getHotels = async (
+    filterData = {},
+    pipeline = [],
+    populateQuery = []
+) => {
+
+    // 🔹 Aggregation mode
+    if (Array.isArray(pipeline) && pipeline.length > 0) {
+        return await Hotel.aggregate(pipeline);
+    }
+
+    // 🔹 Normal find mode
+    const hotels = Hotel.find(filterData).populate(populateQuery);
+
+    return hotels;
+};
+
