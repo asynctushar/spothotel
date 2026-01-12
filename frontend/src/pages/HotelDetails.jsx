@@ -91,18 +91,29 @@ const HotelDetails = () => {
                     <hr className='my-8' />
 
                     <div className='space-y-6'>
-                        <div>
-                            <h2 className='text-3xl font-bold mb-2'>Available Rooms</h2>
-                            <h5 className='text-muted-foreground text-lg'>
-                                Choose from our selection of comfortable and luxurious rooms
-                            </h5>
-                        </div>
+                        {data.hotel.rooms && data.hotel.rooms.length > 0 ? (
+                            <>
+                                <div>
+                                    <h2 className='text-3xl font-bold mb-2'>Available Rooms</h2>
+                                    <h5 className='text-muted-foreground text-lg'>
+                                        Choose from our selection of comfortable and luxurious rooms
+                                    </h5>
+                                </div>
 
-                        <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-                            {data.hotel.rooms.map((room) => (
-                                <RoomCard room={room} key={room._id} />
-                            ))}
-                        </div>
+                                <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                                    {data.hotel.rooms.map((room) => (
+                                        <RoomCard room={room} key={room._id} />
+                                    ))}
+                                </div>
+                            </>
+                        ) : (
+                            <div className="text-center py-12 bg-muted/30 rounded-lg border">
+                                <h3 className="text-2xl font-semibold mb-2">No Rooms Available</h3>
+                                <p className="text-muted-foreground">
+                                    This hotel currently has no rooms available. Please check back later or explore other hotels.
+                                </p>
+                            </div>
+                        )}
                     </div>
                 </div>
             ) : (
