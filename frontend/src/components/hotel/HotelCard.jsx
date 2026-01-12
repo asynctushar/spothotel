@@ -1,4 +1,4 @@
-import PlaceHolder from "@/assets/images/placeholder.jpg";
+import PlaceHolder from "../../assets/images/placeholder.jpg";
 import { Link } from 'react-router';
 import { Button } from '../ui/button';
 import { MapPin, Navigation, Star } from 'lucide-react';
@@ -14,7 +14,7 @@ const HotelCard = ({ hotel }) => {
                     alt={hotel.pictures[0]?.public_id ?? "placeholder"}
                     className='w-full h-full object-cover'
                 />
-                {!hotel.featured && (
+                {hotel.featured && (
                     <Badge className='absolute top-2 left-2 bg-primary/90'>
                         <Star className='w-3 h-3 mr-1 fill-current' />
                         Featured
@@ -35,11 +35,11 @@ const HotelCard = ({ hotel }) => {
                     <span>{hotel.distance}</span>
                 </div>
 
-                <p className='text-sm text-muted-foreground line-clamp-2 mb-3'>
+                <p className='text-sm text-muted-foreground line-clamp-2 mb-3 min-h-10'>
                     {hotel.description}
                 </p>
 
-                <div className='flex flex-wrap gap-2 mb-4'>
+                <div className='flex flex-wrap gap-2 mb-4 min-h-8'>
                     {hotel.specification.slice(0, 3).map((item, index) => (
                         <Badge key={index} variant="secondary" className='text-xs'>
                             {item}
@@ -64,6 +64,7 @@ const HotelCard = ({ hotel }) => {
                         </Button>
                     </div>
                 </div>
+                <div />
             </div>
         </div>
     );

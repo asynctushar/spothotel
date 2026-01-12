@@ -196,7 +196,7 @@ const Register = () => {
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full cursor-pointer"
               disabled={loading}
             >
               {loading ? "Creating account..." : "Register"}

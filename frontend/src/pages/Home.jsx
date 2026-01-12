@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
+import HotelCardLoader from '@/components/hotel/HotelCardLoader';
 
 const Home = () => {
     const [isPersonOpen, setIsPersonOpen] = useState(false);
@@ -180,16 +181,31 @@ const Home = () => {
 
             {/* Hotels Section */}
             <div className="max-w-7xl mx-auto px-4 py-12">
-                <h2 className="text-3xl font-bold mb-2">Hotels</h2>
-                <h5 className="text-muted-foreground mb-8">Handpicked exceptional stays for your next adventure.</h5>
+                <h2 className="text-3xl font-bold mb-2">
+                    {Object.keys(queryParams).length > 0 ? 'Search Results' : 'Hotels'}
+                </h2>
+                <h5 className="text-muted-foreground mb-8">
+                    {Object.keys(queryParams).length > 0
+                        ? `Hotels in ${queryParams.location || 'your destination'}`
+                        : 'Handpicked exceptional stays for your next adventure.'}
+                </h5>
 
                 {isLoading ? (
-                    <div className="text-center py-12">Loading hotels...</div>
-                ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {data && data.hotels.map((hotel) => (
+                        {[...Array(6)].map((_, index) => (
+                            <HotelCardLoader key={index} />
+                        ))}
+                    </div>
+                ) : data && data.hotels.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {data.hotels.map((hotel) => (
                             <HotelCard hotel={hotel} key={hotel._id} />
                         ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-16">
+                        <h3 className="text-2xl font-semibold mb-2">No hotels found</h3>
+                        <p className="text-muted-foreground">Try adjusting your search criteria or explore other destinations.</p>
                     </div>
                 )}
             </div>
