@@ -80,7 +80,7 @@ const Home = () => {
                                         <Button variant="outline" className="w-full h-12 justify-start text-left font-normal">
                                             <Calendar className="mr-2 h-5 w-5 text-muted-foreground" />
                                             <span className="truncate">
-                                                {dateRange.from && dateRange.to ? (
+                                                {dateRange && dateRange.from && dateRange.to ? (
                                                     <>
                                                         {format(dateRange.from, 'MMM dd')} - {format(dateRange.to, 'MMM dd')}
                                                     </>

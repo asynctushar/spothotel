@@ -29,7 +29,11 @@ const hotelSchema = new mongoose.Schema({
     rooms: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Rooms"
-    }]
+    }],
+    featured: {
+        type: Boolean,
+        default: false
+    }
 
 }, { timestamps: true });
 

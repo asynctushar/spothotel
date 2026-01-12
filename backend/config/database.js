@@ -8,11 +8,11 @@ const databaseConnect = () => {
         autoIndex: true
     })
         .then((data) => {
-            console.log(`Database connected to ${data.connection.host}`)
+            console.log(`Database connected to ${data.connection.host}`);
         })
         .catch((err) => {
-            console.log(err)
-        })
-}
+            console.log(err);
+        });
+};
 
 module.exports = databaseConnect;
