@@ -3,9 +3,10 @@ import { baseApi } from './baseApi';
 export const hotelApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         hotels: builder.query({
-            query: () => ({
+            query: (params = {}) => ({
                 url: '/hotels',
                 method: 'GET',
+                params: params,
             }),
             providesTags: ["Hotel"],
         }),

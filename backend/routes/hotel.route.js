@@ -1,5 +1,5 @@
 const express = require('express');
-const { createHotel, createHotelRoom, getHotelRooms, uploadHotelPictures, updateHotel, deleteHotel, getHotelDetails, getAllHotels, getAllHotels2 } = require('../controllers/hotel.controller');
+const { createHotel, createHotelRoom, getHotelRooms, uploadHotelPictures, updateHotel, deleteHotel, getHotelDetails, getAllHotels } = require('../controllers/hotel.controller');
 const imageUpload = require('../middlewares/imageUpload');
 const { isAuthenticatedUser, authorizedRole } = require('../middlewares/auth');
 

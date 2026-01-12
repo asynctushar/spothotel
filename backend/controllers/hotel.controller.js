@@ -149,7 +149,7 @@ exports.getAllHotels = catchAsyncErrors(async (req, res, next) => {
     const personCount = Number(req.query.person);
     const dates = [];
 
-    // validations (unchanged)
+    // validations
     if (req.query.person && personCount < 1)
         return next(new ErrorHandler("At least one person required", 400));
 
