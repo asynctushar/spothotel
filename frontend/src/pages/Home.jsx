@@ -23,7 +23,7 @@ const Home = () => {
     });
 
     const [queryParams, setQueryParams] = useState({});
-    const { data, isLoading, isError, error } = useHotelsQuery(queryParams);
+    const { data, isLoading, isError, error, isFetching } = useHotelsQuery(queryParams);
     const dispatch = useDispatch();
     const location = useLocation();
 
@@ -62,12 +62,12 @@ const Home = () => {
     return (
         <div className="min-h-screen bg-muted/30">
             {/* Search Section */}
-            <div className="bg-primary py-16 px-4">
+            <div className="bg-primary p-10 px-4">
                 <div className="max-w-5xl mx-auto">
-                    <h1 className="text-4xl font-bold text-center mb-3 text-primary-foreground">Find Your Perfect Stay</h1>
-                    <p className="text-center text-primary-foreground/80 mb-8">Search hotels, compare prices, and book your next adventure</p>
+                    <h1 className="text-3xl md:text-4xl font-bold text-center mb-2 text-primary-foreground">Find Your Perfect Stay</h1>
+                    <p className="text-center text-primary-foreground/80 mb-6">Search hotels, compare prices, and book your next adventure</p>
 
-                    <div className="bg-background rounded-lg shadow-lg p-4">
+                    <div className="bg-background rounded-lg shadow-lg p-3">
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                             {/* Location Input */}
                             <div className="md:col-span-1">
@@ -192,11 +192,11 @@ const Home = () => {
             </div>
 
             {/* Hotels Section */}
-            <div className="max-w-7xl mx-auto px-4 py-12">
-                {isLoading ? (
+            <div className="max-w-7xl mx-auto px-4 py-6">
+                {isLoading || isFetching ? (
                     <>
-                        <h2 className="text-3xl font-bold mb-2">Finding Hotels</h2>
-                        <h5 className="text-muted-foreground mb-8">Please wait while we search for the best stays...</h5>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-4">Finding Hotels</h2>
+                        <h5 className="text-muted-foreground mb-2">Please wait while we search for the best stays...</h5>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {[...Array(6)].map((_, index) => (
                                 <HotelCardLoader key={index} />
@@ -205,7 +205,7 @@ const Home = () => {
                     </>
                 ) : data && data.hotels.length > 0 ? (
                     <>
-                        <div className="flex justify-between items-center mb-8">
+                        <div className="flex justify-between items-center mb-4">
                             <div>
                                 <h2 className="text-3xl font-bold mb-2">
                                     {Object.keys(queryParams).length > 0

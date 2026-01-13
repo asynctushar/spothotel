@@ -2,15 +2,20 @@ import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel";
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const RoomCard = ({ room }) => {
     const { isAuthenticated } = useSelector(state => state.authState);
     const navigate = useNavigate();
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isAvailabilityOpen, setIsAvailabilityOpen] = useState(false);
 
     const reserveHandler = () => {
@@ -21,59 +26,32 @@ const RoomCard = ({ room }) => {
         }
     };
 
-    const nextImage = () => {
-        setCurrentImageIndex((prev) =>
-            prev === room.pictures.length - 1 ? 0 : prev + 1
-        );
-    };
-
-    const prevImage = () => {
-        setCurrentImageIndex((prev) =>
-            prev === 0 ? room.pictures.length - 1 : prev - 1
-        );
-    };
-
     const disabledDates = room.notAvailable?.map(date => new Date(date)) || [];
 
     return (
         <div className='rounded-lg border bg-card overflow-hidden flex flex-col h-full shadow-sm hover:shadow-md transition-shadow'>
             <div className='relative h-48 overflow-hidden bg-muted'>
                 {room.pictures && room.pictures.length > 0 ? (
-                    <>
-                        <img
-                            src={room.pictures[currentImageIndex]?.url}
-                            alt={`${room.name} - Image ${currentImageIndex + 1}`}
-                            className='w-full h-full object-cover'
-                        />
+                    <Carousel className="w-full h-full">
+                        <CarouselContent>
+                            {room.pictures.map((picture, index) => (
+                                <CarouselItem key={index}>
+                                    <img
+                                        src={picture.url}
+                                        alt={`${room.name} - Image ${index + 1}`}
+                                        className='w-full h-48 object-cover'
+                                        loading='lazy'
+                                    />
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
                         {room.pictures.length > 1 && (
                             <>
-                                <button
-                                    onClick={prevImage}
-                                    className='absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background rounded-full p-1.5 shadow-md transition-colors'
-                                >
-                                    <ChevronLeft className='w-5 h-5' />
-                                </button>
-                                <button
-                                    onClick={nextImage}
-                                    className='absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background rounded-full p-1.5 shadow-md transition-colors'
-                                >
-                                    <ChevronRight className='w-5 h-5' />
-                                </button>
-                                <div className='absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5'>
-                                    {room.pictures.map((_, index) => (
-                                        <button
-                                            key={index}
-                                            onClick={() => setCurrentImageIndex(index)}
-                                            className={`w-2 h-2 rounded-full transition-colors ${index === currentImageIndex
-                                                ? 'bg-primary'
-                                                : 'bg-background/60'
-                                                }`}
-                                        />
-                                    ))}
-                                </div>
+                                <CarouselPrevious className="left-2 cursor-pointer" />
+                                <CarouselNext className="right-2 cursor-pointer" />
                             </>
                         )}
-                    </>
+                    </Carousel>
                 ) : (
                     <div className='w-full h-full flex items-center justify-center text-muted-foreground'>
                         No image available

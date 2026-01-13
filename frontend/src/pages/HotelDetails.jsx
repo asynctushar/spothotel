@@ -34,6 +34,7 @@ const HotelDetails = () => {
                                     src={data.hotel.pictures[selectedImage]?.url}
                                     alt={`${data.hotel.name} - Image ${selectedImage + 1}`}
                                     className='w-full h-full object-cover'
+                                    loading='lazy'
                                 />
                             </div>
                             <div className='grid grid-cols-5 gap-3'>
@@ -41,7 +42,7 @@ const HotelDetails = () => {
                                     <button
                                         key={index}
                                         onClick={() => setSelectedImage(index)}
-                                        className={`aspect-video rounded-lg overflow-hidden border-2 transition-all ${selectedImage === index
+                                        className={`aspect-video rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${selectedImage === index
                                             ? 'border-primary shadow-md'
                                             : 'border-transparent hover:border-primary/50'
                                             }`}
@@ -50,6 +51,7 @@ const HotelDetails = () => {
                                             src={picture.url}
                                             alt={`${data.hotel.name} thumbnail ${index + 1}`}
                                             className='w-full h-full object-cover'
+                                            loading='lazy'
                                         />
                                     </button>
                                 ))}
