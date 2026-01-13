@@ -100,7 +100,7 @@ const HotelDetails = () => {
                                     </h5>
                                 </div>
 
-                                <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                                <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
                                     {data.hotel.rooms.map((room) => (
                                         <RoomCard room={room} key={room._id} />
                                     ))}

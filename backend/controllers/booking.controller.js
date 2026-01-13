@@ -22,12 +22,6 @@ exports.createBooking = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Phone number is required", 400));
     }
 
-    // validation of payment info
-    const intent = await PaymentService.retrivePaymentIndent(paymentInfo);
-    if (intent.status !== "succeeded" || intent.amount !== (totalPrice * 100)) {
-        return next(new ErrorHandler("Invalid Payment Info", 400));
-    }
-
     const hotel = await HotelService.getHotel({ id: req.params.id });
     if (!hotel) {
         return next(new ErrorHandler("Hotel not found", 404));
@@ -43,9 +37,26 @@ exports.createBooking = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("This Room is not available in this hotel", 400));
     }
 
+    // Validate total price calculation
+    const numberOfDays = dates.length;
+    const basePrice = room.pricePerDay * numberOfDays;
+    const vat = basePrice * 0.18; // 18% VAT
+    const calculatedTotalPrice = basePrice + vat;
+    
+    // Allow small floating point differences (0.01)
+    if (Math.abs(totalPrice - calculatedTotalPrice) > 0.01) {
+        return next(new ErrorHandler("Invalid total price calculation", 400));
+    }
+
+    // validation of payment info
+    const intent = await PaymentService.retrivePaymentIndent(paymentInfo);
+    if (intent.status !== "succeeded" || intent.amount !== Math.round(totalPrice * 100)) {
+        return next(new ErrorHandler("Invalid Payment Info", 400));
+    }
+
     const isValidDate = dates.every((date) => Date.parse(new Date().toDateString()) <= Date.parse(new Date(date).toDateString()));
     if (!isValidDate) {
-        return next(new ErrorHandler("given date is before than current date"));
+        return next(new ErrorHandler("Given date is before current date", 400));
     }
 
     const hasDuplicate = dates.length !== new Set(dates).size;
@@ -68,7 +79,7 @@ exports.createBooking = catchAsyncErrors(async (req, res, next) => {
         hotel: hotel.id,
         room: room.id,
         dates,
-        totalPrice,
+        totalPrice: calculatedTotalPrice,
         phone,
         paymentInfo,
         paidAt: Date.now()

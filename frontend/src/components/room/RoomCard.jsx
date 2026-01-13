@@ -15,9 +15,9 @@ const RoomCard = ({ room }) => {
 
     const reserveHandler = () => {
         if (isAuthenticated) {
-            navigate(`/rooms/${room._id}/book`);
+            navigate(`/booking/rooms/${room._id}`);
         } else {
-            navigate("/login", { state: { redirect: `/rooms/${room._id}/book` } });
+            navigate("/login", { state: { redirect: `/booking/rooms/${room._id}` } });
         }
     };
 
