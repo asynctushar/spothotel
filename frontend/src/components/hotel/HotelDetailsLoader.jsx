@@ -4,7 +4,7 @@ import RoomCardLoader from '../room/RoomCardLoader';
 const HotelDetailsLoader = () => {
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
-            <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12'>
+            <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 mb-4'>
                 <div className='space-y-4'>
                     <Skeleton className="aspect-video w-full rounded-lg" />
                     <div className='grid grid-cols-5 gap-3'>
@@ -27,7 +27,7 @@ const HotelDetailsLoader = () => {
                 </div>
             </div>
 
-            <Skeleton className="h-px w-full my-8" />
+            <Skeleton className="h-px w-full my-4" />
 
             <div className='space-y-6'>
                 <div>

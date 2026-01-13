@@ -54,6 +54,12 @@ const Home = () => {
         setIsPersonOpen(false);
     };
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            searchHandler();
+        }
+    };
+
     const incrementRoom = () => setTravellers({ ...travellers, room: travellers.room + 1 });
     const decrementRoom = () => setTravellers({ ...travellers, room: Math.max(1, travellers.room - 1) });
     const incrementPerson = () => setTravellers({ ...travellers, person: travellers.person + 1 });
@@ -62,7 +68,7 @@ const Home = () => {
     return (
         <div className="min-h-screen bg-muted/30">
             {/* Search Section */}
-            <div className="bg-primary p-10 px-4">
+            <div className="bg-primary p-10 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-5xl mx-auto">
                     <h1 className="text-3xl md:text-4xl font-bold text-center mb-2 text-primary-foreground">Find Your Perfect Stay</h1>
                     <p className="text-center text-primary-foreground/80 mb-6">Search hotels, compare prices, and book your next adventure</p>
@@ -77,6 +83,7 @@ const Home = () => {
                                         placeholder="Where are you going?"
                                         value={keyword}
                                         onChange={(e) => setKeyword(e.target.value)}
+                                        onKeyPress={handleKeyDown}
                                         className="pl-10 h-12"
                                     />
                                 </div>
@@ -192,7 +199,7 @@ const Home = () => {
             </div>
 
             {/* Hotels Section */}
-            <div className="max-w-7xl mx-auto px-4 py-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                 {isLoading || isFetching ? (
                     <>
                         <h2 className="text-2xl md:text-3xl font-bold mb-4">Finding Hotels</h2>

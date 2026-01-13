@@ -3,6 +3,7 @@ import Account from "../pages/Account";
 import Payment from "@/pages/Payment";
 import PaymentLayout from "@/components/layout/PaymentLayout";
 import BookingSuccess from "@/pages/BookingSuccess";
+import Settings from "@/pages/Settings";
 
 export default [
     { path: "account", Component: Account },
@@ -16,5 +17,8 @@ export default [
     },
     {
         path: "booking/success", Component: BookingSuccess
+    },
+    {
+        path: "account/settings", Component: Settings
     },
 ];

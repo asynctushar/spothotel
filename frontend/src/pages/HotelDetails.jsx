@@ -26,8 +26,8 @@ const HotelDetails = () => {
             {isLoading ? (
                 <HotelDetailsLoader />
             ) : data?.hotel ? (
-                <div className="max-w-7xl mx-auto px-4 py-8">
-                    <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12'>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 mb-4'>
                         <div className='space-y-4'>
                             <div className='aspect-video rounded-lg overflow-hidden border shadow-md'>
                                 <img
@@ -90,7 +90,7 @@ const HotelDetails = () => {
                         </div>
                     </div>
 
-                    <hr className='my-8' />
+                    <hr className='my-4' />
 
                     <div className='space-y-6'>
                         {data.hotel.rooms && data.hotel.rooms.length > 0 ? (
