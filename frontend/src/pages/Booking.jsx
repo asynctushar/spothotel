@@ -123,7 +123,7 @@ const Booking = () => {
     }
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl min-h-[calc(100vh-72px)] mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <h1 className="text-3xl font-bold mb-8">Complete Your Booking</h1>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -225,7 +225,7 @@ const Booking = () => {
 
                 {/* Right Column - Booking Summary */}
                 <div className="lg:col-span-1">
-                    <Card className="sticky top-4">
+                    <Card className="top-4">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <CalendarDays className="w-5 h-5" />
