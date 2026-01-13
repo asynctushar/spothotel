@@ -237,7 +237,7 @@ const Booking = () => {
                                 <Label>Select Dates *</Label>
                                 <Popover open={isDateOpen} onOpenChange={setIsDateOpen}>
                                     <PopoverTrigger asChild>
-                                        <Button variant="outline" className="w-full justify-start text-left font-normal">
+                                        <Button variant="outline" className="w-full justify-start text-left font-normal cursor-pointer">
                                             <Calendar className="mr-2 h-4 w-4" />
                                             {dateRange?.from && dateRange?.to ? (
                                                 <>

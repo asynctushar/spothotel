@@ -4,10 +4,13 @@ import Payment from "@/pages/Payment";
 import PaymentLayout from "@/components/layout/PaymentLayout";
 import BookingSuccess from "@/pages/BookingSuccess";
 import Settings from "@/pages/Settings";
+import Bookings from "@/pages/Bookings";
+import BookingDetails from "@/pages/BookingDetails";
 
 export default [
     { path: "account", Component: Account },
     { path: "booking/rooms/:id", Component: Booking },
+    { path: "booking/success", Component: BookingSuccess },
     {
         path: "booking",
         Component: PaymentLayout,
@@ -15,10 +18,7 @@ export default [
             { path: "payment", Component: Payment },
         ],
     },
-    {
-        path: "booking/success", Component: BookingSuccess
-    },
-    {
-        path: "account/settings", Component: Settings
-    },
+    { path: "account/settings", Component: Settings },
+    { path: "account/bookings", Component: Bookings },
+    { path: "account/bookings/:id", Component: BookingDetails },
 ];

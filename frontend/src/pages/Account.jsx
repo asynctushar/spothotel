@@ -47,7 +47,7 @@ const Account = () => {
             icon: Calendar,
             label: 'Your Bookings',
             description: 'View and manage your reservations',
-            path: '/me/bookings',
+            path: '/account/bookings',
             enabled: true
         },
         {
@@ -60,7 +60,7 @@ const Account = () => {
     ];
 
     return (
-        <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="container min-h-[calc(100vh-72px)] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Profile Card */}
                 <Card className="lg:col-span-2">

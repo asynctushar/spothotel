@@ -17,7 +17,7 @@ const BookingSuccess = () => {
     }, [state]);
 
     if (!state?.success) {
-        return <Navigate to="/me/bookings" replace />;
+        return <Navigate to="/account/bookings" replace />;
     }
 
     return (
@@ -43,7 +43,7 @@ const BookingSuccess = () => {
 
                     <div className="flex flex-col sm:flex-row gap-3 pt-4">
                         <Button
-                            onClick={() => navigate('/me/bookings', { replace: true })}
+                            onClick={() => navigate('/account/bookings', { replace: true })}
                             className="flex-1 cursor-pointer"
                         >
                             View My Bookings
