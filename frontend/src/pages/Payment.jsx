@@ -191,7 +191,7 @@ const Payment = () => {
                             onClick={submitHandler}
                             ref={payBtn}
                             disabled={isLoading || !stripe || !elements}
-                            className="w-full"
+                            className="w-full cursor-pointer"
                             size="lg"
                         >
                             {isLoading ? 'Processing...' : `Pay $${bookingDetails?.totalPrice?.toFixed(2)}`}
