@@ -17,14 +17,8 @@ const AdminNavbar = ({ onMenuClick }) => {
                         <Menu className="w-5 h-5" />
                     </Button>
 
-                    {/* Desktop Title */}
-                    <div className="hidden lg:block">
-                        <h1 className="text-xl font-semibold text-foreground">Admin Dashboard</h1>
-                    </div>
-
-                    {/* Mobile Title */}
-                    <div className="lg:hidden flex-1 text-center">
-                        <h1 className="text-lg font-semibold text-foreground">Admin Panel</h1>
+                    <div className="flex-1 text-center lg:text-left">
+                        <h1 className="text-lg lg:text-xl font-semibold text-foreground">Admin Panel</h1>
                     </div>
 
                     {/* User Profile */}

@@ -154,7 +154,7 @@ const Settings = () => {
     };
 
     return (
-        <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-slate-50 pb-16">
+        <div className="min-h-screen bg-background pb-16">
             <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto py-4">
                 <Link to="/account" className="inline-flex items-center gap-2 text-primary hover:underline mb-4">
                     <ArrowLeft className="w-4 h-4" />
@@ -162,13 +162,13 @@ const Settings = () => {
                 </Link>
 
                 <div className="mb-4">
-                    <h1 className="text-3xl font-bold text-gray-900">Account Settings</h1>
-                    <p className="text-gray-600 mt-2">Manage your account information and preferences</p>
+                    <h1 className="text-3xl font-bold text-foreground">Account Settings</h1>
+                    <p className="text-foreground/75 mt-2">Manage your account information and preferences</p>
                 </div>
 
                 <div className="space-y-4">
                     {/* Personal Information Card */}
-                    <Card className="shadow-lg border-0">
+                    <Card className="shadow-md border-0">
                         <CardHeader>
                             <CardTitle>Personal Information</CardTitle>
                             <CardDescription>Update your personal details</CardDescription>
@@ -207,7 +207,7 @@ const Settings = () => {
                     </Card>
 
                     {/* Security Card */}
-                    <Card className="shadow-lg border-0">
+                    <Card className="shadow-md border-0">
                         <CardHeader>
                             <CardTitle>Security</CardTitle>
                             <CardDescription>Manage your password and account security</CardDescription>
@@ -231,7 +231,7 @@ const Settings = () => {
                     </Card>
 
                     {/* Danger Zone Card */}
-                    <Card className="shadow-lg border-0 border-red-200">
+                    <Card className="shadow-md border-0 border-red-200">
                         <CardHeader>
                             <CardTitle className="text-red-600">Danger Zone</CardTitle>
                             <CardDescription>Irreversible actions for your account</CardDescription>

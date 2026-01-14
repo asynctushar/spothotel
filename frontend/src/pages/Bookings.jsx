@@ -44,7 +44,7 @@ const Bookings = () => {
     }
 
     return (
-        <div className="min-h-[calc(100vh-72px)] bg-linear-to-br from-slate-50 via-blue-50 to-slate-50 pb-16">
+        <div className="min-h-[calc(100vh-72px)] bg-background pb-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <Link to="/account" className="inline-flex items-center gap-2 text-primary hover:underline mb-6">
                     <ArrowLeft className="w-4 h-4" />
@@ -52,8 +52,8 @@ const Bookings = () => {
                 </Link>
 
                 <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Your Bookings</h1>
-                    <p className="text-gray-600 mt-2">View and manage all your hotel reservations</p>
+                    <h1 className="text-3xl font-bold text-foreground">Your Bookings</h1>
+                    <p className="text-foreground/75 mt-2">View and manage all your hotel reservations</p>
                 </div>
 
                 {!data?.bookings || data.bookings.length === 0 ? (

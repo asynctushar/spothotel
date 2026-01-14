@@ -50,10 +50,10 @@ const BookingDetails = () => {
 
     if (!data?.booking) {
         return (
-            <div className="min-h-[calc(100vh-72px)] bg-linear-to-br from-slate-50 via-blue-50 to-slate-50 flex items-center justify-center px-4">
+            <div className="min-h-[calc(100vh-72px)] bg-background flex items-center justify-center px-4">
                 <div className="text-center max-w-md">
                     <h2 className="text-3xl font-bold mb-3">Booking Not Found</h2>
-                    <p className="text-gray-600 mb-6">
+                    <p className="text-foreground/75 mb-6">
                         The booking you're looking for doesn't exist or may have been removed.
                     </p>
                     <Link to="/me/bookings">
@@ -65,7 +65,7 @@ const BookingDetails = () => {
     }
 
     return (
-        <div className="min-h-[calc(100vh-72px)] bg-linear-to-br from-slate-50 via-blue-50 to-slate-50 pb-16">
+        <div className="min-h-[calc(100vh-72px)] bg-background pb-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <Link to="/account/bookings" className="inline-flex items-center gap-2 text-primary hover:underline mb-6">
                     <ArrowLeft className="w-4 h-4" />
@@ -73,8 +73,8 @@ const BookingDetails = () => {
                 </Link>
 
                 <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Booking Details</h1>
-                    <p className="text-gray-600 mt-2">View your booking information</p>
+                    <h1 className="text-3xl font-bold text-foreground">Booking Details</h1>
+                    <p className="text-foreground/75 mt-2">View your booking information</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

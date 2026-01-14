@@ -23,7 +23,7 @@ const AdminLayout = () => {
         <SheetContent side="left" className="p-0 w-64">
           <Sidebar onLinkClick={handleLinkClick} />
         </SheetContent>
-      </Sheet> 
+      </Sheet>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
