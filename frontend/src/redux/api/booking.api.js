@@ -7,7 +7,7 @@ export const bookingApi = baseApi.injectEndpoints({
                 url: '/bookings/me',
                 method: 'GET',
             }),
-            providesTags: [{ type: "Booking", id: "SELF_LIST " }]
+            providesTags: [{ type: "Booking", id: "SELF_LIST" }]
         }),
         ownBooking: builder.query({
             query: (id) => ({

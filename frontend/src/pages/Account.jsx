@@ -1,15 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import { User, Settings, LayoutDashboard, Calendar, LogOut, ChevronRight, Mail, Shield } from 'lucide-react';
 import { logout } from '../redux/actions/auth.action';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { useOwnBookingsQuery } from '@/redux/api/booking.api';
+import { bookingApi, useOwnBookingsQuery } from '@/redux/api/booking.api';
 import { setError } from '@/redux/slices/app.slice';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useEffect } from 'react';
+import { baseApi } from '@/redux/api/baseApi';
 
 const Account = () => {
     const dispatch = useDispatch();
@@ -22,8 +23,13 @@ const Account = () => {
         }
     }, [isError, error, dispatch]);
 
-    const logoutHandler = () => {
-        dispatch(logout());
+    const logoutHandler = async () => {
+        const res = await dispatch(logout());
+
+        if (res.type === "auth/logout/fulfilled") {
+            dispatch(bookingApi.util.invalidateTags([{ type: "Booking", id: "SELF_LIST" }]));
+
+        }
     };
 
     const getInitials = (name) => {
