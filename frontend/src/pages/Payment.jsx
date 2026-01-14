@@ -128,7 +128,7 @@ const Payment = () => {
 
     return (
         <Fragment>
-            <div className="max-w-2xl mx-auto px-4 py-12">
+            <div className="max-w-2xl min-h-[calc(100vh-72px)] mx-auto px-4 py-12">
                 <div className="text-center mb-8">
                     <h1 className="text-3xl font-bold mb-2">Complete Payment</h1>
                     <p className="text-muted-foreground">Enter your card details to confirm your booking</p>
