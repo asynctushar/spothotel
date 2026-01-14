@@ -6,11 +6,13 @@ import CreateHotel from "@/pages/admin/CreateHotel";
 import Hotel from "@/pages/admin/Hotel";
 import HotelRooms from "@/pages/admin/HotelRooms";
 import CreateRoom from "@/pages/admin/CreateRoom";
+import BookingDetails from "@/pages/admin/BookingDetails";
 
 export default [
     { path: "admin/dashboard", Component: Dashboard },
     { path: "admin/users", Component: Users },
     { path: "admin/bookings", Component: Bookings },
+    { path: "admin/bookings/:id", Component: BookingDetails },
     { path: "admin/hotels", Component: Hotels },
     { path: "admin/hotels/create", Component: CreateHotel },
     { path: "admin/hotels/:id", Component: Hotel },
