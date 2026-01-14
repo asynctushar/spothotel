@@ -25,7 +25,7 @@ import AllBookingsLoader from '@/components/booking/AllBookingsLoader';
 
 const Bookings = () => {
   const dispatch = useDispatch();
-  const { isLoading, data } = useBookingsQuery();
+  const { isLoading, data, isFetching } = useBookingsQuery();
   const [updateBookingStatus, { isLoading: isUpdateBookingStatusLoading, isError: isUpdateBookingStatusError, error: updateBookingStatusError, isSuccess: isUpdateBookingStatusSuccess }] = useUpdateBookingStatusMutation();
 
   const [open, setOpen] = useState(false);
@@ -38,7 +38,7 @@ const Bookings = () => {
   const currentBookings = data?.bookings?.slice(page * rowsPerPage, (page + 1) * rowsPerPage) || [];
 
   useEffect(() => {
-    if (!isUpdateBookingStatusLoading && isUpdateBookingStatusSuccess) {
+    if (!isUpdateBookingStatusLoading && isUpdateBookingStatusSuccess && !isFetching) {
       setOpen(false);
       setBookingRef(undefined);
       dispatch(setSuccess('Booking status updated successfully'));
@@ -46,7 +46,7 @@ const Bookings = () => {
     if (isUpdateBookingStatusError && updateBookingStatusError) {
       dispatch(setError(updateBookingStatusError.data.message));
     }
-  }, [isUpdateBookingStatusLoading, isUpdateBookingStatusSuccess, isUpdateBookingStatusError, updateBookingStatusError, dispatch]);
+  }, [isUpdateBookingStatusLoading, isUpdateBookingStatusSuccess, isUpdateBookingStatusError, updateBookingStatusError, isFetching, dispatch]);
 
   const editHandler = () => {
     updateBookingStatus({ status, id: bookingRef._id });

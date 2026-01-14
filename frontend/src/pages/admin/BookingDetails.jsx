@@ -46,8 +46,6 @@ const BookingDetails = () => {
         return 'outline';
     };
 
-    console.log(data);
-
     if (isLoading) return <AdminBookingDetailsLoader />;
 
     if (!data?.booking) {
