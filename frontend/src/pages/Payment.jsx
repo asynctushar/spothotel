@@ -87,26 +87,41 @@ const Payment = () => {
         }
     };
 
-    const getComputedColor = (variable) => {
+    const getResolvedColor = (cssVar) => {
         if (typeof window === 'undefined') return '#000000';
-        const root = document.documentElement;
-        const value = getComputedStyle(root).getPropertyValue(variable).trim();
-        return value ? `hsl(${value})` : '#000000';
+
+        const value = getComputedStyle(document.documentElement)
+            .getPropertyValue(cssVar)
+            .trim();
+
+        if (!value) return '#000000';
+
+        // Create a temporary element to force color resolution
+        const temp = document.createElement('div');
+        temp.style.color = value;
+        document.body.appendChild(temp);
+
+        const resolvedColor = getComputedStyle(temp).color;
+
+        document.body.removeChild(temp);
+
+        return resolvedColor; // rgb(r g b) or rgb(r, g, b)
     };
+
 
     // Then update cardElementOptions:
     const cardElementOptions = {
         style: {
             base: {
                 fontSize: '16px',
-                color: getComputedColor('--foreground'),
+                color: getResolvedColor('--foreground'),
                 fontFamily: 'system-ui, -apple-system, sans-serif',
                 '::placeholder': {
-                    color: getComputedColor('--muted-foreground'),
+                    color: getResolvedColor('--muted-foreground'),
                 },
             },
             invalid: {
-                color: getComputedColor('--destructive'),
+                color: getResolvedColor('--destructive'),
             },
         },
     };
