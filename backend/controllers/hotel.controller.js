@@ -104,29 +104,49 @@ exports.deleteHotel = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Hotel not found", 404));
     }
 
-    // delete hotel rooms
-    await RoomService.deleteRooms({ id: req.params.id });
+    // get all rooms of this hotel BEFORE deleting them
+    const rooms = await RoomService.getRooms({ hotel: req.params.id });
 
-    // delete hotel pictures
-    if (hotel.pictures.length > 0) {
-        await Promise.all(hotel.pictures.map(async (picture) => {
-            await CloudService.deleteFile(picture.public_id);
-            return;
-        }));
+    // delete all room-related data
+    if (rooms && rooms.length > 0) {
+        await Promise.all(
+            rooms.map(async (room) => {
+                // delete room pictures
+                if (room.pictures?.length > 0) {
+                    await Promise.all(
+                        room.pictures.map((picture) =>
+                            CloudService.deleteFile(picture.public_id)
+                        )
+                    );
+                }
+            })
+        );
     }
 
     // delete hotel's booking details
-    await BookingService.deleteBookings({ room: req.params.id });
+    await BookingService.deleteBookings({ hotel: req.params.id });
+
+    // delete rooms
+    await RoomService.deleteRooms({ hotel: req.params.id });
+
+    // delete hotel pictures
+    if (hotel.pictures?.length > 0) {
+        await Promise.all(
+            hotel.pictures.map((picture) =>
+                CloudService.deleteFile(picture.public_id)
+            )
+        );
+    }
 
     // finally delete hotel
     await HotelService.deleteHotel(req.params.id);
 
-
     res.status(200).json({
         success: true,
-        message: "Hotel deleted successfully"
+        message: "Hotel deleted successfully",
     });
 });
+
 
 // get hotel details
 exports.getHotelDetails = catchAsyncErrors(async (req, res, next) => {

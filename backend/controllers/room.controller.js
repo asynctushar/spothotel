@@ -73,9 +73,8 @@ exports.deleteRoom = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Room's hotel not found", 404));
     }
 
-    // delete room from hotel 
-    const hotelRooms = hotel.rooms.filter(roomId => roomId.toString() !== req.params.id);
-    await HotelService.updateHotel(hotel.id, { rooms: hotelRooms });
+    // delete room's booking details
+    await BookingService.deleteBookings({ room: req.params.id });
 
     // delete room pictures
     if (room.pictures.length > 0) {
@@ -86,8 +85,10 @@ exports.deleteRoom = catchAsyncErrors(async (req, res, next) => {
         }));
     }
 
-    // delete room's booking details and room itself
-    await BookingService.deleteBookings({ room: req.params.id });
+    // delete room from hotel 
+    const hotelRooms = hotel.rooms.filter(roomId => roomId.toString() !== req.params.id);
+    await HotelService.updateHotel(hotel.id, { rooms: hotelRooms });
+
     await RoomService.deleteRoom(req.params.id);
 
     res.status(200).json({
