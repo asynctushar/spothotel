@@ -12,6 +12,12 @@ const AllBookingsLoader = () => {
             <Card className="shadow-lg border-0 overflow-hidden py-0">
                 <CardContent className="p-0">
                     <div className="overflow-x-auto">
+                        <colgroup>
+                            <col className="w-[30%]" />
+                            <col className="w-[25%]" />
+                            <col className="w-[25%]" />
+                            <col className="w-[20%]" />
+                        </colgroup>
                         <table className="w-full">
                             <thead>
                                 <tr className="bg-gray-50 border-b">
@@ -31,7 +37,7 @@ const AllBookingsLoader = () => {
                             </thead>
                             <tbody>
                                 {Array.from({ length: 5 }).map((_, i) => (
-                                    <tr key={i} className="border-b" style={{ height: '72px' }}>
+                                    <tr key={i} className="border-b h-18">
                                         <td className="px-6 py-4">
                                             <Skeleton className="h-4 w-48" />
                                         </td>

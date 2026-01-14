@@ -13,6 +13,12 @@ const UsersLoader = () => {
                 <CardContent className="p-0">
                     <div className="overflow-x-auto">
                         <table className="w-full">
+                            <colgroup>
+                                <col className="w-[25%]" />
+                                <col className="w-[20%]" />
+                                <col className="w-[30%]" />
+                                <col className="w-[25%]" />
+                            </colgroup>
                             <thead>
                                 <tr className="bg-gray-50 border-b">
                                     <th className="text-left px-6 py-4">

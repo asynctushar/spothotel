@@ -58,7 +58,7 @@ const Bookings = () => {
 
                 {!data?.bookings || data.bookings.length === 0 ? (
                     <Card className="shadow-lg border-0" style={{ minHeight: '500px' }}>
-                        <CardContent className="flex flex-col items-center justify-center py-16" style={{ minHeight: '500px' }}>
+                        <CardContent className="flex flex-col items-center justify-center py-16 min-h-125">
                             <Calendar className="w-16 h-16 text-gray-300 mb-4" />
                             <h3 className="text-xl font-semibold text-gray-900 mb-2">No Bookings Yet</h3>
                             <p className="text-gray-600 mb-6">You haven't made any reservations yet</p>
@@ -74,6 +74,12 @@ const Bookings = () => {
                         <CardContent className="p-0">
                             <div className="overflow-x-auto">
                                 <table className="w-full">
+                                    <colgroup>
+                                        <col className="w-[30%]" />
+                                        <col className="w-[20%]" />
+                                        <col className="w-[30%]" />
+                                        <col className="w-[20%]" />
+                                    </colgroup>
                                     <thead>
                                         <tr className="bg-primary text-primary-foreground border-b">
                                             <th className="text-left px-6 py-4 font-semibold ">Booking ID</th>
@@ -84,7 +90,7 @@ const Bookings = () => {
                                     </thead>
                                     <tbody>
                                         {currentBookings.map((booking) => (
-                                            <tr key={booking._id} className="border-b hover:bg-gray-50 transition-colors" style={{ height: '72px' }}>
+                                            <tr key={booking._id} className="border-b hover:bg-gray-50 transition-colors h-18">
                                                 <td className="px-6 py-4 font-mono text-sm">
                                                     {booking._id}
                                                 </td>

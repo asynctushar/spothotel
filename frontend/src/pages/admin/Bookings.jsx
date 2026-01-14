@@ -1,7 +1,9 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router';
 import { Eye, Pencil } from 'lucide-react';
 import { useBookingsQuery, useUpdateBookingStatusMutation } from "@/redux/api/booking.api";
+import { setError, setSuccess } from '@/redux/slices/app.slice';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -22,8 +24,9 @@ import {
 import AllBookingsLoader from '@/components/booking/AllBookingsLoader';
 
 const Bookings = () => {
+  const dispatch = useDispatch();
   const { isLoading, data } = useBookingsQuery();
-  const [updateBookingStatus] = useUpdateBookingStatusMutation();
+  const [updateBookingStatus, { isLoading: isUpdateBookingStatusLoading, isError: isUpdateBookingStatusError, error: updateBookingStatusError, isSuccess: isUpdateBookingStatusSuccess }] = useUpdateBookingStatusMutation();
 
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState('');
@@ -34,10 +37,19 @@ const Bookings = () => {
   const totalPages = Math.ceil((data?.bookings?.length || 0) / rowsPerPage);
   const currentBookings = data?.bookings?.slice(page * rowsPerPage, (page + 1) * rowsPerPage) || [];
 
+  useEffect(() => {
+    if (!isUpdateBookingStatusLoading && isUpdateBookingStatusSuccess) {
+      setOpen(false);
+      setBookingRef(undefined);
+      dispatch(setSuccess('Booking status updated successfully'));
+    }
+    if (isUpdateBookingStatusError && updateBookingStatusError) {
+      dispatch(setError(updateBookingStatusError.data.message));
+    }
+  }, [isUpdateBookingStatusLoading, isUpdateBookingStatusSuccess, isUpdateBookingStatusError, updateBookingStatusError, dispatch]);
+
   const editHandler = () => {
     updateBookingStatus({ status, id: bookingRef._id });
-    setOpen(false);
-    setBookingRef(undefined);
   };
 
   const getPaymentStatusVariant = (status) => {
@@ -80,6 +92,12 @@ const Bookings = () => {
             <CardContent className="p-0">
               <div className="overflow-x-auto">
                 <table className="w-full">
+                  <colgroup>
+                    <col className="w-[30%]" />
+                    <col className="w-[25%]" />
+                    <col className="w-[25%]" />
+                    <col className="w-[20%]" />
+                  </colgroup>
                   <thead>
                     <tr className="bg-primary text-primary-foreground border-b">
                       <th className="text-left px-6 py-4 font-semibold">Booking ID</th>
@@ -223,10 +241,10 @@ const Bookings = () => {
             </Button>
             <Button
               onClick={editHandler}
-              disabled={status === bookingRef?.status}
+              disabled={status === bookingRef?.status || isUpdateBookingStatusLoading}
               className="cursor-pointer"
             >
-              Update
+              {isUpdateBookingStatusLoading ? 'Updating...' : 'Update'}
             </Button>
           </DialogFooter>
         </DialogContent>

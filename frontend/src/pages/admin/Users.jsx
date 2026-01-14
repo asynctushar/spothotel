@@ -1,7 +1,8 @@
-import { Fragment, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { Fragment, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Pencil } from 'lucide-react';
 import { useChangeUserRoleMutation, useUsersQuery } from "@/redux/api/user.api";
+import { setError, setSuccess } from '@/redux/slices/app.slice';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -22,9 +23,10 @@ import {
 import UsersLoader from '@/components/user/UsersLoader';
 
 const Users = () => {
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.authState);
   const { isLoading, data } = useUsersQuery();
-  const [changeUserRole] = useChangeUserRoleMutation();
+  const [changeUserRole, { isLoading: isChangeUserRoleLoading, isError: isChangeUserRoleError, error: changeUserRoleError, isSuccess: isChangeUserRoleSuccess }] = useChangeUserRoleMutation();
 
   const [open, setOpen] = useState(false);
   const [role, setRole] = useState("");
@@ -35,10 +37,19 @@ const Users = () => {
   const totalPages = Math.ceil((data?.users?.length || 0) / rowsPerPage);
   const currentUsers = data?.users?.slice(page * rowsPerPage, (page + 1) * rowsPerPage) || [];
 
+  useEffect(() => {
+    if (!isChangeUserRoleLoading && isChangeUserRoleSuccess) {
+      setOpen(false);
+      setUserRef(undefined);
+      dispatch(setSuccess('User role updated successfully'));
+    }
+    if (isChangeUserRoleError && changeUserRoleError) {
+      dispatch(setError(changeUserRoleError.data.message));
+    }
+  }, [isChangeUserRoleLoading, isChangeUserRoleSuccess, isChangeUserRoleError, changeUserRoleError, dispatch]);
+
   const editHandler = () => {
     changeUserRole({ id: userRef._id, role });
-    setOpen(false);
-    setUserRef(undefined);
   };
 
   const getRoleVariant = (role) => {
@@ -68,7 +79,13 @@ const Users = () => {
           <Card className="shadow-lg border-0 overflow-hidden py-0">
             <CardContent className="p-0">
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full table-fixed">
+                  <colgroup>
+                    <col className="w-[25%]" />
+                    <col className="w-[20%]" />
+                    <col className="w-[30%]" />
+                    <col className="w-[25%]" />
+                  </colgroup>
                   <thead>
                     <tr className="bg-primary text-primary-foreground border-b">
                       <th className="text-left px-6 py-4 font-semibold">User ID</th>
@@ -80,13 +97,13 @@ const Users = () => {
                   <tbody>
                     {currentUsers.map((singleUser) => (
                       <tr key={singleUser._id} className="border-b hover:bg-gray-50 transition-colors" style={{ height: '72px' }}>
-                        <td className="px-6 py-4 font-mono text-sm">
+                        <td className="px-6 py-4 font-mono text-sm truncate">
                           {singleUser._id}
                         </td>
-                        <td className="px-6 py-4 font-medium">
+                        <td className="px-6 py-4 font-medium truncate">
                           {singleUser.name}
                         </td>
-                        <td className="px-6 py-4 text-foreground/75">
+                        <td className="px-6 py-4 text-foreground/75 truncate">
                           {singleUser.email}
                         </td>
                         <td className="px-6 py-4">
@@ -199,15 +216,17 @@ const Users = () => {
             </Select>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setOpen(false)} className="cursor-pointer">
+            <Button
+              className="cursor-pointer"
+              variant="outline" onClick={() => setOpen(false)}>
               Cancel
             </Button>
             <Button
-              className="cursor-pointer"
               onClick={editHandler}
-              disabled={role === userRef?.role}
+              className="cursor-pointer"
+              disabled={role === userRef?.role || isChangeUserRoleLoading}
             >
-              Update
+              {isChangeUserRoleLoading ? 'Updating...' : 'Update'}
             </Button>
           </DialogFooter>
         </DialogContent>
