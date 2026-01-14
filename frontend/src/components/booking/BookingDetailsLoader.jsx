@@ -4,7 +4,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const BookingDetailsLoader = () => {
     return (
-        <div className="min-h-[calc(100vh-72px)] bg-linear-to-br from-slate-50 via-blue-50 to-slate-50 pb-16">
+        <div className="min-h-[calc(100vh-72px)] bg-background pb-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <Skeleton className="h-5 w-32 mb-6" />
 
