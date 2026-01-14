@@ -62,15 +62,15 @@ const Users = () => {
 
   return (
     <Fragment>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground">All Users</h1>
           <p className="text-foreground/75 mt-2">View and manage all users in the system</p>
         </div>
 
         {!data?.users || data.users.length === 0 ? (
-          <Card className="shadow-lg border-0" style={{ minHeight: '500px' }}>
-            <CardContent className="flex flex-col items-center justify-center py-16" style={{ minHeight: '500px' }}>
+          <Card className="shadow-lg border-0 min-h-125">
+            <CardContent className="flex flex-col items-center justify-center py-16 min-h-125">
               <h3 className="text-xl font-semibold text-gray-900 mb-2">No Users Yet</h3>
               <p className="text-gray-600 mb-6">There are no users in the system</p>
             </CardContent>
@@ -91,12 +91,12 @@ const Users = () => {
                       <th className="text-left px-6 py-4 font-semibold">User ID</th>
                       <th className="text-left px-6 py-4 font-semibold">Name</th>
                       <th className="text-left px-6 py-4 font-semibold">Email</th>
-                      <th className="text-left px-6 py-4 font-semibold">Role</th>
+                      <th className="text-center px-6 py-4 font-semibold">Role</th>
                     </tr>
                   </thead>
                   <tbody>
                     {currentUsers.map((singleUser) => (
-                      <tr key={singleUser._id} className="border-b hover:bg-gray-50 transition-colors" style={{ height: '72px' }}>
+                      <tr key={singleUser._id} className="border-b hover:bg-gray-50 transition-colors h-18">
                         <td className="px-6 py-4 font-mono text-sm truncate">
                           {singleUser._id}
                         </td>
@@ -107,7 +107,7 @@ const Users = () => {
                           {singleUser.email}
                         </td>
                         <td className="px-6 py-4">
-                          <div className="flex items-center gap-2">
+                          <div className="flex justify-center items-center gap-2">
                             <Badge variant={getRoleVariant(singleUser.role)} className="capitalize">
                               {singleUser.role}
                             </Badge>
@@ -129,7 +129,7 @@ const Users = () => {
                       </tr>
                     ))}
                     {Array.from({ length: rowsPerPage - currentUsers.length }).map((_, i) => (
-                      <tr key={`empty-${i}`} style={{ height: '72px' }}>
+                      <tr key={`empty-${i}`} className='h-18'>
                         <td colSpan={4} className="px-6 py-4"></td>
                       </tr>
                     ))}

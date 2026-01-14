@@ -56,7 +56,7 @@ const BookingDetails = () => {
                     <p className="text-foreground/75 mb-6">
                         The booking you're looking for doesn't exist or may have been removed.
                     </p>
-                    <Link to="/me/bookings">
+                    <Link to="/account/bookings">
                         <Button>View All Bookings</Button>
                     </Link>
                 </div>
@@ -141,7 +141,7 @@ const BookingDetails = () => {
                                 <div className="flex items-center gap-3">
                                     <DollarSign className="w-4 h-4 text-muted-foreground" />
                                     <span className="font-medium w-32">Price per Day:</span>
-                                    <span className="text-primary font-semibold">{data.booking.room.pricePerDay} taka</span>
+                                    <span className="text-primary font-semibold">${data.booking.room.pricePerDay}</span>
                                 </div>
                             </CardContent>
                         </Card>

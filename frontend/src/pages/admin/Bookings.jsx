@@ -74,7 +74,7 @@ const Bookings = () => {
 
   return (
     <Fragment>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground">All Bookings</h1>
           <p className="text-foreground/75 mt-2">View and manage all hotel reservations</p>
@@ -82,7 +82,7 @@ const Bookings = () => {
 
         {!data?.bookings || data.bookings.length === 0 ? (
           <Card className="shadow-lg border-0" style={{ minHeight: '500px' }}>
-            <CardContent className="flex flex-col items-center justify-center py-16" style={{ minHeight: '500px' }}>
+            <CardContent className="flex flex-col items-center justify-center py-16 min-h-125">
               <h3 className="text-xl font-semibold text-gray-900 mb-2">No Bookings Yet</h3>
               <p className="text-gray-600 mb-6">There are no reservations in the system</p>
             </CardContent>
@@ -108,7 +108,7 @@ const Bookings = () => {
                   </thead>
                   <tbody>
                     {currentBookings.map((booking) => (
-                      <tr key={booking._id} className="border-b hover:bg-gray-50 transition-colors" style={{ height: '72px' }}>
+                      <tr key={booking._id} className="border-b hover:bg-gray-50 transition-colors h-18">
                         <td className="px-6 py-4 font-mono text-sm">
                           {booking._id}
                         </td>
@@ -148,7 +148,7 @@ const Bookings = () => {
                       </tr>
                     ))}
                     {Array.from({ length: rowsPerPage - currentBookings.length }).map((_, i) => (
-                      <tr key={`empty-${i}`} style={{ height: '72px' }}>
+                      <tr key={`empty-${i}`} className='h-18'>
                         <td colSpan={4} className="px-6 py-4"></td>
                       </tr>
                     ))}

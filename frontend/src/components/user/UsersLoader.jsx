@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const UsersLoader = () => {
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="mb-8">
                 <Skeleton className="h-9 w-48 mb-2" />
                 <Skeleton className="h-5 w-80" />
@@ -30,14 +30,14 @@ const UsersLoader = () => {
                                     <th className="text-left px-6 py-4">
                                         <Skeleton className="h-5 w-20" />
                                     </th>
-                                    <th className="text-left px-6 py-4">
+                                    <th className="text-center px-24 py-4">
                                         <Skeleton className="h-5 w-16" />
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {Array.from({ length: 5 }).map((_, i) => (
-                                    <tr key={i} className="border-b" style={{ height: '72px' }}>
+                                    <tr key={i} className="border-b h-18">
                                         <td className="px-6 py-4">
                                             <Skeleton className="h-4 w-48" />
                                         </td>
@@ -47,8 +47,8 @@ const UsersLoader = () => {
                                         <td className="px-6 py-4">
                                             <Skeleton className="h-4 w-48" />
                                         </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center gap-2">
+                                        <td className="px-24 py-4">
+                                            <div className="flex justify-center items-center gap-2">
                                                 <Skeleton className="h-6 w-16 rounded-full" />
                                                 <Skeleton className="h-8 w-8 rounded" />
                                             </div>
