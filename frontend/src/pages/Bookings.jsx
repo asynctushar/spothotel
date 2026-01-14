@@ -1,6 +1,6 @@
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router';
-import { Calendar, ExternalLink, Clock, CheckCircle2, XCircle, AlertCircle, Eye } from 'lucide-react';
+import { Calendar, Clock, CheckCircle2, XCircle, AlertCircle, Eye, ArrowLeft } from 'lucide-react';
 import { useOwnBookingsQuery } from '../redux/api/booking.api';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -46,6 +46,11 @@ const Bookings = () => {
     return (
         <div className="min-h-[calc(100vh-72px)] bg-linear-to-br from-slate-50 via-blue-50 to-slate-50 pb-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <Link to="/account" className="inline-flex items-center gap-2 text-primary hover:underline mb-6">
+                    <ArrowLeft className="w-4 h-4" />
+                    <span>Back to Account</span>
+                </Link>
+
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-900">Your Bookings</h1>
                     <p className="text-gray-600 mt-2">View and manage all your hotel reservations</p>
@@ -96,12 +101,12 @@ const Bookings = () => {
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4 text-right">
-                                                    <Link to={`/account/bookings/${booking._id}`}>
-                                                        <Button variant="outline" size="sm" className="cursor-pointer">
+                                                    <Button variant="outline" size="sm" className="cursor-pointer" asChild>
+                                                        <Link to={`/account/bookings/${booking._id}`}>
                                                             <Eye className="w-4 h-4 mr-2" />
                                                             View
-                                                        </Button>
-                                                    </Link>
+                                                        </Link>
+                                                    </Button>
                                                 </td>
                                             </tr>
                                         ))}

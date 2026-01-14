@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -6,6 +5,8 @@ const BookingsLoader = () => {
     return (
         <div className="min-h-[calc(100vh-72px)] bg-linear-to-br from-slate-50 via-blue-50 to-slate-50 pb-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <Skeleton className="h-5 w-32 mb-6" />
+
                 <div className="mb-8">
                     <Skeleton className="h-9 w-48 mb-2" />
                     <Skeleton className="h-5 w-80" />
@@ -33,7 +34,7 @@ const BookingsLoader = () => {
                                 </thead>
                                 <tbody>
                                     {Array.from({ length: 5 }).map((_, i) => (
-                                        <tr key={i} className="border-b" style={{ height: '72px' }}>
+                                        <tr key={i} className="border-b h-18">
                                             <td className="px-6 py-4">
                                                 <Skeleton className="h-4 w-48" />
                                             </td>
