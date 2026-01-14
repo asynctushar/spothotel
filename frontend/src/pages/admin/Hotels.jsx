@@ -113,7 +113,7 @@ const Hotels = () => {
           <Card className="shadow-lg border-0 overflow-hidden py-0">
             <CardContent className="p-0">
               <div className="overflow-x-auto">
-                <table className="w-full table-fixed">
+                <table className="w-full">
                   <colgroup>
                     <col className="w-[15%]" />
                     <col className="w-[20%]" />
