@@ -25,7 +25,7 @@ import UsersLoader from '@/components/user/UsersLoader';
 const Users = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.authState);
-  const { isLoading, data } = useUsersQuery();
+  const { isLoading, data, isError, error } = useUsersQuery();
   const [changeUserRole, { isLoading: isChangeUserRoleLoading, isError: isChangeUserRoleError, error: changeUserRoleError, isSuccess: isChangeUserRoleSuccess }] = useChangeUserRoleMutation();
 
   const [open, setOpen] = useState(false);
@@ -46,7 +46,12 @@ const Users = () => {
     if (isChangeUserRoleError && changeUserRoleError) {
       dispatch(setError(changeUserRoleError.data.message));
     }
-  }, [isChangeUserRoleLoading, isChangeUserRoleSuccess, isChangeUserRoleError, changeUserRoleError, dispatch]);
+
+    if (isError) {
+      dispatch(setError(error.data.message));
+    }
+
+  }, [isChangeUserRoleLoading, isChangeUserRoleSuccess, isChangeUserRoleError, changeUserRoleError, isError, error, dispatch]);
 
   const editHandler = () => {
     changeUserRole({ id: userRef._id, role });

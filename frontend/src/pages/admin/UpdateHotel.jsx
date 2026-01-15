@@ -28,7 +28,7 @@ const UpdateHotel = () => {
     const [featured, setFeatured] = useState(false);
     const [errors, setErrors] = useState({ name: '', location: '', distance: '', description: '' });
 
-    const { isLoading, data } = useHotelQuery(id);
+    const { isLoading, data, isError: isHotelError, error: hotelError } = useHotelQuery(id);
     const [updateHotel, { isLoading: isUpdating, isSuccess, isError, error }] = useUpdateHotelMutation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -54,7 +54,12 @@ const UpdateHotel = () => {
         if (isError) {
             dispatch(setError(error.data?.message));
         }
-    }, [isError, error, dispatch]);
+
+        if (isHotelError) {
+            dispatch(setError(hotelError.data?.message));
+        }
+        
+    }, [isError, error, isHotelError, hotelError, dispatch]);
 
     const validateForm = () => {
         const newErrors = { name: '', location: '', distance: '', description: '' };

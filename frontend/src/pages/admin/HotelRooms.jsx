@@ -31,7 +31,7 @@ const HotelRooms = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { isLoading, data, isFetching } = useHotelQuery(id);
+  const { isLoading, data, isFetching, error, isError } = useHotelQuery(id);
   const [uploadRoomImages, { isLoading: isUploadRoomImagesLoading, isError: isUploadRoomImagesError, error: uploadRoomImagesError, isSuccess: isUploadRoomImagesSuccess }] = useUploadRoomImagesMutation();
   const [deleteRoom, { isLoading: isDeleteRoomLoading, isError: isDeleteRoomError, error: deleteRoomError, isSuccess: isDeleteRoomSuccess }] = useDeleteRoomMutation();
 
@@ -66,7 +66,11 @@ const HotelRooms = () => {
     if (isDeleteRoomError && deleteRoomError) {
       dispatch(setError(deleteRoomError.data.message));
     }
-  }, [isDeleteRoomLoading, isDeleteRoomSuccess, isDeleteRoomError, deleteRoomError, isFetching, dispatch]);
+
+    if (isError && error) {
+      dispatch(setError(error.data.message));
+    }
+  }, [isDeleteRoomLoading, isDeleteRoomSuccess, isDeleteRoomError, deleteRoomError, isError, error, isFetching, dispatch]);
 
   const uploadImageHandler = () => {
     const formData = new FormData();

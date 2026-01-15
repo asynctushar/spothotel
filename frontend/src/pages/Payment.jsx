@@ -23,7 +23,7 @@ const Payment = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const bookingDetails = JSON.parse(sessionStorage.getItem('bookingDetails'));
-    const [createBooking, { isLoading, isSuccess }] = useCreateBookingMutation();
+    const [createBooking, { isLoading, isSuccess, isError, error }] = useCreateBookingMutation();
 
     useEffect(() => {
         if (isSuccess) {
@@ -31,6 +31,12 @@ const Payment = () => {
             sessionStorage.removeItem('bookingDetails');
         }
     }, [isSuccess, navigate]);
+
+    useEffect(() => {
+        if (isError && error) {
+            dispatch(setError(error.data?.message));
+        }
+    }, [isError, error, dispatch]);
 
     useEffect(() => {
         if (bookingDetails === null) {

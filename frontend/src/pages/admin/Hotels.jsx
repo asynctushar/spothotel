@@ -28,7 +28,7 @@ import HotelsLoader from '@/components/hotel/HotelsLoader';
 
 const Hotels = () => {
   const dispatch = useDispatch();
-  const { isLoading, data } = useHotelsQuery();
+  const { isLoading, data, isError, error } = useHotelsQuery();
   const [uploadHotelImages, { isLoading: isUploadHotelImagesLoading, isError: isUploadHotelImagesError, error: uploadHotelImagesError, isSuccess: isUploadHotelImagesSuccess }] = useUploadHotelImagesMutation();
   const [deleteHotel, { isLoading: isDeleteHotelLoading, isError: isDeleteHotelError, error: deleteHotelError, isSuccess: isDeleteHotelSuccess }] = useDeleteHotelMutation();
 
@@ -63,7 +63,11 @@ const Hotels = () => {
     if (isDeleteHotelError && deleteHotelError) {
       dispatch(setError(deleteHotelError.data.message));
     }
-  }, [isDeleteHotelLoading, isDeleteHotelSuccess, isDeleteHotelError, deleteHotelError, dispatch]);
+
+    if (isError && error) {
+      dispatch(setError(error.data.message));
+    }
+  }, [isDeleteHotelLoading, isDeleteHotelSuccess, isDeleteHotelError, deleteHotelError, isError, error, dispatch]);
 
   const uploadImageHandler = async () => {
     const formData = new FormData();
