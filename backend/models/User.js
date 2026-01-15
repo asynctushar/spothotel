@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        maxlength: 30,
     },
     email: {
         type: String,
@@ -15,6 +16,7 @@ const userSchema = new mongoose.Schema({
         trim: true,
         validate: [validator.isEmail, "Please enter valid email"],
         unique: true,
+        maxlength: 50,
         index: true
     },
     password: {
@@ -24,7 +26,7 @@ const userSchema = new mongoose.Schema({
     },
     bookings: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Orders"
+        ref: "Booking"
     }],
     role: {
         type: String,
@@ -61,6 +63,6 @@ userSchema.methods.generateAuthToken = function () {
     return jwt.sign({ id: this._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE });
 };
 
-const User = mongoose.model("Users", userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

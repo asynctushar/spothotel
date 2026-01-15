@@ -4,7 +4,6 @@ const HotelService = require("../services/hotel.service");
 const CloudService = require("../services/cloud.service");
 const BookingService = require("../services/booking.service");
 const RoomService = require("../services/room.service");
-const Hotel = require('../models/Hotel');
 
 
 // create hotel -- admin
@@ -20,10 +19,6 @@ exports.createHotel = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Distance is required", 400));
     }
 
-    if (!specification || !Array.isArray(specification) || specification.length < 1) {
-        return next(new ErrorHandler("At least one specification is required", 400));
-    }
-
     if (!description) {
         return next(new ErrorHandler("Description is required", 400));
     }
@@ -34,6 +29,12 @@ exports.createHotel = catchAsyncErrors(async (req, res, next) => {
 
     if (typeof featured !== "boolean") {
         return next(new ErrorHandler("Featured must be boolean.", 400));
+    }
+
+    if (!Array.isArray(specification)) {
+        return next(
+            new ErrorHandler("Specification must be an array", 400)
+        );
     }
 
     const hotel = await HotelService.createHotel({
@@ -89,8 +90,10 @@ exports.updateHotel = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Hotel not found", 404));
     }
 
-    if (specification && (!Array.isArray(specification) || specification.length < 1)) {
-        return next(new ErrorHandler("At least one specification is required", 400));
+    if (!Array.isArray(specification)) {
+        return next(
+            new ErrorHandler("Specification must be an array", 400)
+        );
     }
 
     const updatedHotel = await HotelService.updateHotel(id, {
@@ -248,13 +251,22 @@ exports.getAllHotels = catchAsyncErrors(async (req, res, next) => {
     ];
 
     // 5️⃣ Person filter
-    if (req.query.person && personCount > 1) {
+    if (req.query.person) {
+        let allowedTypes = [];
+
+        if (personCount === 1) {
+            allowedTypes = ["Single", "Double", "Family"];
+        } else {
+            allowedTypes = ["Double", "Family"];
+        }
+
         pipeline.push({
             $match: {
-                "roomsData.type": "Double"
-            }
+                "roomsData.type": { $in: allowedTypes },
+            },
         });
     }
+
 
     // 6️⃣ Availability filter
     if (dates.length > 0) {
@@ -322,11 +334,15 @@ exports.createHotelRoom = catchAsyncErrors(async (req, res, next) => {
     if (!type) {
         return next(new ErrorHandler("Room type is required", 400));
     }
-    if (!specification || !Array.isArray(specification) || specification.length < 1) {
-        return next(new ErrorHandler("At least one spedifiction is required", 400));
-    }
+
     if (!pricePerDay) {
         return next(new ErrorHandler("Price per day is required", 400));
+    }
+
+    if (!Array.isArray(specification)) {
+        return next(
+            new ErrorHandler("Specification must be an array", 400)
+        );
     }
 
     const hotel = await HotelService.getHotel({ id: hotelId });
@@ -338,6 +354,7 @@ exports.createHotelRoom = catchAsyncErrors(async (req, res, next) => {
         hotel: hotel.id,
         number
     });
+
     if (isDuplicate) {
         return next(new ErrorHandler("Duplicate room number", 400));
     }

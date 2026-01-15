@@ -3,19 +3,19 @@ const mongoose = require('mongoose');
 const bookingSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Users",
+        ref: "User",
         required: true,
         index: true
     },
     hotel: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Hotels",
+        ref: "Hotel",
         required: true,
         index: true
     },
     room: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Rooms",
+        ref: "Room",
         required: true,
         index: true
     },
@@ -49,6 +49,6 @@ const bookingSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-const Booking = mongoose.model("Bookings", bookingSchema);
+const Booking = mongoose.model("Booking", bookingSchema);
 
 module.exports = Booking;

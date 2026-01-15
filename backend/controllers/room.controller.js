@@ -42,10 +42,16 @@ exports.uploadRoomPictures = catchAsyncErrors(async (req, res, next) => {
 // update room details
 exports.updateRoom = catchAsyncErrors(async (req, res, next) => {
     const id = req.params.id;
-    const { number, name, type, bedCount, specification, pricePerDay } = req.body;
+    const { number, name, type, specification, pricePerDay } = req.body;
 
     if (number) {
         return next(new ErrorHandler("Room number can't be changed", 400));
+    }
+
+    if (!Array.isArray(specification)) {
+        return next(
+            new ErrorHandler("Specification must be an array", 400)
+        );
     }
 
     const room = await RoomService.getRoom({ id });
@@ -53,7 +59,7 @@ exports.updateRoom = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Room not found', 404));
     }
 
-    const updatedRoom = await RoomService.updateRoom(id, { name, type, bedCount, specification, pricePerDay });
+    const updatedRoom = await RoomService.updateRoom(id, { name, type, specification, pricePerDay });
     res.status(200).json({
         success: true,
         room: updatedRoom
