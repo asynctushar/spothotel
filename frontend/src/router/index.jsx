@@ -16,11 +16,13 @@ import privateRoutes from "./private.route";
 import adminRoutes from "./admin.route";
 
 import NotFound from "../pages/NotFound";
+import Error from "@/pages/Error";
 
 const router = createBrowserRouter([
     {
         path: "/",
         Component: App,
+        errorElement: <Error />,
         children: [
             // 🌍 Public pages (everyone)
             {
