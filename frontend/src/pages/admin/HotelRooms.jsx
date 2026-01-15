@@ -139,7 +139,7 @@ const HotelRooms = () => {
             <CardContent className="flex flex-col items-center justify-center py-16 min-h-125">
               <h3 className="text-xl font-semibold text-gray-900 mb-2">No Rooms Yet</h3>
               <p className="text-gray-600 mb-6">There are no rooms for this hotel</p>
-              <Button className="cursor-pointer" onClick={() => navigate(`/admin/hotels/${id}/rooms/new`)}>
+              <Button className="cursor-pointer" onClick={() => navigate(`/admin/hotels/${id}/rooms/create`)}>
                 <Plus className="w-4 h-4 mr-2" />
                 Add Room
               </Button>

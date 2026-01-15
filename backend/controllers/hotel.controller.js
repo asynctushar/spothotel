@@ -9,7 +9,7 @@ const Hotel = require('../models/Hotel');
 
 // create hotel -- admin
 exports.createHotel = catchAsyncErrors(async (req, res, next) => {
-    const { name, location, distance, specification, description } = req.body;
+    const { name, location, distance, specification, description, featured } = req.body;
     if (!name) {
         return next(new ErrorHandler("Name is required", 400));
     }
@@ -19,9 +19,11 @@ exports.createHotel = catchAsyncErrors(async (req, res, next) => {
     if (!distance) {
         return next(new ErrorHandler("Distance is required", 400));
     }
+
     if (!specification || !Array.isArray(specification) || specification.length < 1) {
-        return next(new ErrorHandler("At least one spedifiction is required", 400));
+        return next(new ErrorHandler("At least one specification is required", 400));
     }
+
     if (!description) {
         return next(new ErrorHandler("Description is required", 400));
     }
@@ -30,8 +32,12 @@ exports.createHotel = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Description length must be more than 20 characters", 400));
     }
 
+    if (typeof featured !== "boolean") {
+        return next(new ErrorHandler("Featured must be boolean.", 400));
+    }
+
     const hotel = await HotelService.createHotel({
-        name, location, distance, specification, description
+        name, location, distance, specification, description, featured
     });
 
     res.status(201).json({
@@ -76,11 +82,15 @@ exports.uploadHotelPictures = catchAsyncErrors(async (req, res, next) => {
 // update hotel details -- admin
 exports.updateHotel = catchAsyncErrors(async (req, res, next) => {
     const id = req.params.id;
-    const { name, location, distance, specification, description } = req.body;
+    const { name, location, distance, specification, description, featured } = req.body;
 
     const hotel = await HotelService.getHotel({ id });
     if (!hotel) {
         return next(new ErrorHandler("Hotel not found", 404));
+    }
+
+    if (specification && (!Array.isArray(specification) || specification.length < 1)) {
+        return next(new ErrorHandler("At least one specification is required", 400));
     }
 
     const updatedHotel = await HotelService.updateHotel(id, {
@@ -88,7 +98,8 @@ exports.updateHotel = catchAsyncErrors(async (req, res, next) => {
         location,
         distance,
         description,
-        specification
+        specification,
+        featured
     });
 
     res.status(200).json({
