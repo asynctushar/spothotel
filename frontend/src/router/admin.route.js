@@ -7,6 +7,7 @@ import HotelRooms from "@/pages/admin/HotelRooms";
 import CreateRoom from "@/pages/admin/CreateRoom";
 import BookingDetails from "@/pages/admin/BookingDetails";
 import UpdateHotel from "@/pages/admin/UpdateHotel";
+import UpdateRoom from "@/pages/admin/UpdateRoom";
 
 export default [
     { path: "admin/dashboard", Component: Dashboard },
@@ -18,5 +19,5 @@ export default [
     { path: "admin/hotels/:id/update", Component: UpdateHotel },
     { path: "admin/hotels/:id/rooms", Component: HotelRooms },
     { path: "admin/hotels/:id/rooms/create", Component: CreateRoom },
-    { path: "admin/rooms/:id/update", Component: CreateRoom },
+    { path: "admin/rooms/:id/update", Component: UpdateRoom },
 ];
