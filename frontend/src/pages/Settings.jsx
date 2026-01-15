@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowLeft, User, Mail, Lock, Trash2, Eye, EyeOff } from 'lucide-react';
 import { changePassword, deleteProfile, updateProfile } from '../redux/actions/auth.action';
 import { Button } from '@/components/ui/button';
@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Separator } from '@/components/ui/separator';
 import { validateEmail } from '@/lib/validations';
 
 const Settings = () => {
@@ -256,7 +255,7 @@ const Settings = () => {
                 </div>
 
                 {/* Name Dialog */}
-                <Dialog open={isNameOpen} onOpenChange={handleNameDialogClose}>
+                <Dialog open={isNameOpen} >
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle>Change Your Name</DialogTitle>
@@ -294,7 +293,7 @@ const Settings = () => {
                 </Dialog>
 
                 {/* Email Dialog */}
-                <Dialog open={isEmailOpen} onOpenChange={handleEmailDialogClose}>
+                <Dialog open={isEmailOpen} >
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle>Change Your Email</DialogTitle>
@@ -332,7 +331,7 @@ const Settings = () => {
                 </Dialog>
 
                 {/* Password Dialog */}
-                <Dialog open={isPasswordOpen} onOpenChange={handlePasswordDialogClose}>
+                <Dialog open={isPasswordOpen} >
                     <DialogContent className="max-w-md">
                         <DialogHeader>
                             <DialogTitle>Change Your Password</DialogTitle>
@@ -435,7 +434,7 @@ const Settings = () => {
                 </Dialog>
 
                 {/* Delete Account Dialog */}
-                <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+                <Dialog open={isDeleteOpen}>
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle className="text-red-600">Delete Your Account?</DialogTitle>

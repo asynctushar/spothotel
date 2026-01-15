@@ -1,4 +1,3 @@
-import PlaceHolder from "../../assets/images/placeholder.jpg";
 import { Link } from 'react-router';
 import { Button } from '../ui/button';
 import { MapPin, Navigation, Star } from 'lucide-react';
