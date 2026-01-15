@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router';
-import { Bed, Hash, DollarSign, ArrowLeft, } from 'lucide-react';
+import { Bed, Hash, DollarSign, } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,12 +14,13 @@ import { setError } from '@/redux/slices/app.slice';
 import CreateRoomLoader from '@/components/room/CreateRoomLoader';
 
 const availableSpecifications = [
-    "Free Wi-fi",
-    "Air Condition",
-    "Free Breakfast",
+    "Air Conditioning",
+    "Private Bathroom",
+    "Flat-Screen TV",
+    "Balcony / City View",
 ];
 
-const availableType = ['Single', 'Double'];
+const availableType = ['Single', 'Double', 'Family'];
 
 const CreateRoom = () => {
     const { id } = useParams();
@@ -257,22 +258,24 @@ const CreateRoom = () => {
                         {/* Specifications */}
                         <div className="space-y-2">
                             <Label className="text-sm">Specifications</Label>
-                            <div className="space-y-2 p-3 border rounded-lg bg-muted/30">
-                                {availableSpecifications.map((spec) => (
-                                    <div key={spec} className="flex items-center space-x-2">
-                                        <Checkbox
-                                            id={spec}
-                                            checked={specification.includes(spec)}
-                                            onCheckedChange={() => handleSpecificationToggle(spec)}
-                                        />
-                                        <Label
-                                            htmlFor={spec}
-                                            className="text-sm font-normal cursor-pointer"
-                                        >
-                                            {spec}
-                                        </Label>
-                                    </div>
-                                ))}
+                            <div className="p-3 border rounded-lg bg-muted/30">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    {availableSpecifications.map((spec) => (
+                                        <div key={spec} className="flex items-center space-x-2">
+                                            <Checkbox
+                                                id={spec}
+                                                checked={specification.includes(spec)}
+                                                onCheckedChange={() => handleSpecificationToggle(spec)}
+                                            />
+                                            <Label
+                                                htmlFor={spec}
+                                                className="text-sm font-normal cursor-pointer"
+                                            >
+                                                {spec}
+                                            </Label>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                             {errors.specification && (
                                 <p className="text-xs text-destructive">{errors.specification}</p>
@@ -280,7 +283,7 @@ const CreateRoom = () => {
                         </div>
 
                         {/* Submit Buttons */}
-                        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                        <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2">
                             <Button
                                 type="button"
                                 variant="outline"

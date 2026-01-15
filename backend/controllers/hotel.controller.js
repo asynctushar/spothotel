@@ -119,7 +119,7 @@ exports.deleteHotel = catchAsyncErrors(async (req, res, next) => {
     }
 
     // get all rooms of this hotel BEFORE deleting them
-    const rooms = await RoomService.getRooms({ hotel: req.params.id });
+    const rooms = await RoomService.getRooms(req.params.id);
 
     // delete all room-related data
     if (rooms && rooms.length > 0) {

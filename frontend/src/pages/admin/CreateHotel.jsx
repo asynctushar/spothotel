@@ -12,9 +12,10 @@ import { useDispatch } from 'react-redux';
 import { setError } from '@/redux/slices/app.slice';
 
 const availableSpecifications = [
-  "Car Parking",
-  "Restaurant",
-  "Free Wi-fi"
+  "Free Wi-Fi in Public Areas",
+  "On-site Restaurant",
+  "24-Hour Front Desk",
+  "Free Parking",
 ];
 
 const CreateHotel = () => {
@@ -213,22 +214,24 @@ const CreateHotel = () => {
             {/* Specifications */}
             <div className="space-y-2">
               <Label className="text-sm">Specifications</Label>
-              <div className="space-y-2 p-3 border rounded-lg bg-muted/30">
-                {availableSpecifications.map((spec) => (
-                  <div key={spec} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={spec}
-                      checked={specification.includes(spec)}
-                      onCheckedChange={() => handleSpecificationToggle(spec)}
-                    />
-                    <Label
-                      htmlFor={spec}
-                      className="text-sm font-normal cursor-pointer"
-                    >
-                      {spec}
-                    </Label>
-                  </div>
-                ))}
+              <div className="p-3 border rounded-lg bg-muted/30">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {availableSpecifications.map((spec) => (
+                    <div key={spec} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={spec}
+                        checked={specification.includes(spec)}
+                        onCheckedChange={() => handleSpecificationToggle(spec)}
+                      />
+                      <Label
+                        htmlFor={spec}
+                        className="text-sm font-normal cursor-pointer"
+                      >
+                        {spec}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
               </div>
               {errors.specification && (
                 <p className="text-xs text-destructive">{errors.specification}</p>

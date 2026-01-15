@@ -199,11 +199,11 @@ const Home = () => {
             </div>
 
             {/* Hotels Section */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                 {isLoading || isFetching ? (
                     <>
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4">Finding Hotels</h2>
-                        <h5 className="text-muted-foreground mb-2">Please wait while we search for the best stays...</h5>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-3">Finding Hotels</h2>
+                        <h5 className="text-muted-foreground mb-1">Please wait while we search for the best stays...</h5>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {[...Array(6)].map((_, index) => (
                                 <HotelCardLoader key={index} />
@@ -212,9 +212,9 @@ const Home = () => {
                     </>
                 ) : data && data.hotels.length > 0 ? (
                     <>
-                        <div className="flex justify-between items-center mb-4">
+                        <div className="flex justify-between items-center mb-3">
                             <div>
-                                <h2 className="text-3xl font-bold mb-2">
+                                <h2 className="text-3xl font-bold mb-1">
                                     {Object.keys(queryParams).length > 0
                                         ? `Hotels in ${queryParams.location}`
                                         : 'Discover Your Perfect Stay'}

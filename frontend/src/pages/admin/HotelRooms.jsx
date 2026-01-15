@@ -1,7 +1,7 @@
 import { Fragment, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router';
-import { ArrowLeft, Plus, Upload, Pencil, Trash2 } from 'lucide-react';
+import { Plus, Upload, Pencil, Trash2 } from 'lucide-react';
 import { useHotelQuery } from "@/redux/api/hotel.api";
 import { useDeleteRoomMutation, useUploadRoomImagesMutation } from "@/redux/api/room.api";
 import { setError, setSuccess } from "@/redux/slices/app.slice";
@@ -46,7 +46,7 @@ const HotelRooms = () => {
   const currentRooms = data?.hotel?.rooms?.slice(page * rowsPerPage, (page + 1) * rowsPerPage) || [];
 
   useEffect(() => {
-    if (!isUploadRoomImagesLoading && isUploadRoomImagesSuccess) {
+    if (!isUploadRoomImagesLoading && isUploadRoomImagesSuccess && !isFetching) {
       setOpen(false);
       setImages([]);
       setRoomRef(undefined);
@@ -55,7 +55,7 @@ const HotelRooms = () => {
     if (isUploadRoomImagesError && uploadRoomImagesError) {
       dispatch(setError(uploadRoomImagesError.data.message));
     }
-  }, [isUploadRoomImagesLoading, isUploadRoomImagesSuccess, isUploadRoomImagesError, uploadRoomImagesError, dispatch]);
+  }, [isUploadRoomImagesLoading, isUploadRoomImagesSuccess, isUploadRoomImagesError, uploadRoomImagesError, isFetching, dispatch]);
 
   useEffect(() => {
     if (!isDeleteRoomLoading && isDeleteRoomSuccess && !isFetching) {
@@ -290,7 +290,7 @@ const HotelRooms = () => {
         )}
       </div>
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Upload Room Images</DialogTitle>
@@ -343,7 +343,7 @@ const HotelRooms = () => {
         </DialogContent>
       </Dialog>
 
-      <AlertDialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+      <AlertDialog open={isDeleteOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Room?</AlertDialogTitle>

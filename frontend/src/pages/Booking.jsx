@@ -72,6 +72,9 @@ const Booking = () => {
         } else if (dateRange?.from && !dateRange?.to) {
             // Handle single date selection
             setDates([format(new Date(dateRange.from), 'yyyy-MM-dd')]);
+
+        } else if (!dateRange?.from) {
+            setDates([]);
         }
     }, [dateRange]);
 
@@ -91,6 +94,7 @@ const Booking = () => {
             dispatch(setError("Please select booking dates"));
             return;
         }
+
 
         const notAvailable = data?.room.notAvailable.map((date) => Date.parse(date));
         const isValidDate = dates.every((date) => !notAvailable.includes(Date.parse(date)));
@@ -301,7 +305,7 @@ const Booking = () => {
                             </Button>
 
                             {(!willCheckOut || dates.length === 0) && (
-                                <p className="text-xs text-center text-muted-foreground">
+                                <p className="text-xs text-center text-destructive">
                                     {!willCheckOut && "Please enter a valid phone number. "}
                                     {dates.length === 0 && "Please select booking dates."}
                                 </p>

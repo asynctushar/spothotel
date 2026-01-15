@@ -8,12 +8,19 @@ const HotelCard = ({ hotel }) => {
     return (
         <div className='rounded-lg border bg-card overflow-hidden flex flex-col h-full shadow-sm hover:shadow-md transition-shadow'>
             <div className="relative h-48 overflow-hidden">
-                <img
-                    src={hotel.pictures[0]?.url ?? PlaceHolder}
-                    loading="lazy"
-                    alt={hotel.pictures[0]?.public_id ?? "placeholder"}
-                    className='w-full h-full object-cover'
-                />
+                {hotel.pictures.length < 1 || !hotel.pictures[0].url ? (
+                    <div className='w-full h-full flex items-center justify-center text-muted-foreground'>
+                        No image available
+                    </div>
+                ) : (
+
+                    <img
+                        src={hotel.pictures[0]?.url}
+                        loading="lazy"
+                        alt={hotel.pictures[0]?.public_id}
+                        className='w-full h-full object-cover'
+                    />
+                )}
                 {hotel.featured && (
                     <Badge className='absolute top-2 left-2 bg-primary/90'>
                         <Star className='w-3 h-3 mr-1 fill-current' />

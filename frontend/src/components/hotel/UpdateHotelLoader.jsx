@@ -43,9 +43,12 @@ const UpdateHotelLoader = () => {
                         <div className="space-y-2">
                             <Skeleton className="h-4 w-24" />
                             <div className="space-y-2 p-3 border rounded-lg bg-muted/30">
-                                <Skeleton className="h-5 w-32" />
-                                <Skeleton className="h-5 w-28" />
-                                <Skeleton className="h-5 w-24" />
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    <Skeleton className="h-5 w-32" />
+                                    <Skeleton className="h-5 w-28" />
+                                    <Skeleton className="h-5 w-32" />
+                                    <Skeleton className="h-5 w-28" />
+                                </div>
                             </div>
                         </div>
 

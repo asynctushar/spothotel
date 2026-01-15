@@ -28,7 +28,7 @@ import HotelsLoader from '@/components/hotel/HotelsLoader';
 
 const Hotels = () => {
   const dispatch = useDispatch();
-  const { isLoading, data, isError, error } = useHotelsQuery();
+  const { isLoading, data, isError, error, isFetching } = useHotelsQuery();
   const [uploadHotelImages, { isLoading: isUploadHotelImagesLoading, isError: isUploadHotelImagesError, error: uploadHotelImagesError, isSuccess: isUploadHotelImagesSuccess }] = useUploadHotelImagesMutation();
   const [deleteHotel, { isLoading: isDeleteHotelLoading, isError: isDeleteHotelError, error: deleteHotelError, isSuccess: isDeleteHotelSuccess }] = useDeleteHotelMutation();
 
@@ -43,7 +43,7 @@ const Hotels = () => {
   const currentHotels = data?.hotels?.slice(page * rowsPerPage, (page + 1) * rowsPerPage) || [];
 
   useEffect(() => {
-    if (!isUploadHotelImagesLoading && isUploadHotelImagesSuccess) {
+    if (!isUploadHotelImagesLoading && isUploadHotelImagesSuccess && !isFetching) {
       setOpen(false);
       setImages([]);
       setHotelRef(undefined);
@@ -52,10 +52,10 @@ const Hotels = () => {
     if (isUploadHotelImagesError && uploadHotelImagesError) {
       dispatch(setError(uploadHotelImagesError.data.message));
     }
-  }, [isUploadHotelImagesLoading, isUploadHotelImagesSuccess, isUploadHotelImagesError, uploadHotelImagesError, dispatch]);
+  }, [isUploadHotelImagesLoading, isUploadHotelImagesSuccess, isUploadHotelImagesError, uploadHotelImagesError, isFetching, dispatch]);
 
   useEffect(() => {
-    if (!isDeleteHotelLoading && isDeleteHotelSuccess) {
+    if (!isDeleteHotelLoading && isDeleteHotelSuccess && !isFetching) {
       setIsDeleteOpen(false);
       setHotelRef(undefined);
       dispatch(setSuccess('Hotel deleted successfully'));
@@ -67,7 +67,7 @@ const Hotels = () => {
     if (isError && error) {
       dispatch(setError(error.data.message));
     }
-  }, [isDeleteHotelLoading, isDeleteHotelSuccess, isDeleteHotelError, deleteHotelError, isError, error, dispatch]);
+  }, [isDeleteHotelLoading, isDeleteHotelSuccess, isDeleteHotelError, deleteHotelError, isError, isFetching, error, dispatch]);
 
   const uploadImageHandler = async () => {
     const formData = new FormData();
@@ -267,7 +267,7 @@ const Hotels = () => {
         )}
       </div>
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Upload Hotel Images</DialogTitle>
@@ -320,7 +320,7 @@ const Hotels = () => {
         </DialogContent>
       </Dialog>
 
-      <AlertDialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+      <AlertDialog open={isDeleteOpen} >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Hotel?</AlertDialogTitle>
@@ -330,6 +330,7 @@ const Hotels = () => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel
+              className="cursor-pointer"
               onClick={() => {
                 setIsDeleteOpen(false);
                 setHotelRef(undefined);
