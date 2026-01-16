@@ -1,11 +1,12 @@
 import HotelDetailsLoader from '@/components/hotel/HotelDetailsLoader';
 import RoomCard from '@/components/room/RoomCard';
+import Meta from '@/components/shared/Meta';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useHotelQuery } from '@/redux/api/hotel.api';
 import { setError } from '@/redux/slices/app.slice';
 import { MapPin, Navigation } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router';
 
@@ -22,7 +23,12 @@ const HotelDetails = () => {
     }, [isError, error, dispatch]);
 
     return (
-        <>
+        <Fragment>
+            <Meta
+                title=""
+                description=""
+                keywords=""
+            />
             {isLoading ? (
                 <HotelDetailsLoader />
             ) : data?.hotel ? (
@@ -131,8 +137,8 @@ const HotelDetails = () => {
                     </div>
                 </div>
             )}
-        </>
+        </Fragment>
     );
 };
 
-export default HotelDetails;
+export default HotelDetails;;

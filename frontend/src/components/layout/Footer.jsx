@@ -6,9 +6,11 @@ const Footer = () => {
         <footer className='bg-secondary text-secondary-foreground border-t'>
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12'>
                 <div className='flex flex-col gap-8'>
-                    <div className='flex flex-col gap-2'>
-                        <h4 className='text-2xl font-bold text-primary'>Spothotel</h4>
-                        <h6 className='text-muted-foreground'>Your perfect stay, just a click away</h6>
+                    <div className="flex flex-col gap-2">
+                        <h4 className="text-2xl font-bold text-primary">SpotHotel</h4>
+                        <p className="text-sm text-muted-foreground">
+                            Trusted hotels, seamless booking, unforgettable stays.
+                        </p>
                     </div>
 
                     <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>

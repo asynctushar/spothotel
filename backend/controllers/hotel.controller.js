@@ -295,11 +295,11 @@ exports.getAllHotels = catchAsyncErrors(async (req, res, next) => {
     });
 
     // populate rooms - remove if not populate "rooms"
-    pipeline.push({
-        $addFields: {
-            rooms: "$roomsData"
-        }
-    });
+    // pipeline.push({
+    //     $addFields: {
+    //         rooms: "$roomsData"
+    //     }
+    // });
 
     // remove extra fields
     pipeline.push({
@@ -308,8 +308,6 @@ exports.getAllHotels = catchAsyncErrors(async (req, res, next) => {
             roomIds: 0
         }
     });
-
-
 
     const hotels = await HotelService.getHotels({}, pipeline);
 

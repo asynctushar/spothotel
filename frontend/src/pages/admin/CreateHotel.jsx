@@ -10,6 +10,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCreateHotelMutation } from '@/redux/api/hotel.api';
 import { useDispatch } from 'react-redux';
 import { setError } from '@/redux/slices/app.slice';
+import { Fragment } from 'react';
+import Meta from '@/components/shared/Meta';
 
 const availableSpecifications = [
   "Free Wi-Fi in Public Areas",
@@ -105,186 +107,193 @@ const CreateHotel = () => {
   };
 
   return (
-    <div className="mx-auto px-4 sm:px-6 lg:px-8 py-6 max-w-7xl">
-      <div className="mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Create Hotel</h1>
-        <p className="text-muted-foreground mt-1 text-sm sm:text-base">Add a new hotel to the system</p>
-      </div>
+    <Fragment>
+      <Meta
+        title=""
+        description=""
+        keywords=""
+      />
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 py-6 max-w-7xl">
+        <div className="mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Create Hotel</h1>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">Add a new hotel to the system</p>
+        </div>
 
-      <Card className="shadow-lg border-0">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-            <Hotel className="w-5 h-5" />
-            Hotel Information
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {/* Hotel Name */}
-            <div className="space-y-1.5">
-              <Label htmlFor="name" className="text-sm">Hotel Name</Label>
-              <div className="relative">
-                <Hotel className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Grand Plaza Hotel"
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                    setErrors({ ...errors, name: '' });
-                  }}
-                  className="pl-9 h-9"
-                />
-              </div>
-              {errors.name && (
-                <p className="text-xs text-destructive">{errors.name}</p>
-              )}
-            </div>
-
-            {/* Location & Distance - Side by side on larger screens */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Location */}
+        <Card className="shadow-lg border-0">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+              <Hotel className="w-5 h-5" />
+              Hotel Information
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {/* Hotel Name */}
               <div className="space-y-1.5">
-                <Label htmlFor="location" className="text-sm">Location</Label>
+                <Label htmlFor="name" className="text-sm">Hotel Name</Label>
                 <div className="relative">
-                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Hotel className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
-                    id="location"
+                    id="name"
                     type="text"
-                    placeholder="Dhaka, Bangladesh"
-                    value={location}
+                    placeholder="Grand Plaza Hotel"
+                    value={name}
                     onChange={(e) => {
-                      setLocation(e.target.value);
-                      setErrors({ ...errors, location: '' });
+                      setName(e.target.value);
+                      setErrors({ ...errors, name: '' });
                     }}
                     className="pl-9 h-9"
                   />
                 </div>
-                {errors.location && (
-                  <p className="text-xs text-destructive">{errors.location}</p>
+                {errors.name && (
+                  <p className="text-xs text-destructive">{errors.name}</p>
                 )}
               </div>
 
-              {/* Distance */}
+              {/* Location & Distance - Side by side on larger screens */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Location */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="location" className="text-sm">Location</Label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      id="location"
+                      type="text"
+                      placeholder="Dhaka, Bangladesh"
+                      value={location}
+                      onChange={(e) => {
+                        setLocation(e.target.value);
+                        setErrors({ ...errors, location: '' });
+                      }}
+                      className="pl-9 h-9"
+                    />
+                  </div>
+                  {errors.location && (
+                    <p className="text-xs text-destructive">{errors.location}</p>
+                  )}
+                </div>
+
+                {/* Distance */}
+                <div className="space-y-1.5">
+                  <Label htmlFor="distance" className="text-sm">Distance</Label>
+                  <div className="relative">
+                    <Navigation className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      id="distance"
+                      type="text"
+                      placeholder="e.g. 2 km from downtown or 15 min walk"
+                      value={distance}
+                      onChange={(e) => {
+                        setDistance(e.target.value);
+                        setErrors({ ...errors, distance: '' });
+                      }}
+                      className="pl-9 h-9"
+                    />
+                  </div>
+                  {errors.distance && (
+                    <p className="text-xs text-destructive">{errors.distance}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Description */}
               <div className="space-y-1.5">
-                <Label htmlFor="distance" className="text-sm">Distance</Label>
+                <Label htmlFor="description" className="text-sm">Description</Label>
                 <div className="relative">
-                  <Navigation className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="distance"
-                    type="text"
-                    placeholder="e.g. 2 km from downtown or 15 min walk"
-                    value={distance}
+                  <FileText className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
+                  <Textarea
+                    id="description"
+                    placeholder="Describe the hotel, its amenities, and what makes it special..."
+                    value={description}
                     onChange={(e) => {
-                      setDistance(e.target.value);
-                      setErrors({ ...errors, distance: '' });
+                      setDescription(e.target.value);
+                      setErrors({ ...errors, description: '' });
                     }}
-                    className="pl-9 h-9"
+                    className="pl-9 min-h-24 resize-none text-sm"
+                    rows={4}
                   />
                 </div>
-                {errors.distance && (
-                  <p className="text-xs text-destructive">{errors.distance}</p>
+                {errors.description && (
+                  <p className="text-xs text-destructive">{errors.description}</p>
                 )}
               </div>
-            </div>
 
-            {/* Description */}
-            <div className="space-y-1.5">
-              <Label htmlFor="description" className="text-sm">Description</Label>
-              <div className="relative">
-                <FileText className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-                <Textarea
-                  id="description"
-                  placeholder="Describe the hotel, its amenities, and what makes it special..."
-                  value={description}
-                  onChange={(e) => {
-                    setDescription(e.target.value);
-                    setErrors({ ...errors, description: '' });
-                  }}
-                  className="pl-9 min-h-24 resize-none text-sm"
-                  rows={4}
-                />
+              {/* Specifications */}
+              <div className="space-y-2">
+                <Label className="text-sm">Specifications</Label>
+                <div className="p-3 border rounded-lg bg-muted/30">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {availableSpecifications.map((spec) => (
+                      <div key={spec} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={spec}
+                          checked={specification.includes(spec)}
+                          onCheckedChange={() => handleSpecificationToggle(spec)}
+                        />
+                        <Label
+                          htmlFor={spec}
+                          className="text-sm font-normal cursor-pointer"
+                        >
+                          {spec}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {errors.specification && (
+                  <p className="text-xs text-destructive">{errors.specification}</p>
+                )}
               </div>
-              {errors.description && (
-                <p className="text-xs text-destructive">{errors.description}</p>
-              )}
-            </div>
 
-            {/* Specifications */}
-            <div className="space-y-2">
-              <Label className="text-sm">Specifications</Label>
-              <div className="p-3 border rounded-lg bg-muted/30">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {availableSpecifications.map((spec) => (
-                    <div key={spec} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={spec}
-                        checked={specification.includes(spec)}
-                        onCheckedChange={() => handleSpecificationToggle(spec)}
-                      />
-                      <Label
-                        htmlFor={spec}
-                        className="text-sm font-normal cursor-pointer"
-                      >
-                        {spec}
-                      </Label>
-                    </div>
-                  ))}
+              {/* Featured */}
+              <div className="flex items-start space-x-2 p-3 border rounded-lg bg-muted/30">
+                <Checkbox
+                  id="featured"
+                  checked={featured}
+                  onCheckedChange={setFeatured}
+                  className="mt-0.5"
+                />
+                <div className="space-y-0.5">
+                  <Label
+                    htmlFor="featured"
+                    className="text-sm font-medium cursor-pointer flex items-center gap-2"
+                  >
+                    <Check className="w-4 h-4" />
+                    Mark as Featured Hotel
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    Featured hotels will be highlighted on the homepage
+                  </p>
                 </div>
               </div>
-              {errors.specification && (
-                <p className="text-xs text-destructive">{errors.specification}</p>
-              )}
-            </div>
 
-            {/* Featured */}
-            <div className="flex items-start space-x-2 p-3 border rounded-lg bg-muted/30">
-              <Checkbox
-                id="featured"
-                checked={featured}
-                onCheckedChange={setFeatured}
-                className="mt-0.5"
-              />
-              <div className="space-y-0.5">
-                <Label
-                  htmlFor="featured"
-                  className="text-sm font-medium cursor-pointer flex items-center gap-2"
+              {/* Submit Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="flex-1 cursor-pointer h-9"
+                  onClick={() => navigate(-1)}
+                  disabled={isLoading}
                 >
-                  <Check className="w-4 h-4" />
-                  Mark as Featured Hotel
-                </Label>
-                <p className="text-xs text-muted-foreground">
-                  Featured hotels will be highlighted on the homepage
-                </p>
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  className="flex-1 cursor-pointer h-9"
+                  disabled={isLoading}
+                  onClick={handleSubmit}
+                >
+                  {isLoading ? "Creating..." : "Create Hotel"}
+                </Button>
               </div>
             </div>
-
-            {/* Submit Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <Button
-                type="button"
-                variant="outline"
-                className="flex-1 cursor-pointer h-9"
-                onClick={() => navigate(-1)}
-                disabled={isLoading}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="button"
-                className="flex-1 cursor-pointer h-9"
-                disabled={isLoading}
-                onClick={handleSubmit}
-              >
-                {isLoading ? "Creating..." : "Create Hotel"}
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+          </CardContent>
+        </Card>
+      </div>
+    </Fragment>
   );
 };
 
-export default CreateHotel;
+export default CreateHotel;;

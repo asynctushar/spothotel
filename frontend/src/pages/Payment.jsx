@@ -15,6 +15,7 @@ import { useCreateBookingMutation } from '../redux/api/booking.api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import Meta from '@/components/shared/Meta';
 
 const Payment = () => {
     const payBtn = useRef();
@@ -134,6 +135,11 @@ const Payment = () => {
 
     return (
         <Fragment>
+            <Meta
+                title=""
+                description=""
+                keywords=""
+            />
             <div className="max-w-2xl min-h-[calc(100vh-72px)] mx-auto px-4 py-12">
                 <div className="text-center mb-8">
                     <h1 className="text-3xl font-bold mb-2">Complete Payment</h1>

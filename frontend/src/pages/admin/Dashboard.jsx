@@ -12,6 +12,7 @@ import { setError } from "@/redux/slices/app.slice";
 import StatCardLoader from "@/components/dashboard/StatCardLoader";
 import ChartCardLoader from "@/components/dashboard/ChartCardLoader";
 import RecentActivityLoader from "@/components/dashboard/RecentActivityLoader";
+import Meta from "@/components/shared/Meta";
 
 const Dashboard = () => {
     const dispatch = useDispatch();
@@ -105,6 +106,11 @@ const Dashboard = () => {
 
     return (
         <Fragment>
+            <Meta
+                title=""
+                description=""
+                keywords=""
+            />
             <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>

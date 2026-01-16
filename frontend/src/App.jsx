@@ -2,9 +2,9 @@ import { Suspense, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet } from "react-router";
 import { loadUser } from "./redux/actions/auth.action";
-import ScrollToTop from "./components/layout/ScrollToTop";
-import GlobalToast from "./components/layout/GlobalToast";
-import ErrorBoundary from "./components/layout/ErrorBoundary";
+import ScrollToTop from "./components/shared/ScrollToTop";
+import GlobalToast from "./components/shared/GlobalToast";
+import ErrorBoundary from "./components/shared/ErrorBoundary";
 import { Toaster } from "@/components/ui/sonner";
 import Loader from "./components/ui/Loader";
 
