@@ -73,7 +73,7 @@ const Home = () => {
                 description="SpotHotel helps you discover, compare, and book comfortable hotels and rooms with ease. Find the perfect stay for your next trip in just a few clicks."
                 keywords="hotel booking, find hotels, book hotels online, travel accommodation, SpotHotel"
             />
-            <div className="min-h-screen bg-muted/30">
+            <div className="min-h-[calc(100vh-64px)] bg-muted/30">
                 {/* Search Section */}
                 <div className="bg-primary p-10 px-4 sm:px-6 lg:px-8">
                     <div className="max-w-5xl mx-auto">

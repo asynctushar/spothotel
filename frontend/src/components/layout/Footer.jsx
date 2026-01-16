@@ -17,16 +17,16 @@ const Footer = () => {
                         <div className='flex flex-col gap-3'>
                             <h5 className='font-semibold text-lg'>Company</h5>
                             <div className='flex flex-col gap-2'>
-                                <Link to="#" className='text-muted-foreground hover:text-primary transition-colors'>About Us</Link>
-                                <Link to="#" className='text-muted-foreground hover:text-primary transition-colors'>Contact Us</Link>
+                                <Link to="/about" className='text-muted-foreground hover:text-primary transition-colors'>About Us</Link>
+                                <Link to="/contact" className='text-muted-foreground hover:text-primary transition-colors'>Contact Us</Link>
                             </div>
                         </div>
 
                         <div className='flex flex-col gap-3'>
                             <h5 className='font-semibold text-lg'>Legal</h5>
                             <div className='flex flex-col gap-2'>
-                                <Link to="#" className='text-muted-foreground hover:text-primary transition-colors'>Privacy Policy</Link>
-                                <Link to="#" className='text-muted-foreground hover:text-primary transition-colors'>Terms & Conditions</Link>
+                                <Link to="/privacy-policy" className='text-muted-foreground hover:text-primary transition-colors'>Privacy Policy</Link>
+                                <Link to="/terms-conditions" className='text-muted-foreground hover:text-primary transition-colors'>Terms & Conditions</Link>
                             </div>
                         </div>
 

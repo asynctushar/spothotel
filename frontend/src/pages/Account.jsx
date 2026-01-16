@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { User, Settings, LayoutDashboard, Calendar, LogOut, ChevronRight, Mail, Shield } from 'lucide-react';
 import { logout } from '../redux/actions/auth.action';
 import { Button } from '@/components/ui/button';
@@ -17,6 +17,7 @@ const Account = () => {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authState);
     const { data, isLoading, isError, error } = useOwnBookingsQuery();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (isError && error) {
@@ -188,7 +189,7 @@ const Account = () => {
                                     <p className="text-xs text-muted-foreground">
                                         Have questions or need assistance? Our support team is here to help.
                                     </p>
-                                    <Button variant="outline" size="sm" className="w-full mt-2 cursor-pointer">
+                                    <Button variant="outline" size="sm" className="w-full mt-2 cursor-pointer" onClick={() => navigate(`/contact`)}>
                                         Contact Support
                                     </Button>
                                 </div>
@@ -197,7 +198,7 @@ const Account = () => {
                     </div>
                 </div>
             </div>
-        </Fragment>
+        </Fragment >
     );
 };
 
