@@ -54,14 +54,22 @@ const CreateRoom = () => {
     }, [isError, error, isHotelError, hotelError, dispatch]);
 
     const validateForm = () => {
-        const newErrors = { name: '', number: '', price: '', type: '' };
+        const newErrors = { name: '', number: '', price: '', type: '', specification: '' };
         let isValid = true;
 
+        // Name validation
         if (!name.trim()) {
             newErrors.name = 'Room name is required';
             isValid = false;
+        } else if (name.trim().length < 4) {
+            newErrors.name = 'Room name must be at least 4 characters';
+            isValid = false;
+        } else if (name.trim().length > 40) {
+            newErrors.name = 'Room name cannot exceed 40 characters';
+            isValid = false;
         }
 
+        // Number validation
         if (!number.trim()) {
             newErrors.number = 'Room number is required';
             isValid = false;
@@ -70,6 +78,7 @@ const CreateRoom = () => {
             isValid = false;
         }
 
+        // Price validation
         if (!price.trim()) {
             newErrors.price = 'Price is required';
             isValid = false;
@@ -78,13 +87,18 @@ const CreateRoom = () => {
             isValid = false;
         }
 
+        // Type validation
         if (!type) {
             newErrors.type = 'Room type is required';
             isValid = false;
         }
 
+        // Specification validation
         if (specification.length < 1) {
-            newErrors.specification = 'At least one specification required';
+            newErrors.specification = 'At least one specification is required';
+            isValid = false;
+        } else if (specification.length > 4) {
+            newErrors.specification = 'Maximum 4 specifications are allowed';
             isValid = false;
         }
 
@@ -119,9 +133,15 @@ const CreateRoom = () => {
     return (
         <Fragment>
             <Meta
-                title=""
-                description=""
-                keywords=""
+                title={
+                    data?.hotel
+                        ? `Add Room | ${data?.hotel?.name}`
+                        : isLoading
+                            ? "Create Room"
+                            : "Hotel Not Found"
+                }
+                description="Add a new room to a hotel including pricing, capacity, and room type on SpotHotel."
+                keywords="create room, add room, hotel rooms, SpotHotel admin"
             />
             {isLoading ? <CreateRoomLoader /> : !data?.hotel ? (
                 <div className="mx-auto min-h-[calc(100vh-72px)] px-4 sm:px-6 lg:px-8 py-6 max-w-7xl flex items-center justify-center">
@@ -215,7 +235,7 @@ const CreateRoom = () => {
                                             <Input
                                                 id="price"
                                                 type="number"
-                                                placeholder="5000"
+                                                placeholder="199"
                                                 value={price}
                                                 onChange={(e) => {
                                                     setPrice(e.target.value);

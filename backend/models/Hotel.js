@@ -3,21 +3,24 @@ const mongoose = require('mongoose');
 const hotelSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: [true, "Hotel name is required"],
         trim: true,
-        maxlength: 50,
+        maxlength: [40, "Hotel name cannot exceed 40 characters"],
+        minlength: [4, "Hotel name must be at least 4 characters"],
     },
+
     location: {
         type: String,
-        required: true,
+        required: [true, "Hotel location is required"],
         trim: true,
-        maxlength: 30,
+        maxlength: [30, "Location cannot exceed 30 characters"],
     },
+
     distance: {
         type: String,
-        require: true,
+        required: [true, "Distance from destination is required"],
         trim: true,
-        maxlength: 50,
+        maxlength: [30, "Distance cannot exceed 30 characters"],
     },
     specification: {
         type: [
@@ -54,9 +57,10 @@ const hotelSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: true,
+        required: [true, "Hotel description is required"],
         trim: true,
-        maxlength: 200
+        maxlength: [250, "Description cannot exceed 250 characters"],
+        minlength: [20, "Description must be at least 20 characters"],
     },
     pictures: [{
         public_id: String,

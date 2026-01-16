@@ -37,9 +37,9 @@ class ErrorBoundary extends Component {
             return (
                 <Fragment>
                     <Meta
-                        title=""
-                        description=""
-                        keywords=""
+                        title="Something Went Wrong"
+                        description="An unexpected error occurred while loading this page. Please refresh or try again later."
+                        keywords="application error, unexpected error, SpotHotel error"
                     />
                     <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-slate-50 flex items-center justify-center p-4">
                         <Card className="max-w-md w-full shadow-lg border-0">

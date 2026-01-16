@@ -69,9 +69,9 @@ const Account = () => {
     return (
         <Fragment>
             <Meta
-                title=""
-                description=""
-                keywords=""
+                title="My Account"
+                description="Manage your SpotHotel account, view personal information, and access your bookings all in one place."
+                keywords="user account, profile, SpotHotel account"
             />
             <div className="container min-h-[calc(100vh-72px)] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

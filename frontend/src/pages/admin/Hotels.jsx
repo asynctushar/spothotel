@@ -95,9 +95,9 @@ const Hotels = () => {
   return (
     <Fragment>
       <Meta
-        title=""
-        description=""
-        keywords=""
+        title="Manage Hotels"
+        description="View, create, update, and manage hotels listed on the SpotHotel platform."
+        keywords="hotel management, admin hotels, SpotHotel admin"
       />
       {isLoading ? <HotelsLoader /> : (
         <>

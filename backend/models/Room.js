@@ -3,9 +3,10 @@ const mongoose = require('mongoose');
 const roomSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: [true, "Room name is required"],
         trim: true,
-        maxlength: 30,
+        maxlength: [40, "Room name cannot exceed 40 characters"],
+        minlength: [4, "Room name must be at least 4 characters"],
     },
     number: {
         type: Number,

@@ -107,9 +107,9 @@ const Dashboard = () => {
     return (
         <Fragment>
             <Meta
-                title=""
-                description=""
-                keywords=""
+                title="Admin Dashboard"
+                description="Overview of platform activity including bookings, users, hotels, and system performance on SpotHotel."
+                keywords="admin dashboard, hotel management, SpotHotel admin"
             />
             <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="mb-8">

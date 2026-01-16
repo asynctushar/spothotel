@@ -41,9 +41,9 @@ const Bookings = () => {
     return (
         <Fragment>
             <Meta
-                title=""
-                description=""
-                keywords=""
+                title="My Bookings"
+                description="View and manage all your hotel bookings in one place. Track stays, check details, and plan your trips with SpotHotel."
+                keywords="my bookings, hotel reservations, SpotHotel account"
             />
             {isLoading ? <BookingsLoader /> : (
                 <div className="min-h-[calc(100vh-72px)] bg-background pb-16">

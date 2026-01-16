@@ -69,9 +69,9 @@ const Home = () => {
     return (
         <Fragment>
             <Meta
-                title=""
-                description=""
-                keywords=""
+                title="Discover & Book Comfortable Hotels Worldwide"
+                description="SpotHotel helps you discover, compare, and book comfortable hotels and rooms with ease. Find the perfect stay for your next trip in just a few clicks."
+                keywords="hotel booking, find hotels, book hotels online, travel accommodation, SpotHotel"
             />
             <div className="min-h-screen bg-muted/30">
                 {/* Search Section */}

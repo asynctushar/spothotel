@@ -66,9 +66,9 @@ const Users = () => {
   return (
     <Fragment>
       <Meta
-        title=""
-        description=""
-        keywords=""
+        title="Manage Users"
+        description="View, manage, and monitor all registered users on the SpotHotel platform."
+        keywords="user management, admin users, SpotHotel admin"
       />
       {isLoading ? <UsersLoader /> : (
         <>

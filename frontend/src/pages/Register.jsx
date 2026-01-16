@@ -25,33 +25,49 @@ const Register = () => {
   const redirectUrl = location.state?.redirect || '/';
 
   const validateForm = () => {
-    const newErrors = { name: '', email: '', password: '', confirmPassword: '' };
+    const newErrors = {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    };
+
     let isValid = true;
 
+    // Name
     if (!name.trim()) {
       newErrors.name = 'Name is required';
       isValid = false;
     } else if (name.trim().length < 2) {
       newErrors.name = 'Name must be at least 2 characters';
       isValid = false;
+    } else if (name.trim().length > 40) {
+      newErrors.name = 'Name cannot exceed 40 characters';
+      isValid = false;
     }
 
+    // Email
     if (!email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'Email address is required';
       isValid = false;
     } else if (!validateEmail(email)) {
-      newErrors.email = 'Please enter a valid email';
+      newErrors.email = 'Please enter a valid email address';
+      isValid = false;
+    } else if (email.length > 50) {
+      newErrors.email = 'Email address cannot exceed 50 characters';
       isValid = false;
     }
 
+    // Password
     if (!password.trim()) {
       newErrors.password = 'Password is required';
       isValid = false;
-    } else if (password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    } else if (password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters long';
       isValid = false;
     }
 
+    // Confirm Password (frontend-only UX rule)
     if (!confirmPassword.trim()) {
       newErrors.confirmPassword = 'Please confirm your password';
       isValid = false;
@@ -63,6 +79,7 @@ const Register = () => {
     setErrors(newErrors);
     return isValid;
   };
+
 
   const registerHandler = async (e) => {
     e.preventDefault();
@@ -82,9 +99,9 @@ const Register = () => {
   return (
     <Fragment>
       <Meta
-        title=""
-        description=""
-        keywords=""
+        title="Create Account"
+        description="Create a SpotHotel account to book hotels faster, manage your stays, and access exclusive offers."
+        keywords="register, sign up, create account, SpotHotel registration"
       />
       <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-muted/30">
         <div className="w-full max-w-md">

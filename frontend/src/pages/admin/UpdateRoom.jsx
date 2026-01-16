@@ -11,6 +11,7 @@ import { useRoomQuery, useUpdateRoomMutation } from '@/redux/api/room.api';
 import { useDispatch } from 'react-redux';
 import { setError } from '@/redux/slices/app.slice';
 import UpdateRoomLoader from '@/components/room/UpdateRoomLoader';
+import Meta from '@/components/shared/Meta';
 
 const availableSpecifications = [
     "Air Conditioning",
@@ -63,26 +64,39 @@ const UpdateRoom = () => {
     }, [isError, error, isRoomError, roomError, dispatch]);
 
     const validateForm = () => {
-        const newErrors = { name: '', price: '', type: '' };
+        const newErrors = { name: '', price: '', type: '', specification: '' };
         let isValid = true;
 
+        // Name validation
         if (!name.trim()) {
             newErrors.name = 'Room name is required';
             isValid = false;
+        } else if (name.trim().length < 4) {
+            newErrors.name = 'Room name must be at least 4 characters';
+            isValid = false;
+        } else if (name.trim().length > 40) {
+            newErrors.name = 'Room name cannot exceed 40 characters';
+            isValid = false;
         }
 
+        // Price validation
         if (!price || isNaN(price) || Number(price) <= 0) {
             newErrors.price = 'Must be a valid positive amount';
             isValid = false;
         }
 
+        // Type validation
         if (!type) {
             newErrors.type = 'Room type is required';
             isValid = false;
         }
 
+        // Specification validation
         if (specification.length < 1) {
-            newErrors.specification = 'At least one specification required';
+            newErrors.specification = 'At least one specification is required';
+            isValid = false;
+        } else if (specification.length > 4) {
+            newErrors.specification = 'Maximum 4 specifications are allowed';
             isValid = false;
         }
 
@@ -117,10 +131,17 @@ const UpdateRoom = () => {
     return (
         <Fragment>
             <Meta
-                title=""
-                description=""
-                keywords=""
+                title={
+                    data?.room
+                        ? `Update Room | ${data?.room?.name || "Room"}`
+                        : isLoading
+                            ? "Update Room"
+                            : "Room Not Found"
+                }
+                description="Update room details such as pricing, availability, and room type on SpotHotel."
+                keywords="update room, edit room, hotel room management, SpotHotel admin"
             />
+
             {isLoading ? <UpdateRoomLoader /> : !data?.room ? (
                 <div className="mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-center items-center min-h-[70vh]">
                     <div className="text-center py-16 ">
@@ -274,7 +295,7 @@ const UpdateRoom = () => {
                                 </div>
 
                                 {/* Submit Buttons */}
-                                <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                                <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2">
                                     <Button
                                         type="button"
                                         variant="outline"

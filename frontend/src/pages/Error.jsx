@@ -12,9 +12,9 @@ const Error = () => {
     return (
         <Fragment>
             <Meta
-                title=""
-                description=""
-                keywords=""
+                title="Something Went Wrong"
+                description="An unexpected error occurred while loading this page. Please try again or return to the homepage."
+                keywords="error, application error, SpotHotel error"
             />
             <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-slate-50 flex items-center justify-center p-4">
                 <Card className="max-w-md w-full shadow-lg border-0">

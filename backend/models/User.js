@@ -6,23 +6,26 @@ const jwt = require('jsonwebtoken');
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: [true, "Name is required"],
         trim: true,
-        maxlength: 30,
+        maxlength: [40, "Name cannot exceed 40 characters"],
+        minlength: [2, "Name must be at least 2 characters"],
     },
+
     email: {
         type: String,
-        required: true,
+        required: [true, "Email address is required"],
         trim: true,
-        validate: [validator.isEmail, "Please enter valid email"],
         unique: true,
-        maxlength: 50,
-        index: true
+        index: true,
+        validate: [validator.isEmail, "Please enter a valid email address"],
+        maxlength: [50, "Email address cannot exceed 50 characters"],
     },
+
     password: {
         type: String,
-        required: true,
-        minlength: 8,
+        required: [true, "Password is required"],
+        minlength: [8, "Password must be at least 8 characters long"],
     },
     bookings: [{
         type: mongoose.Schema.Types.ObjectId,

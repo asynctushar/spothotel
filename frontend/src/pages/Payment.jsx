@@ -136,9 +136,9 @@ const Payment = () => {
     return (
         <Fragment>
             <Meta
-                title=""
-                description=""
-                keywords=""
+                title="Secure Payment"
+                description="Complete your hotel booking with a fast, secure, and seamless payment process on SpotHotel."
+                keywords="hotel payment, secure booking, SpotHotel payment"
             />
             <div className="max-w-2xl min-h-[calc(100vh-72px)] mx-auto px-4 py-12">
                 <div className="text-center mb-8">

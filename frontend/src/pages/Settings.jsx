@@ -44,6 +44,11 @@ const Settings = () => {
             setErrors({ ...errors, name: 'Name must be at least 2 characters' });
             return false;
         }
+
+        if (name.trim().length > 40) {
+            setErrors({ ...errors, name: 'Name cannot exceed 40 characters' });
+            return false;
+        }
         setErrors({ ...errors, name: '' });
         return true;
     };
@@ -57,6 +62,12 @@ const Settings = () => {
             setErrors({ ...errors, email: 'Please enter a valid email' });
             return false;
         }
+
+        if (email.length > 50) {
+            setErrors({ ...errors, email: 'Email address cannot exceed 50 characters' });
+            return false;
+        }
+
         setErrors({ ...errors, email: '' });
         return true;
     };
@@ -68,16 +79,16 @@ const Settings = () => {
         if (!oldPassword.trim()) {
             newErrors.oldPassword = 'Current password is required';
             isValid = false;
-        } else if (oldPassword.length < 6) {
-            newErrors.oldPassword = 'Password must be at least 6 characters';
+        } else if (oldPassword.length < 8) {
+            newErrors.oldPassword = 'Password must be at least 8 characters';
             isValid = false;
         }
 
         if (!newPassword.trim()) {
             newErrors.newPassword = 'New password is required';
             isValid = false;
-        } else if (newPassword.length < 6) {
-            newErrors.newPassword = 'Password must be at least 6 characters';
+        } else if (newPassword.length < 8) {
+            newErrors.newPassword = 'Password must be at least 8 characters';
             isValid = false;
         }
 
@@ -156,9 +167,9 @@ const Settings = () => {
     return (
         <Fragment>
             <Meta
-                title=""
-                description=""
-                keywords=""
+                title="Account Settings"
+                description="Update your personal details, security preferences, and account settings on SpotHotel."
+                keywords="account settings, profile settings, SpotHotel"
             />
             <div className="min-h-screen bg-background pb-16">
                 <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto py-4">

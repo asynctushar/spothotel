@@ -64,34 +64,57 @@ const UpdateHotel = () => {
     }, [isError, error, isHotelError, hotelError, dispatch]);
 
     const validateForm = () => {
-        const newErrors = { name: '', location: '', distance: '', description: '' };
+        const newErrors = { name: '', location: '', distance: '', description: '', specification: '' };
         let isValid = true;
 
+        // Name validation
         if (!name.trim()) {
             newErrors.name = 'Hotel name is required';
             isValid = false;
+        } else if (name.trim().length < 4) {
+            newErrors.name = 'Hotel name must be at least 4 characters';
+            isValid = false;
+        } else if (name.trim().length > 40) {
+            newErrors.name = 'Hotel name cannot exceed 40 characters';
+            isValid = false;
         }
 
+        // Location validation
         if (!location.trim()) {
             newErrors.location = 'Location is required';
             isValid = false;
+        } else if (location.trim().length > 30) {
+            newErrors.location = 'Location cannot exceed 30 characters';
+            isValid = false;
         }
 
+        // Distance validation
         if (!distance.trim()) {
             newErrors.distance = 'Distance is required';
             isValid = false;
+        } else if (distance.trim().length > 30) {
+            newErrors.distance = 'Distance cannot exceed 30 characters';
+            isValid = false;
         }
 
+        // Description validation
         if (!description.trim()) {
             newErrors.description = 'Description is required';
             isValid = false;
+        } else if (description.trim().length > 250) {
+            newErrors.description = 'Description cannot exceed 250 characters';
+            isValid = false;
         } else if (description.trim().length < 20) {
-            newErrors.description = 'Description must be at least 20 characters';
+            newErrors.name = 'Description must be at least 20 characters';
             isValid = false;
         }
 
+        // Specification validation
         if (specification.length < 1) {
-            newErrors.specification = 'At least one specification required';
+            newErrors.specification = 'At least one specification is required';
+            isValid = false;
+        } else if (specification.length > 4) {
+            newErrors.specification = 'Maximum 4 specifications are allowed';
             isValid = false;
         }
 
@@ -127,9 +150,15 @@ const UpdateHotel = () => {
     return (
         <Fragment>
             <Meta
-                title=""
-                description=""
-                keywords=""
+                title={
+                    data?.hotel
+                        ? `Update ${data?.hotel?.name}`
+                        : isLoading
+                            ? "Update Hotel"
+                            : "Hotel Not Found"
+                }
+                description="Update hotel information, amenities, and availability on the SpotHotel platform."
+                keywords="update hotel, edit hotel, hotel management, SpotHotel admin"
             />
             {isLoading ? <UpdateHotelLoader /> : !data?.hotel ? (
                 <div className="min-h-[calc(100vh-72px)] bg-background flex items-center justify-center px-4">

@@ -112,10 +112,21 @@ const Booking = () => {
     return (
         <Fragment>
             <Meta
-                title=""
-                description=""
-                keywords=""
+                title={
+                    data?.room
+                        ? `Book ${data?.room?.name}`
+                        : isLoading
+                            ? "Booking Room"
+                            : "Room Not Found"
+                }
+                description={
+                    data?.room
+                        ? `Book ${data?.room?.name} at ${data?.room?.hotel?.name}. Choose your dates and confirm your stay easily with SpotHotel.`
+                        : "Book hotel rooms easily and securely with SpotHotel."
+                }
+                keywords="book hotel room, room booking, SpotHotel booking"
             />
+
             {isLoading ? <BookingLoader /> : !data?.room ? (
                 <div className="flex flex-col items-center justify-center min-h-[53vh] px-4">
                     <div className="text-center max-w-md">

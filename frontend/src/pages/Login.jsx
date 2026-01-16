@@ -27,25 +27,31 @@ const Login = () => {
     const newErrors = { email: '', password: '' };
     let isValid = true;
 
+    // Email
     if (!email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'Email address is required';
       isValid = false;
     } else if (!validateEmail(email)) {
-      newErrors.email = 'Please enter a valid email';
+      newErrors.email = 'Please enter a valid email address';
+      isValid = false;
+    } else if (email.length > 50) {
+      newErrors.email = 'Email address cannot exceed 50 characters';
       isValid = false;
     }
 
+    // Password
     if (!password.trim()) {
       newErrors.password = 'Password is required';
       isValid = false;
-    } else if (password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    } else if (password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters long';
       isValid = false;
     }
 
     setErrors(newErrors);
     return isValid;
   };
+
 
   const loginHandler = async (e) => {
     e.preventDefault();
@@ -63,9 +69,9 @@ const Login = () => {
   return (
     <Fragment>
       <Meta
-        title=""
-        description=""
-        keywords=""
+        title="Login"
+        description="Login to your SpotHotel account to manage bookings, view reservations, and plan your next stay."
+        keywords="login, user login, SpotHotel login, hotel booking account"
       />
       <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-muted/30">
         <div className="w-full max-w-md">

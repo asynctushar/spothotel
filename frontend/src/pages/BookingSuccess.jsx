@@ -24,9 +24,9 @@ const BookingSuccess = () => {
     return (
         <Fragment>
             <Meta
-                title=""
-                description=""
-                keywords=""
+                title="Booking Confirmed"
+                description="Your hotel booking has been successfully confirmed. View your booking details and get ready for a comfortable stay with SpotHotel."
+                keywords="booking success, reservation confirmed, SpotHotel"
             />
             <div className="min-h-[calc(100vh-120px)] flex items-center justify-center px-4 py-12">
                 <Card className="max-w-md w-full">

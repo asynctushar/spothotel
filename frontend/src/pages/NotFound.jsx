@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { Search, Home, ArrowLeft } from 'lucide-react';
+import { Search, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Fragment } from 'react';
@@ -9,9 +9,9 @@ const NotFound = () => {
     return (
         <Fragment>
             <Meta
-                title=""
-                description=""
-                keywords=""
+                title="Page Not Found"
+                description="The page you're looking for doesn't exist or may have been moved. Explore hotels and book your next stay on SpotHotel."
+                keywords="404, page not found, SpotHotel"
             />
             <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-slate-50 flex items-center justify-center p-4">
                 <Card className="max-w-md w-full shadow-lg border-0">

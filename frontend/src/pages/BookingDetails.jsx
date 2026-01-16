@@ -51,10 +51,21 @@ const BookingDetails = () => {
     return (
         <Fragment>
             <Meta
-                title=""
-                description=""
-                keywords=""
+                title={
+                    data?.booking
+                        ? `Booking Details #${data?.booking._id}`
+                        : isLoading
+                            ? "Booking Details"
+                            : "Booking Not Found"
+                }
+                description={
+                    data?.booking
+                        ? "View your booking details, stay information, and reservation status on SpotHotel."
+                        : "View your hotel booking details on SpotHotel."
+                }
+                keywords="booking details, hotel reservation, SpotHotel booking"
             />
+
             {isLoading ? <BookingDetailsLoader /> : !data?.booking ? (
                 <div className="min-h-[calc(100vh-72px)] bg-background flex items-center justify-center px-4">
                     <div className="text-center max-w-md">

@@ -77,9 +77,9 @@ const Bookings = () => {
   return (
     <Fragment>
       <Meta
-        title=""
-        description=""
-        keywords=""
+        title="Manage Bookings"
+        description="View and manage all customer bookings across the SpotHotel platform."
+        keywords="all bookings, booking management, SpotHotel admin"
       />
       {isLoading ? <AllBookingsLoader /> : (
         <>

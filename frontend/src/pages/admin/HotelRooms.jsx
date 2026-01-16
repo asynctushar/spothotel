@@ -96,9 +96,9 @@ const HotelRooms = () => {
   return (
     <Fragment>
       <Meta
-        title=""
-        description=""
-        keywords=""
+        title={data?.hotel ? `${data?.hotel?.name} Rooms` : isLoading ? "Hotel Rooms" : "Hotel Not Found"}
+        description="Manage rooms, pricing, and availability for a specific hotel on SpotHotel."
+        keywords="hotel rooms, room management, SpotHotel admin"
       />
       {isLoading ? <HotelRoomsLoader /> : !data?.hotel ? (
         <div className="min-h-[calc(100vh-72px)] bg-background flex items-center justify-center px-4">
