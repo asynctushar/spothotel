@@ -34,7 +34,7 @@ const Booking = () => {
     });
 
     const prices = data?.room?.pricePerDay * dates?.length;
-    const vat = data?.room?.pricePerDay * dates?.length * (18 / 100);
+    const vat = data?.room?.pricePerDay * dates?.length * (15 / 100);
     const totalPrice = prices + vat;
     const willCheckOut = phone.length >= 10;
 
@@ -295,7 +295,7 @@ const Booking = () => {
                                                     <span className="font-medium">${prices.toFixed(2)}</span>
                                                 </div>
                                                 <div className="flex justify-between text-sm">
-                                                    <span className="text-muted-foreground">VAT (18%)</span>
+                                                    <span className="text-muted-foreground">VAT (15%)</span>
                                                     <span className="font-medium">${vat.toFixed(2)}</span>
                                                 </div>
                                             </div>
