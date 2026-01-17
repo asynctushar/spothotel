@@ -1,29 +1,60 @@
 const mongoose = require('mongoose');
 
 const roomSchema = new mongoose.Schema({
-    number: {
-        type: Number,
-        required: true
-    },
     name: {
         type: String,
-        required: true,
-        trim: true
+        required: [true, "Room name is required"],
+        trim: true,
+        maxlength: [40, "Room name cannot exceed 40 characters"],
+        minlength: [4, "Room name must be at least 4 characters"],
     },
-    space: {
+    number: {
         type: Number,
-        require: true
+        required: true,
+        index: true
     },
     type: {
         type: String,
-        enum: ['Single', 'Double'],
+        enum: ['Single', 'Double', "Family"],
         required: true
     },
     pricePerDay: {
         type: Number,
         required: true
     },
-    specification: [String],
+    specification: {
+        type: [
+            {
+                type: String,
+                enum: {
+                    values: [
+                        "Air Conditioning",
+                        "Private Bathroom",
+                        "Flat-Screen TV",
+                        "Balcony / City View",
+                    ]
+                    ,
+                    message: "Invalid specification value",
+                },
+                trim: true,
+            },
+        ],
+        required: true,
+        validate: [
+            {
+                validator: (arr) => arr.length >= 1,
+                message: "At least one specification is required",
+            },
+            {
+                validator: (arr) => arr.length <= 4,
+                message: "Maximum 4 specifications are allowed",
+            },
+            {
+                validator: (arr) => new Set(arr).size === arr.length,
+                message: "Duplicate specifications are not allowed",
+            },
+        ],
+    },
     notAvailable: [{
         type: Date,
     }],
@@ -33,12 +64,13 @@ const roomSchema = new mongoose.Schema({
     }],
     hotel: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Hotels",
-        required: true
+        ref: "Hotel",
+        required: true,
+        index: true
     }
 
 }, { timestamps: true });
 
-const Room = mongoose.model("Rooms", roomSchema);
+const Room = mongoose.model("Room", roomSchema);
 
 module.exports = Room;
