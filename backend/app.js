@@ -40,10 +40,10 @@ app.use("/api/v2/bookings", bookingRoute);
 
 // production build
 if (process.env.NODE_ENV === "PRODUCTION") {
-	app.use(express.static(path.join(__dirname + "./../frontend/build")));
+	app.use(express.static(path.join(__dirname + "./../frontend/dist")));
 
 	app.get("*", (req, res) => {
-		res.sendFile(path.resolve(__dirname, "./../frontend/build/index.html"));
+		res.sendFile(path.resolve(__dirname, "./../frontend/dist/index.html"));
 	});
 }
 
