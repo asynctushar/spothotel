@@ -201,7 +201,7 @@ const BookingDetails = () => {
                                                 <span className="font-medium">${prices.toFixed(2)}</span>
                                             </div>
                                             <div className="flex justify-between text-sm">
-                                                <span className="text-muted-foreground">VAT (18%)</span>
+                                                <span className="text-muted-foreground">VAT (15%)</span>
                                                 <span className="font-medium">${vat.toFixed(2)}</span>
                                             </div>
                                         </div>

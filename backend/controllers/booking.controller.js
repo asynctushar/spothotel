@@ -40,9 +40,9 @@ exports.createBooking = catchAsyncErrors(async (req, res, next) => {
     // Validate total price calculation
     const numberOfDays = dates.length;
     const basePrice = room.pricePerDay * numberOfDays;
-    const vat = basePrice * 0.18; // 18% VAT
+    const vat = basePrice * 0.15; // 15% VAT
     const calculatedTotalPrice = basePrice + vat;
-    
+
     // Allow small floating point differences (0.01)
     if (Math.abs(totalPrice - calculatedTotalPrice) > 0.01) {
         return next(new ErrorHandler("Invalid total price calculation", 400));
@@ -210,7 +210,7 @@ exports.createPayment = catchAsyncErrors(async (req, res, next) => {
 
     const myPayment = await PaymentService.createPaymentIntent({
         amount: (req.body.amount * 100),
-        currency: 'bdt',
+        currency: 'usd',
         metadata: {
             company: 'Spothotel'
         }

@@ -22,7 +22,7 @@ const BookingDetails = () => {
     const [dates, setDates] = useState([]);
     const user = useSelector((state) => state.authState.user);
     const prices = data?.booking?.room.pricePerDay * dates?.length;
-    const vat = data?.booking?.room.pricePerDay * dates?.length * (18 / 100);
+    const vat = data?.booking?.room.pricePerDay * dates?.length * (15 / 100);
 
     useEffect(() => {
         if (data && data?.booking) {
@@ -212,7 +212,7 @@ const BookingDetails = () => {
                                                 <span className="font-medium">${prices.toFixed(2)}</span>
                                             </div>
                                             <div className="flex justify-between text-sm">
-                                                <span className="text-muted-foreground">VAT (18%)</span>
+                                                <span className="text-muted-foreground">VAT (15%)</span>
                                                 <span className="font-medium">${vat.toFixed(2)}</span>
                                             </div>
                                         </div>
