@@ -36,7 +36,7 @@ const Home = () => {
 
     useEffect(() => {
         if (isError && error) {
-            dispatch(setError(error.data.message));
+            dispatch(setError(error?.data?.message || "Something went wrong"));
         }
     }, [isError, error, dispatch]);
 

@@ -14,6 +14,7 @@ const hotelSchema = new mongoose.Schema({
         required: [true, "Hotel location is required"],
         trim: true,
         maxlength: [30, "Location cannot exceed 30 characters"],
+        index: true
     },
 
     distance: {

@@ -7,6 +7,10 @@ node_modules
 /.pnp
 .pnp.js
 
+# seeders
+backend/config/seeder.js
+backend/config/hotels.js
+
 # testing
 /coverage
 
